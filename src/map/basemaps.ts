@@ -97,8 +97,8 @@ export const BASEMAP_TOP_LAYER = LAYER_SAT_PLACES;
 /** Credits shown in the map attribution while each basemap is drawn (plain text + one link). */
 export const CREDIT = {
   map: '© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors',
-  satellite: "Imagery © Esri, Maxar, Earthstar Geographics, and the GIS User Community",
-  labels: "Labels © Esri",
+  satellite: "Imagery © Esri, Vantor, Earthstar Geographics, and the GIS User Community",
+  labels: "Labels: Esri, HERE, Garmin, © OpenStreetMap contributors, and the GIS User Community",
   terrain: "Terrain: Mapzen / AWS Terrain Tiles (SRTM, GMTED2010, ETOPO1 and others)",
 } as const;
 

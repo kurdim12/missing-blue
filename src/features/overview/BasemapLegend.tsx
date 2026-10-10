@@ -21,7 +21,7 @@ export function BasemapLegend() {
           <p className="faint ov-small">{t("imageryCaveat")}</p>
           <p className="faint ov-small">{t("imageryRefs")}</p>
           <SourceNote>
-            <bdi dir="ltr">Imagery © Esri, Maxar, Earthstar Geographics, and the GIS User Community · Labels © Esri</bdi>
+            <bdi dir="ltr">Imagery © Esri, Vantor, Earthstar Geographics, and the GIS User Community · Labels: Esri, HERE, Garmin, © OpenStreetMap contributors, and the GIS User Community</bdi>
           </SourceNote>
         </>
       ) : (

@@ -34,7 +34,7 @@ function lengthM(coords: number[][]) {
   for (let i = 1; i < coords.length; i++) {
     const [x1, y1] = coords[i - 1], [x2, y2] = coords[i];
     const k = Math.cos(((y1 + y2) / 2) * Math.PI / 180);
-    m += Math.hypot((x2 - x1) * 111320 * k, (y2 - y1) * 111320);
+    m += Math.hypot((x2 - x1) * 111320 * k, (y2 - y1) * 110574); // same metres per degree as server/data.ts
   }
   return m;
 }
