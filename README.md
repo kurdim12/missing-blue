@@ -8,7 +8,7 @@
 
 <a href="docs/media/missing-blue-film.mp4"><img src="docs/media/film-preview.gif" alt="Missing Blue pitch film: Jordan's water scarcity, Detect, Verify, Remember, and the Missing Blue logo" width="100%"></a>
 
-**🌐 [Live demo](https://pct-adjacent-williams-isolation.trycloudflare.com)** · **▶ [Watch the full pitch film (97 s, MP4)](docs/media/missing-blue-film.mp4)**<br>
+**🌐 [Live demo](https://thanks-statute-dispatch-reflection.trycloudflare.com)** · **▶ [Watch the full pitch film (97 s, MP4)](docs/media/missing-blue-film.mp4)**<br>
 <sub>The live demo runs from the team laptop during AI Quest 2026 (AI screens play recorded runs). Pitch film for AI Quest 2026. Its figures belong to the film's story; this repo's own numbers are in the table below.</sub>
 
 ![AI Quest 2026](https://img.shields.io/badge/AI%20Quest-2026-1d4ed8)
