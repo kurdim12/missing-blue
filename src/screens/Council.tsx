@@ -1,6 +1,6 @@
 // AI council: five Claude agents (three specialists in parallel -> skeptic -> dispatcher) over the radar wet spots.
 // Live via POST /api/council {mode:"live"}; replay of a real recorded live run via {mode:"recorded"}.
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { ScreenProps } from "../screens";
 import { fmt, useI18n, type Bi } from "../i18n";
 import { Badge, Button, EmptyState, Ltr, Page, PageHeader } from "../ui";
@@ -100,11 +100,17 @@ const secs = (ms: number | null | undefined) => (ms == null ? "–" : fmt(ms / 1
 const tok = (u: Usage | null | undefined) => (u ? `${fmt(u.input_tokens, 0)} / ${fmt(u.output_tokens, 0)}` : "– / –");
 const rank = (d: CouncilDecision) => (d.verdict === "dispatch" ? ({ high: 0, medium: 1, low: 2 } as Record<string, number>)[d.priority ?? "low"] ?? 2 : 5);
 
-export default function Council(_props: ScreenProps) {
+export default function Council(props: ScreenProps) {
   const { t, lang } = useI18n();
   const info = useCouncilInfo();
   const { state, run, stop } = useCouncilStream();
   const [mode, setMode] = useState<"live" | "recorded">("recorded");
+  // Demo mode opens #/council?mode=recorded: start the recorded replay at once (one key press per pitch step).
+  const autoReplay = props.query?.get("mode") === "recorded";
+  useEffect(() => {
+    if (autoReplay && state.phase === "idle") void run("recorded");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoReplay]);
   const running = state.phase === "running";
   const rec = state.recorded ?? info?.recorded ?? null;
   const recDate = rec?.recorded_at ? rec.recorded_at.slice(0, 10) : null;
