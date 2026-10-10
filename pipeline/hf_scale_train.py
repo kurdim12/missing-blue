@@ -43,4 +43,4 @@ pa = np.array([refy[int(np.argmin(((refs[:, S] - Xn[t, S]) ** 2).sum(1) + (refq 
 ea = {'gap': [round(float((pa[:, g] == Y[te, g]).mean()) * 100, 1) for g in range(K)], 'all': round(float((pa == Y[te]).all(1).mean()) * 100, 1), 'reference_sims': int(2 ** K)}
 print('algorithm 15', ea)
 json.dump({'gaps': GAPS, 'n_states': 2 ** K, 'n_scenarios': int(len(Y)), 'n_train': int(len(tr)), 'n_val': int(len(va)), 'n_test': int(len(te)), 'info_bits_curve': bitsc,
-           'eval_3': e3, 'eval_15': e15, 'algorithm_15': ea, 'sensors': [{'lat': round(float(lat[nodes[k]]), 6), 'lon': round(float(lon[nodes[k]]), 6), 'node': nodes[k]} for k in S]}, open(sys.argv[2], 'w'))
+           'eval_3': e3, 'eval_15': e15, 'algorithm_15': ea, 'sensors': [{'node': nodes[k]} for k in S]}, open(sys.argv[2], 'w'))

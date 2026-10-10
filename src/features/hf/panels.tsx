@@ -8,6 +8,7 @@ import type { HfGap, HfLiveModel, HfResultsResponse } from "../../types";
 import { Badge, EmptyState, Ltr, Panel, SourceNote, Tag } from "../../ui";
 import { CONNECTED_AT, NOT_CONNECTED_AT, type HfEngine, type Verdict, verdictOf } from "./engine";
 import { GAP_LETTERS, hfStrings } from "./strings";
+import { inchText } from "../overview/spotText";
 
 const bitsText = (n: number, lang: "en" | "ar") => withUnit(n, "bits", lang, 2, 2);
 /** A gap whose test accuracy with the full logger set stays below this is a coin toss: pressure cannot resolve it. */
@@ -82,7 +83,7 @@ export function GapBars({
               <Tag tone={v === "connected" ? "blue" : v === "not_connected" ? "neutral" : "warn"}>{verdictLabel(v)}</Tag>
             </span>
             <p className="hf-gap-meta">
-              {g ? t("gapMeta", { gap: withUnit(g.gap_m, "m", lang, 2), pipe: withUnit(g.pipe_in, "in", lang, 2) }) : null}
+              {g ? t("gapMeta", { gap: withUnit(g.gap_m, "m", lang, 2), pipe: inchText(g.pipe_in, lang) ?? "–" }) : null}
               {reveal ? (
                 <span className={`hf-truth ${v === "undecided" ? "is-none" : truthOk ? "is-ok" : "is-bad"}`}>
                   {g ? " · " : null}

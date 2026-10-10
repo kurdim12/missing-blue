@@ -14,6 +14,7 @@ import { NextStep } from "../features/story/NextStep";
 import { PITCH, type PitchStep } from "../features/story/pitch";
 import { demoStrings } from "../features/story/strings";
 import "../features/story/story.css";
+import { resetDemoReports } from "../features/workorder/store";
 
 const CUE_KEY = "mb.demo.cue";
 const readCue = () => {
@@ -133,6 +134,15 @@ export default function DemoMode({ query }: ScreenProps) {
   const idx = Math.min(n - 1, Math.max(0, Number.isFinite(raw) ? Math.round(raw) - 1 : 0));
   const step = PITCH[idx];
   const [cueOn, setCueOn] = useState(readCue);
+
+  // A rehearsal tap on "Leak found" in the embedded crew phone must not show up in the live demo:
+  // demo reports (order status, crew reports) are cleared when Demo mode opens and when it returns to step 1.
+  useEffect(() => {
+    if (idx === 0) resetDemoReports();
+  }, [idx]);
+  useEffect(() => {
+    resetDemoReports();
+  }, []);
   const stageRef = useRef<HTMLDivElement>(null);
   const frameWin = useRef<Window | null>(null);
 

@@ -88,10 +88,11 @@ export default function SpotDetail({ params }: ScreenProps) {
   const rain = parseRain(d.rain_check);
   const cls = pipeClass(pd.cls);
 
-  // twin coverage: distance from this spot to the twin's leak candidate vs the twin's radius (both from the twin file)
+  // twin coverage: the twin has a scenario at this spot only when its leak junction lies within the spot's position
+  // accuracy (the same test as the triage tool simulate_leak in server/triage.ts), not merely inside the zone radius
   const tw = twin.data;
   const twinNote = tw
-    ? distanceM(p.lat, p.lon, tw.key.cand.lat, tw.key.cand.lon) <= tw.assumptions.radius_m
+    ? distanceM(p.lat, p.lon, tw.key.cand.lat, tw.key.cand.lon) <= p.position_accuracy_m
       ? t("twinInside", { r: withUnit(tw.assumptions.radius_m / 1000, "km", lang, 1) })
       : t("twinOutside", { r: withUnit(tw.assumptions.radius_m / 1000, "km", lang, 1) })
     : null;

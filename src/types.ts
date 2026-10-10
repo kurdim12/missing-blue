@@ -158,7 +158,8 @@ export type HfScale9 = {
   eval_3: { bayes_gap: number[]; bayes_all: number; mlp_gap: number[]; mlp_all: number };
   eval_15: { bayes_gap: number[]; bayes_all: number; mlp_gap: number[]; mlp_all: number };
   algorithm_15: { gap: number[]; all: number; reference_sims: number };
-  sensors: { lat: number; lon: number; node: number }[];
+  /** logger junction ids only (coordinates are not published) */
+  sensors: { node: number }[];
 };
 export type HfResultsResponse = {
   results: HfResults | null; // null in a fresh clone (held back)

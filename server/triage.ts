@@ -119,7 +119,8 @@ function runTool(name: string, input: Record<string, unknown>): { result: unknow
           is_error: false,
           result: {
             spot_id: p.spot_id,
-            spot_centre_to_pipe_m: p.nearest_pipe_m,
+            // whole metres: the spot position is only good to about ±position_accuracy_m
+            spot_centre_to_pipe_m: Math.round(p.nearest_pipe_m),
             within_40m: p.on_pipe_40m,
             pipe_layer: p.nearest_pipe_layer,
             pipe: p.nearest_pipe,
@@ -300,7 +301,7 @@ Use the tools to check every spot (list_wet_spots, then nearest_pipe and land_co
 Rules:
 1. Dispatch a crew only to a spot whose centre is within ${r.dispatch_radius_m} m of a real pipe (nearest_pipe.within_40m is true).
 2. Reject spots far from any pipe on farmland (Crops or Rangeland): they are most likely irrigation.
-3. The radar position is accurate to about ±${r.position_accuracy_m} m. Never claim metre precision: write "spot centre X m from the pipe".
+3. The radar position is accurate to about ±${r.position_accuracy_m} m. Never claim metre precision: write "spot centre X m from the pipe", with distances in whole metres (or km with one decimal), never with decimals of a metre.
 4. Rain check: ${r.rain_check ?? "not available"}. Rain does not explain these spots.
 5. A wet spot is an inspection candidate, never a confirmed leak. Never write "leak found" or "confirmed".
 6. Copy every number exactly as the tools return it. Do not convert units, estimate costs or invent figures. If a tool returns an error, say so instead of guessing.
@@ -320,12 +321,22 @@ function collectNumbers(v: unknown, into: number[] = []): number[] {
   return into;
 }
 
+/** The rule constants (dispatch radius, pressure-drop threshold) count only when written as a distance ("40 m",
+ *  "more than 1 m"); a bare "1" (e.g. "1 other junction") must come from a tool result, not from a rule. */
+const RULE_CONSTANTS = [DISPATCH_RADIUS_M, DROP_THRESHOLD_M];
+const RULE_UNIT_AFTER = /^\s?(m|م)(?![A-Za-zء-ي²³])/;
+
 /** Every number in a reason should match a tool result for that spot: exactly, rounded, or metres written as km. */
 function checkNumbers(reason: string, pool: number[]) {
   const found: { text: string; match: "exact" | "rounded" | "none" }[] = [];
   for (const m of reason.matchAll(NUM_RE)) {
     const text = m[0];
     const n = numberOf(m);
+    const after = reason.slice((m.index ?? 0) + text.length);
+    if (RULE_CONSTANTS.some((c) => Math.abs(c - n) < 1e-9) && RULE_UNIT_AFTER.test(after)) {
+      found.push({ text, match: "exact" });
+      continue;
+    }
     const decimals = m[2] ? m[2].length - 1 : 0;
     const tol = 0.5 * 10 ** -decimals + 1e-9;
     let match: "exact" | "rounded" | "none" = "none";
@@ -350,15 +361,30 @@ function finalize(result: TriageResult, runs: ToolRun[]) {
   const listRun = runs.find((r) => r.name === "list_wet_spots" && !r.is_error);
   const listed = ((listRun?.result as { spots?: Record<string, unknown>[] })?.spots ?? []) as Record<string, unknown>[];
   const rain = (listRun?.result as { rain_check?: string })?.rain_check ?? "";
-  const global = collectNumbers([rain, DISPATCH_RADIUS_M, DROP_THRESHOLD_M]);
+  // rule constants are not in the pool: checkNumbers accepts them only next to their own unit (see RULE_CONSTANTS)
+  const global = collectNumbers([rain]);
   const decisions = result.decisions.map((d) => {
     const id = d.id.toLowerCase();
-    const forSpot = runs.filter((r) => String(r.input?.spot_id ?? "").toLowerCase() === id).map((r) => r.result);
+    const spotRuns = runs.filter((r) => String(r.input?.spot_id ?? "").toLowerCase() === id);
+    const forSpot = spotRuns.map((r) => r.result);
+    // a tool whose data file is missing (held back in a fresh clone): its numbers cannot be verified
+    const toolsMissing = [
+      ...new Set(spotRuns.filter((r) => r.is_error && (r.result as { error?: string })?.error === "missing_data").map((r) => r.name)),
+    ];
     const row = listed.find((s) => String(s.spot_id).toLowerCase() === id);
     const pool = [...global, ...collectNumbers(forSpot), ...collectNumbers(row ?? {})];
     const spot = findSpot(d.id)?.properties;
     const rule = !spot ? "unknown_spot" : d.verdict === "dispatch" && !spot.on_pipe_40m ? "dispatch_beyond_40m" : "ok";
-    return { ...d, checks: { numbers: checkNumbers(d.reason, pool), rule } };
+    return {
+      ...d,
+      checks: {
+        numbers: checkNumbers(d.reason, pool),
+        // the Arabic reason is checked on its own: the screen shows the check for the language it shows
+        ...(d.reason_ar ? { numbers_ar: checkNumbers(d.reason_ar, pool) } : {}),
+        tools_missing: toolsMissing,
+        rule,
+      },
+    };
   });
   const ids = new Set(result.decisions.map((d) => d.id.toLowerCase()));
   return {

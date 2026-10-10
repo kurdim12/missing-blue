@@ -119,7 +119,8 @@ function buildFacts(spotId: string) {
       cad_layer: p.nearest_pipe_layer,
       pipe_id: pf?.pipe_id ?? null,
       pipe_class: pf?.class ?? null,
-      spot_centre_to_pipe_m: p.nearest_pipe_m,
+      // whole metres: the radar position is only good to about ±position_accuracy_m (decimals would be false precision)
+      spot_centre_to_pipe_m: Math.round(p.nearest_pipe_m),
       within_rule_distance: p.on_pipe_40m,
       rule_distance_m: ON_PIPE_RULE_M,
     },
@@ -188,7 +189,19 @@ export function checkNumbers(sections: { ar: Sections; en: Sections }, facts: un
 
 // ------------------------------------------------------------------ recorded orders (server/recorded/workorders.json)
 
-type RecordedOrder = { order_id: string; spot_id: string; priority: Priority; recorded_at: string; by: string; en: Sections; ar: Sections };
+type RecordedOrder = {
+  order_id: string;
+  spot_id: string;
+  priority: Priority;
+  recorded_at: string;
+  by: string;
+  en: Sections;
+  ar: Sections;
+  /** how the recorded text differs from what Claude wrote (shown on the sheet) */
+  edited?: Bilingual;
+  /** Claude's text before the edit */
+  original?: { en: string; ar: string; from?: string };
+};
 type RecordedFile = { note: string; orders: RecordedOrder[] };
 
 let recordedCache: RecordedFile | null = null;
@@ -223,6 +236,8 @@ type OrderResult = {
   check: ReturnType<typeof checkNumbers>;
   fallback_reason?: string;
   usage?: { input_tokens: number; output_tokens: number };
+  edited?: Bilingual;
+  original?: { en: string; ar: string; from?: string };
 };
 
 function recordedResult(spotId: string, facts: Facts, fallbackReason?: string): OrderResult | null {
@@ -243,6 +258,8 @@ function recordedResult(spotId: string, facts: Facts, fallbackReason?: string): 
     written_at: r.recorded_at,
     // re-checked against today's facts: in a fresh clone the twin file is held back, so its numbers show as unmatched
     check: checkNumbers(sections, facts),
+    ...(r.edited ? { edited: r.edited } : {}),
+    ...(r.original ? { original: r.original } : {}),
     ...(fallbackReason ? { fallback_reason: fallbackReason } : {}),
   };
 }
@@ -264,7 +281,7 @@ const OUTPUT_SCHEMA = {
 
 const SYSTEM = `You write field work orders for the leak-detection crew of the Karak water utility in Jordan.
 Use ONLY the facts JSON you are given.
-Numbers: copy every number exactly as it is written in the facts (same digits, same decimals). Add no other number: no rounding, no unit conversion, no totals, no ranges, no list numbering, no times, no pipe ids or codes that are not in the facts. Use Latin digits 0-9 in both languages. Write dates as day, month name, year (for example 16 Sep 2026 / 16 أيلول 2026).
+Numbers: copy every number exactly as it is written in the facts (same digits, same decimals). Distances are in whole metres: never add decimals to a distance. Add no other number: no rounding, no unit conversion, no totals, no ranges, no list numbering, no times, no pipe ids or codes that are not in the facts. Use Latin digits 0-9 in both languages. Write dates as day, month name, year (for example 16 Sep 2026 / 16 أيلول 2026).
 Honesty: a wet spot is an inspection candidate, never a confirmed leak. The radar position is only good to about ± the position accuracy in the facts (write it as ±N m): say "spot centre X m from the pipe" and tell the crew to search the whole circle; never imply metre precision. The estimated loss uses an ASSUMED leak size: say so. If the twin facts are null, do not mention a hydraulic model.
 Sections, one or two short sentences each: where = place, coordinates and the search circle; pipe = which pipe and the spot-centre distance; evidence = radar rise, passes, rain, land cover; why = why a crew visit is needed (use the twin facts when present); check = what to check on site; loss = the estimated loss if a leak is confirmed.
 Write "ar" in clear Modern Standard Arabic for a Jordanian crew and "en" in plain English; both say the same thing. Do not repeat the section names inside the text.

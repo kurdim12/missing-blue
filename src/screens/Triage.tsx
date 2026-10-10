@@ -10,6 +10,7 @@ import { triageStrings } from "../features/triage/strings";
 import { ToolLog } from "../features/triage/ToolLog";
 import { DecisionCard } from "../features/triage/DecisionCard";
 import { useTriageStream, type TriageDecision, type TriageInfo } from "../features/triage/useTriageStream";
+import { rainSentence } from "../features/overview/spotText";
 import "../features/triage/triage.css";
 
 const PRIO_RANK: Record<string, number> = { high: 0, medium: 1, low: 2 };
@@ -133,9 +134,7 @@ export default function Triage({ embedded, query }: ScreenProps) {
                   <li>{t("rule3", { acc: pm(info.data.rules.position_accuracy_m, "m", lang) })}</li>
                   <li>
                     {t("rule4")}{" "}
-                    <bdi dir="ltr" className="triage-rain">
-                      {info.data.rules.rain_check ?? "–"}
-                    </bdi>
+                    <span className="triage-rain">{rainSentence(info.data.rules.rain_check, lang)}</span>
                   </li>
                   <li>{t("rule5")}</li>
                   <li>{t("rule6")}</li>

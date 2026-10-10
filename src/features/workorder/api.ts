@@ -55,6 +55,10 @@ export type WorkOrder = {
   check: { ok: boolean; numbers_checked: number; unmatched: string[] };
   fallback_reason?: string;
   usage?: { input_tokens: number; output_tokens: number };
+  /** recorded text edited after Claude wrote it, or prepared by hand: what changed */
+  edited?: Bi;
+  /** Claude's original text before the edit */
+  original?: { en: string; ar: string; from?: string };
 };
 
 export type OrderMode = "live" | "recorded" | "latest";

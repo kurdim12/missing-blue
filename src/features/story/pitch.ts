@@ -82,7 +82,7 @@ export const PITCH: PitchStep[] = [
     title: { en: "AI triage", ar: "الفرز بالذكاء الاصطناعي" },
     criterion: { en: "Innovation · Technical", ar: "الابتكار · التنفيذ التقني" },
     cue: {
-      en: "The AI checks each spot with tools: nearest pipe, land cover, leak simulation. It keeps {nGo} and rejects {nNo} farmland spots, and explains every decision. {lead} is {leadM} from a {leadPipe} line, give or take {acc}.",
+      en: "The AI checks each spot with tools: nearest pipe, land cover, leak simulation. It keeps {nGo} and rejects {nNo} farmland spots, and explains every decision. {lead} is {leadM} from a {leadPipe} line; the radar position is good to {acc}.",
       ar: "يفحص الذكاء الاصطناعي كل بقعة بأدوات: أقرب أنبوب، الغطاء الأرضي، محاكاة التسرب. يُبقي {nGo} ويرفض {nNo} بقع زراعية، ويشرح كل قرار. {lead} على بعد {leadM} من خط {leadPipe}، بهامش {acc}.",
     },
   },

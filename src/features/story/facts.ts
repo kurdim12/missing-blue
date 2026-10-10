@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import { api, useApi, type ApiError } from "../../api";
 import { fmt, fmtDate, pm, unit, withUnit, type Lang } from "../../i18n";
 import type { HfResultsResponse, PipesSummary, SpotProps, TwinResponse } from "../../types";
+import { pipeLabelText } from "../overview/spotText";
 import { ASSUMED_LEAK_LPS_FALLBACK, CITED, DAYS_PER_YEAR, LITRES_PER_M3, SECONDS_PER_DAY } from "./sources";
 
 export type StoryFacts = {
@@ -102,7 +103,7 @@ export function storyVars(f: StoryFacts, lang: Lang): Record<string, string> {
     nrw: withUnit(CITED.nrw.value, "%", lang),
     days: withUnit(CITED.repeatDays.value, "days", lang, 0),
     dates: passesLabel(f.passes, lang),
-    rain: f.rainMm === null ? "–" : withUnit(f.rainMm, "mm", lang, 1, 1),
+    rain: f.rainMm === null ? "–" : withUnit(f.rainMm, "mm", lang, 1),
     n: f.spots ? fmt(f.spots.length, 0) : "–",
     km: f.pipes ? withUnit(f.pipes.km_total, "km", lang, 0) : "–",
     nGo: f.spots ? fmt(f.dispatch.length, 0) : "–",
@@ -110,7 +111,7 @@ export function storyVars(f: StoryFacts, lang: Lang): Record<string, string> {
     ids: ids.length ? ids.join(and) : "–",
     lead: f.lead?.spot_id ?? "–",
     leadM: f.lead ? withUnit(f.lead.nearest_pipe_m, "m", lang, 0) : "–",
-    leadPipe: f.lead?.nearest_pipe ?? "–",
+    leadPipe: f.lead ? pipeLabelText(f.lead.nearest_pipe, lang, true) : "–",
     acc: f.accuracyM === null ? "–" : pmText(f.accuracyM, lang),
     leak: withUnit(f.leakLps, "L/s", lang),
     perDay: withUnit(f.leakM3Day, "m3/day", lang),

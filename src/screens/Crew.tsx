@@ -127,11 +127,13 @@ export default function Crew({ params, query, embedded }: ScreenProps) {
         <div className="crew-card-head">
           <h2>{t("orderTitle")}</h2>
           {o ? o.source === "recorded" ? <Badge kind="RECORDED" size="sm" /> : <Tag tone="blue">{tw("liveRun")}</Tag> : null}
+          {o?.edited ? <Tag tone="warn">{o.original ? tw("editedTag") : tw("preparedTag")}</Tag> : null}
         </div>
         {order.loading ? (
           <Spinner />
         ) : o ? (
           <>
+            {o.edited ? <p className="faint">{o.edited[lang]}</p> : null}
             <dl className="crew-order" lang={lang} dir={lang === "ar" ? "rtl" : "ltr"}>
               {SECTION_KEYS.map((k) => (
                 <div key={k} className="crew-order-row">

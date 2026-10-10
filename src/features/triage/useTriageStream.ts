@@ -24,7 +24,14 @@ export type TriageDecision = {
   reason_ar?: string;
   corrected?: Bi;
   original_reason?: string;
-  checks: { numbers: NumberCheck; rule: "ok" | "dispatch_beyond_40m" | "unknown_spot" };
+  checks: {
+    numbers: NumberCheck;
+    /** the same check on the Arabic reason */
+    numbers_ar?: NumberCheck;
+    /** tools whose data file was missing for this spot (numbers from them cannot be verified) */
+    tools_missing?: string[];
+    rule: "ok" | "dispatch_beyond_40m" | "unknown_spot";
+  };
 };
 
 export type TriageFinal = { decisions: TriageDecision[]; summary: string; summary_ar: string | null; missing_ids: string[] };
@@ -98,6 +105,19 @@ function reduce(s: TriageState, event: string, d: any): TriageState {
   }
 }
 
+/** The Impact screen reads the last run's token count from this browser (src/features/story/usage.ts). */
+function saveUsage(d: any) {
+  try {
+    const v = d?.live
+      ? { input_tokens: d.input_tokens, output_tokens: d.output_tokens, source: "live", model: d.model ?? null, at: new Date().toISOString() }
+      : { source: "recorded", at: new Date().toISOString() };
+    localStorage.setItem("mb.triage.usage", JSON.stringify(v));
+    window.dispatchEvent(new Event("mb-triage-usage"));
+  } catch {
+    /* storage blocked: Impact keeps its "run triage" hint */
+  }
+}
+
 export function useTriageStream() {
   const [state, setState] = useState<TriageState>(INITIAL);
   const ctrl = useRef<AbortController | null>(null);
@@ -129,6 +149,7 @@ export function useTriageStream() {
       } catch {
         return;
       }
+      if (event === "usage") saveUsage(parsed);
       setState((s) => reduce(s, event, parsed));
     };
     try {

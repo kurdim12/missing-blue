@@ -1,10 +1,10 @@
 // Pure helpers that turn wet-spot / pipe records into display text. No numbers are typed here:
 // everything is parsed or computed from the records passed in.
 import { Fragment, createElement, type ReactNode } from "react";
-import { fmt, fmtDate, unit, type Lang } from "../../i18n";
+import { fmt, fmtDate, unit, withUnit, type Lang } from "../../i18n";
 import { pipeClassOfDiameter } from "../../map/style";
 import type { PipeClass, PipeProps, SpotProps } from "../../types";
-import { LAND_COVER, MATERIALS, PIPE_CLASS_NOUN } from "./strings";
+import { LAND_COVER, MATERIALS, PIPE_CLASS_NOUN, overviewStrings } from "./strings";
 
 // ------------------------------------------------------------------ inches
 const FRACTIONS: Record<string, string> = { "0.25": "¼", "0.5": "½", "0.75": "¾" };
@@ -40,6 +40,17 @@ export function parsePipeLabel(label: string): { inch: number | null; material: 
   }
   const key = rest.trim().toLowerCase().replace(/\s+/g, "_");
   return { inch, material: MATERIALS[key] ? key : null, materialText: rest.trim() };
+}
+
+/** '3/4" galvanized iron' -> '¾" · galvanized iron' / '¾ إنش · الحديد المجلفن' (plain text; unknown wording stays as written). */
+export function pipeLabelText(label: string | null | undefined, lang: Lang, phrase = false): string {
+  const p = parsePipeLabel(label ?? "");
+  const size = inchText(p.inch, lang);
+  if (!size) return label ?? "–";
+  const mat = p.material ? MATERIALS[p.material][lang] : p.materialText;
+  // phrase: '¾" galvanized iron' / 'الحديد المجلفن ¾ إنش' for running sentences (presenter cues)
+  if (phrase) return lang === "ar" ? `${mat} ${size}` : `${size} ${mat}`;
+  return `${size} · ${mat}`;
 }
 
 export type PipeDesc = { inch: number | null; materialKey: string | null; materialText: string; cls: PipeClass; layer: string; id: string | null };
@@ -93,6 +104,17 @@ export function parseRain(s: string | null | undefined): { mm: number; d0: strin
   if (!m) return null;
   const dates = s.match(/\d{4}-\d{2}-\d{2}/g) ?? [];
   return { mm: Number(m[1]), d0: dates[0] ?? null, d1: dates[1] ?? null };
+}
+
+/** The spot file's rain sentence in the screen language ("0 mm at Mazar and Karak between 4 Sep 2026 and 28 Sep 2026 …");
+ *  the raw text when it cannot be parsed. */
+export function rainSentence(s: string | null | undefined, lang: Lang): string {
+  const r = parseRain(s);
+  if (!r || !r.d0 || !r.d1) return s ?? "–";
+  return overviewStrings[lang].rainText
+    .replace("{mm}", withUnit(r.mm, "mm", lang, 1))
+    .replace("{d0}", fmtDate(r.d0, lang))
+    .replace("{d1}", fmtDate(r.d1, lang));
 }
 
 // ------------------------------------------------------------------ geometry

@@ -10,7 +10,8 @@ import { PRIORITY_TONE, SECTION_KEYS, woApi, type SectionKey, type WorkOrder as 
 import { crewStrings, woStrings } from "../features/workorder/strings";
 import { QrCode, useCrewUrl } from "../features/workorder/QrCode";
 import { landSummary, pipeClassLabel } from "../features/workorder/format";
-import { CHECKS, STATUSES, readCrewReport, useStatuses } from "../features/workorder/store";
+import { pipeLabelText } from "../features/overview/spotText";
+import { CHECKS, STATUSES, hasDemoReports, readCrewReport, resetDemoReports, useStatuses } from "../features/workorder/store";
 import "../features/workorder/workorder.css";
 
 export default function WorkOrder({ params, embedded }: ScreenProps) {
@@ -116,12 +117,29 @@ function Sheet({ order, lang }: { order: Order; lang: Lang }) {
           <div className="badge-row">
             <Tag tone={PRIORITY_TONE[order.priority]}>{t(`prio_${order.priority}`)}</Tag>
             {recorded ? <Badge kind="RECORDED" /> : <Tag tone="blue">{t("liveRun")}</Tag>}
+            {order.edited ? <Tag tone="warn">{order.original ? t("editedTag") : t("preparedTag")}</Tag> : null}
           </div>
           <span className="wo-meta-line faint">
             {t("writtenBy")}: <Ltr>{order.by}</Ltr> · {t("writtenOn")}: {fmtDate(order.written_at, lang)}
           </span>
         </div>
       </header>
+
+      {order.edited ? (
+        <div className="wo-edited">
+          <p>{order.edited[lang]}</p>
+          {order.original ? (
+            <details className="wo-original">
+              <summary>{t("originalShow")}</summary>
+              {(lang === "ar" ? (["ar", "en"] as const) : (["en", "ar"] as const)).map((l) => (
+                <p key={l} className="wo-original-text" lang={l} dir={l === "ar" ? "rtl" : "ltr"}>
+                  {order.original![l]}
+                </p>
+              ))}
+            </details>
+          ) : null}
+        </div>
+      ) : null}
 
       <div className="wo-meta">
         <span>
@@ -203,7 +221,7 @@ function Facts({ order, lang }: { order: Order; lang: Lang }) {
         <dt>{t("f_pipe")}</dt>
         <dd>
           <span>
-            <Ltr>{f.pipe.description}</Ltr> · {t("cadLayer")} <Ltr mono>{f.pipe.cad_layer}</Ltr>
+            {pipeLabelText(f.pipe.description, lang)} · {t("cadLayer")} <Ltr mono>{f.pipe.cad_layer}</Ltr>
           </span>
           <br />
           {f.pipe.pipe_id ? (
@@ -227,7 +245,7 @@ function Facts({ order, lang }: { order: Order; lang: Lang }) {
             later: passes,
           })}
           <br />
-          {t("rainLine", { mm: f.rain.mm_between_passes === null ? "–" : withUnit(f.rain.mm_between_passes, "mm", lang, 1, 1) })}
+          {t("rainLine", { mm: f.rain.mm_between_passes === null ? "–" : withUnit(f.rain.mm_between_passes, "mm", lang, 1) })}
           <br />
           {t("landLine", { years: land.range, classes: land.text })}
           <br />
@@ -312,7 +330,12 @@ function StatusList({ current }: { current: string }) {
   const st = useStatuses();
   if (!list.data?.orders.length) return null;
   return (
-    <Panel className="no-print wo-status" title={t("statusTitle")} subtitle={t("statusSub")}>
+    <Panel
+      className="no-print wo-status"
+      title={t("statusTitle")}
+      subtitle={t("statusSub")}
+      badges={<Tag tone="neutral">{t("demoTag")}</Tag>}
+    >
       <div className="wo-table-wrap">
         <table className="wo-table">
           <thead>
@@ -372,6 +395,13 @@ function StatusList({ current }: { current: string }) {
           </tbody>
         </table>
       </div>
+      {hasDemoReports() ? (
+        <div>
+          <Button size="sm" variant="secondary" onClick={resetDemoReports}>
+            {t("resetReports")}
+          </Button>
+        </div>
+      ) : null}
     </Panel>
   );
 }

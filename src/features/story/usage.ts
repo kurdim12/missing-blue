@@ -11,6 +11,8 @@ export type TriageUsage = {
   source: "live" | "recorded" | null;
   model: string | null;
   at: string | null;
+  /** recorded replay: no live tokens were used */
+  noTokens?: boolean;
 };
 
 const KEYS = ["mb.triage.usage", "mb.triage.last", "mb.triage"];
@@ -22,8 +24,11 @@ function parse(raw: string | null): TriageUsage | null {
     const u = v?.usage && typeof v.usage === "object" ? v.usage : v;
     const inp = Number(u?.input_tokens ?? u?.inputTokens);
     const out = Number(u?.output_tokens ?? u?.outputTokens);
-    if (!Number.isFinite(inp) || !Number.isFinite(out)) return null;
     const src = v?.source ?? u?.source;
+    // a recorded replay calls no model: no tokens to show, but the run happened
+    if (src === "recorded" && (!Number.isFinite(inp) || !Number.isFinite(out)))
+      return { input_tokens: 0, output_tokens: 0, total: 0, source: "recorded", model: null, at: typeof v?.at === "string" ? v.at : null, noTokens: true };
+    if (!Number.isFinite(inp) || !Number.isFinite(out)) return null;
     return {
       input_tokens: inp,
       output_tokens: out,
@@ -58,9 +63,11 @@ export function useTriageUsage(): TriageUsage | null {
     const on = () => setU(readTriageUsage());
     window.addEventListener("storage", on);
     window.addEventListener("focus", on);
+    window.addEventListener("mb-triage-usage", on);
     return () => {
       window.removeEventListener("storage", on);
       window.removeEventListener("focus", on);
+      window.removeEventListener("mb-triage-usage", on);
     };
   }, []);
   return u;

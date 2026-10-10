@@ -1,5 +1,5 @@
 {
-  "_about": "Recorded work orders, returned with source \"recorded\" when no ANTHROPIC_API_KEY is set or a live Claude call fails. W7 is the order Claude wrote during preparation (demo/missing-blue.html, DATA.recorded.order, MB-KRK-0007), split into the six sections and aligned to the facts JSON built from data/ (86 m3 -> 86.4 m3, the twin's '1 other junction of 850' instead of 'does not move pressure', pipe-year removed). W3 was written during preparation from the same facts for the second dispatched spot. Every number is re-checked against the facts on each request (check.unmatched lists any number not found, e.g. twin numbers in a fresh clone where data/twin is held back).",
+  "_about": "Recorded work orders, returned with source \"recorded\" when no ANTHROPIC_API_KEY is set or a live Claude call fails. W7 is the order Claude wrote during preparation (demo/missing-blue.html, DATA.recorded.order, MB-KRK-0007), split into the six sections and aligned to the facts JSON built from data/ (86 m3 -> 86.4 m3, the twin's '1 other junction of 850' instead of 'does not move pressure', pipe-year removed). W3 was written during preparation from the same facts for the second dispatched spot (not saved from a live Claude call; labelled so on screen). Each order's `edited` note is shown on the sheet; W7 also carries Claude's original text under `original`. Every number is re-checked against the facts on each request (check.unmatched lists any number not found, e.g. twin numbers in a fresh clone where data/twin is held back).",
   "origin": "demo/missing-blue.html (DATA.recorded.order) + preparation run, 10 Oct 2026",
   "note": "Recorded, not live. The UI labels these 'Recorded run'.",
   "orders": [
@@ -8,11 +8,11 @@
       "spot_id": "W7",
       "priority": "high",
       "recorded_at": "2026-10-10",
-      "by": "Recorded run · Claude",
+      "by": "Recorded run · Claude · edited",
       "en": {
         "where": "West edge of al-Mazar al-Janubi, Karak. Spot centre 31.05727 N, 35.68692 E. The radar position is good to about ±50 m, so search the whole circle.",
         "pipe": "¾\" galvanized iron service line in the utility's network record; the spot centre is 6 m from the pipe.",
-        "evidence": "NISAR L-band radar shows soil moisture up on 16 Sep 2026 and still up on 28 Sep 2026 against 4 Sep 2026 (HH +2.44 dB, HV +1.82 dB). Rain between passes: 0.0 mm (ERA5). Land cover: built area in 2023, 2024 and 2025 (Sentinel-2).",
+        "evidence": "NISAR L-band radar shows soil moisture up on 16 Sep 2026 and still up on 28 Sep 2026 against 4 Sep 2026 (HH +2.44 dB, HV +1.82 dB). Rain between passes: 0 mm (ERA5). Land cover: built area in 2023, 2024 and 2025 (Sentinel-2).",
         "why": "In the hydraulic twin, a 1 L/s leak here drops pressure by more than 1 m at only 1 other junction of 850, so pressure loggers would likely miss it. Only a visit can confirm it.",
         "check": "Walk the line inside the circle: look for wet soil, sunken asphalt or green growth; listen with a ground microphone on the line and at the meter box; check the meter box for night flow.",
         "loss": "If a leak is confirmed at the assumed size of 1 L/s: about 86.4 m³ a day. The leak size is assumed, not measured."
@@ -20,10 +20,19 @@
       "ar": {
         "where": "الطرف الغربي من المزار الجنوبي، محافظة الكرك. مركز البقعة 31.05727 شمالًا، 35.68692 شرقًا. دقة موقع الرادار نحو ±50 م، لذا ابحث في الدائرة كلها.",
         "pipe": "خط خدمة حديد مجلفن قطر ¾ إنش في سجل شبكة المياه؛ مركز البقعة على بعد 6 م من الأنبوب.",
-        "evidence": "رادار NISAR بنطاق L يُظهر ارتفاع رطوبة التربة في 16 أيلول 2026 واستمراره في 28 أيلول 2026 مقارنةً بـ 4 أيلول 2026 (HH ‎+2.44 dB، HV ‎+1.82 dB). الأمطار بين المرورين: 0.0 مم (ERA5). الغطاء الأرضي: منطقة عمرانية في 2023 و2024 و2025 (Sentinel-2).",
+        "evidence": "رادار NISAR بنطاق L يُظهر ارتفاع رطوبة التربة في 16 أيلول 2026 واستمراره في 28 أيلول 2026 مقارنةً بـ 4 أيلول 2026 (HH ‎+2.44 dB، HV ‎+1.82 dB). الأمطار بين المرورين: 0 مم (ERA5). الغطاء الأرضي: منطقة عمرانية في 2023 و2024 و2025 (Sentinel-2).",
         "why": "في التوأم الهيدروليكي، تسرّب بحجم 1 لتر/ثانية هنا يخفض الضغط أكثر من 1 م عند عقدة أخرى واحدة فقط من أصل 850 عقدة، فغالبًا لن تكشفه أجهزة تسجيل الضغط. الزيارة الميدانية وحدها تؤكده.",
         "check": "امشِ على امتداد الخط داخل الدائرة: ابحث عن تربة رطبة أو هبوط في الإسفلت أو نمو نباتات؛ استمع بالميكروفون الأرضي على الخط وعند صندوق العداد؛ وافحص صندوق العداد بحثًا عن تدفق ليلي.",
         "loss": "إذا تأكد التسرّب بالحجم المفترض 1 لتر/ثانية: نحو 86.4 م³ يوميًا. حجم التسرّب مفترض وغير مقاس."
+      },
+      "edited": {
+        "en": "Edited after Claude wrote it, to match the facts from data/: 86 m³ became 86.4 m³; \"does not move network pressure\" became the twin's \"1 other junction of 850\"; the pipe year was removed; the text was split into six sections. Claude's original text is shown below.",
+        "ar": "عُدِّل بعد أن كتبه Claude ليطابق الحقائق من data/: تغيّر 86 م³ إلى 86.4 م³؛ واستُبدلت بعبارة «لا يغيّر ضغط الشبكة» نتيجةُ التوأم «عقدة أخرى واحدة من 850»؛ وحُذفت سنة الأنبوب؛ وقُسِّم النص إلى ستة أقسام. نص Claude الأصلي معروض أدناه."
+      },
+      "original": {
+        "en": "Location: west edge of al-Mazar al-Janubi, Karak (31.05727 N, 35.68692 E).\nAsset: ¾\" galvanized iron service line (network record), 6 m from the spot centre; radar position accurate to about ±50 m.\nEvidence: NISAR L-band radar shows soil moisture up on 16 Sep and still up on 28 Sep 2026 (HH +2.44 dB, HV +1.82 dB); 0 mm rain between passes (ERA5).\nWhy a crew: the hydraulic twin shows this leak does not move network pressure, so pressure loggers will not catch it.\nOn site: look for wet soil, sunken asphalt or green growth along the line; listen with a ground microphone on the line and at the meter box; check the meter for night flow.\nEstimated loss if confirmed: about 1 L/s, roughly 86 m³ a day (assumed leak size).",
+        "ar": "الموقع: الطرف الغربي من المزار الجنوبي، محافظة الكرك.\nالأنبوب: خط خدمة حديد مجلفن قطر ¾ إنش (سجل الشبكة 2020)، على بعد 6 م من مركز البقعة، ودقة موقع الرادار نحو ±50 م.\nالدليل: رادار NISAR بنطاق L يُظهر ارتفاع رطوبة التربة في 16 أيلول واستمراره في 28 أيلول 2026، دون أي هطول للأمطار بين المرورين.\nلماذا فريق ميداني: النموذج الهيدروليكي يُظهر أن هذا التسرّب لا يغيّر ضغط الشبكة، فلن تكشفه أجهزة قياس الضغط.\nفي الموقع: تفقّد التربة الرطبة أو هبوط الإسفلت أو نمو النباتات على امتداد الخط، واستمع بالميكروفون الأرضي على الخط وعند صندوق العداد، وافحص العداد للتدفق الليلي.\nالفاقد المقدّر عند التأكيد: نحو 1 لتر/ثانية، أي قرابة 86 م³ يومياً (حجم تسرّب مفترض).",
+        "from": "demo/missing-blue.html (DATA.recorded.order)"
       }
     },
     {
@@ -31,22 +40,26 @@
       "spot_id": "W3",
       "priority": "medium",
       "recorded_at": "2026-10-10",
-      "by": "Recorded run · Claude",
+      "by": "Prepared text · not a saved Claude run",
       "en": {
         "where": "North-east edge of Karak, open rangeland. Spot centre 31.21237 N, 35.75522 E. The radar position is good to about ±50 m, so search the whole circle.",
-        "pipe": "1\" galvanized iron line in the utility's network record; the spot centre is 38.2 m from the pipe, within the 40 m rule.",
-        "evidence": "NISAR L-band radar shows soil moisture up on 16 Sep 2026 and still up on 28 Sep 2026 against 4 Sep 2026 (HH +2.46 dB, HV +2.64 dB). Rain between passes: 0.0 mm (ERA5). Land cover: rangeland in 2023, 2024 and 2025 (Sentinel-2), not farmland.",
+        "pipe": "1\" galvanized iron line in the utility's network record; the spot centre is about 38 m from the pipe (position ±50 m), within the 40 m rule.",
+        "evidence": "NISAR L-band radar shows soil moisture up on 16 Sep 2026 and still up on 28 Sep 2026 against 4 Sep 2026 (HH +2.46 dB, HV +2.64 dB). Rain between passes: 0 mm (ERA5). Land cover: rangeland in 2023, 2024 and 2025 (Sentinel-2), not farmland.",
         "why": "The ground stayed wet with no rain, close to a pipe, on land that is not irrigated farmland, so one visit is worth it. The radar position allows the wet ground to be on the pipe itself.",
         "check": "Walk the line inside the circle: look for wet soil, sunken asphalt or green growth; listen with a ground microphone on the line and at the meter box; check the meter box for night flow.",
         "loss": "If a leak is confirmed at the assumed size of 1 L/s: about 86.4 m³ a day. The leak size is assumed, not measured."
       },
       "ar": {
         "where": "الطرف الشمالي الشرقي من الكرك، أرض رعوية مفتوحة. مركز البقعة 31.21237 شمالًا، 35.75522 شرقًا. دقة موقع الرادار نحو ±50 م، لذا ابحث في الدائرة كلها.",
-        "pipe": "خط حديد مجلفن قطر 1 إنش في سجل شبكة المياه؛ مركز البقعة على بعد 38.2 م من الأنبوب، ضمن قاعدة 40 م.",
-        "evidence": "رادار NISAR بنطاق L يُظهر ارتفاع رطوبة التربة في 16 أيلول 2026 واستمراره في 28 أيلول 2026 مقارنةً بـ 4 أيلول 2026 (HH ‎+2.46 dB، HV ‎+2.64 dB). الأمطار بين المرورين: 0.0 مم (ERA5). الغطاء الأرضي: أرض رعوية في 2023 و2024 و2025 (Sentinel-2)، وليست أرضًا زراعية.",
+        "pipe": "خط حديد مجلفن قطر 1 إنش في سجل شبكة المياه؛ مركز البقعة على بعد نحو 38 م من الأنبوب (دقة الموقع ±50 م)، ضمن قاعدة 40 م.",
+        "evidence": "رادار NISAR بنطاق L يُظهر ارتفاع رطوبة التربة في 16 أيلول 2026 واستمراره في 28 أيلول 2026 مقارنةً بـ 4 أيلول 2026 (HH ‎+2.46 dB، HV ‎+2.64 dB). الأمطار بين المرورين: 0 مم (ERA5). الغطاء الأرضي: أرض رعوية في 2023 و2024 و2025 (Sentinel-2)، وليست أرضًا زراعية.",
         "why": "بقيت الأرض رطبة دون أمطار، قرب أنبوب، وفي أرض غير مزروعة ولا مروية، لذا تستحق زيارة واحدة. دقة موقع الرادار تسمح بأن تكون الأرض الرطبة فوق الأنبوب نفسه.",
         "check": "امشِ على امتداد الخط داخل الدائرة: ابحث عن تربة رطبة أو هبوط في الإسفلت أو نمو نباتات؛ استمع بالميكروفون الأرضي على الخط وعند صندوق العداد؛ وافحص صندوق العداد بحثًا عن تدفق ليلي.",
         "loss": "إذا تأكد التسرّب بالحجم المفترض 1 لتر/ثانية: نحو 86.4 م³ يوميًا. حجم التسرّب مفترض وغير مقاس."
+      },
+      "edited": {
+        "en": "Written during preparation from the same facts JSON, not saved from a live Claude call. Use \"Write it live with Claude\" for a live order.",
+        "ar": "كُتب أثناء التحضير من ملف الحقائق نفسه، ولم يُحفَظ من استدعاء مباشر لـ Claude. استخدم «اكتبه مباشرة بواسطة Claude» للحصول على أمر مباشر."
       }
     }
   ]

@@ -40,11 +40,18 @@ export default function Overview({ query }: ScreenProps) {
   const [layersOpen, setLayersOpen] = useState(() => !isPhone());
   const dates = useMemo(() => radarDates(rb.data), [rb.data]);
   const [rs, setRs] = useState<RadarState>(() => ({
-    on: query.get("radar") === "1",
+    on: query.get("radar") === "1" || query.get("view") === "radar",
     date: query.get("date") ?? "",
     pol: query.get("pol") === "hv" ? "hv" : "hh",
     mask: true,
   }));
+  // Demo mode passes ?view=radar (time-lapse step: overlay on) and ?view=pipes (pipes step: overlay off); the
+  // embedded screen stays mounted between those steps, so follow the query, not only the first render.
+  const view = query.get("view");
+  useEffect(() => {
+    if (view === "radar") setRs((r) => ({ ...r, on: true }));
+    else if (view === "pipes") setRs((r) => ({ ...r, on: false }));
+  }, [view]);
   // default pass = the latest one listed in bounds.json
   const date = dates.includes(rs.date) ? rs.date : dates[dates.length - 1] ?? "";
   const radarState = { ...rs, date };

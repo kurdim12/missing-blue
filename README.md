@@ -54,6 +54,8 @@ Everything is local except the optional OpenStreetMap basemap and live Claude ca
 
 Every screen renders an honest Arabic/English message when one of these files is missing; nothing crashes.
 
+Note on `hydrofingerprint_scale9.json`: until the commit that added this note, its `sensors` list carried the latitude/longitude of the 15 logger junctions it uses (Mazar network). The current file keeps node ids only, but those 15 coordinates remain in the public git history. Removing them from history needs a history rewrite and a force push, which is the repository owner's decision.
+
 ---
 
 ## Screens
@@ -162,10 +164,10 @@ What the AI is: a **physics-guided Bayesian model** and a **neural network (MLP)
 |---|---|---|
 | Wet spots within 40 m of a real pipe | 2 of 7. W7: spot centre 6 m from a ¾" galvanized iron service line, built area 2023–2025. W3: 38 m from a 1" line on open rangeland | `wet_spots.geojson` |
 | Twin, leak of 1 L/s at W7: junctions dropping > 1 m | 1 other junction (2 including the leak junction) of 850 | `mazar_zone_results.json` |
-| Twin, 15 L/s break on a main 3.7 km away: junctions dropping > 1 m | 788 of 850 | `mazar_zone_results.json` |
+| Twin, 15 L/s break on a 4" main about 1.9 km from W7: junctions dropping > 1 m | 788 of 850 | `mazar_zone_results.json` |
 | Information from 10 loggers: AI-placed vs random | 3.63 vs 1.71 bits (of 5) | `hydrofingerprint_results.json` |
 | Gap accuracy A–E, 3 spread loggers (Bayesian) | 52.6 / 52.5 / 50.3 / 52.5 / 49.5% (chance) | `hydrofingerprint_results.json` |
-| Gap accuracy A–E, 10 loggers (Bayesian) | 100 / 93.1 / 99.4 / 99.7 / 49.3%; all 5 right 46.1% (MLP 37.2%) | `hydrofingerprint_results.json` |
+| Gap accuracy A–E, 10 loggers (Bayesian) | 100 / 93.1 / 99.4 / 99.7 / 49.3%; all 5 right 46.1% (MLP 37.2%) (training run in `hydrofingerprint_results.json`; the screens quote the separate evaluation in `hydrofingerprint_robustness.json`, 46.9%, next row) | `hydrofingerprint_results.json` |
 | AI vs plain least-squares algorithm, same 10 loggers, all 5 right | **46.9% vs 26.7%** (1,440 test cases) | `hydrofingerprint_robustness.json` |
 | Same, on a network that does not match the model (roughness ×0.8–1.2, demand ×0.5–1.6, tank ±5 m, more noise) | **45.4% vs 23.9%** (800 cases) | `hydrofingerprint_robustness.json` |
 | Calibration: when it says ≥ 90% or ≤ 10% (about 70% of decisions) | right 99.9% (nominal) / 99.1% (mismatched network) | `hydrofingerprint_robustness.json` |

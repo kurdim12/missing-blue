@@ -105,7 +105,7 @@ export default function Problem({ query, embedded }: ScreenProps) {
             />
             <Stat
               label={t("foundRain")}
-              value={facts.rainMm === null ? "–" : withUnit(facts.rainMm, "mm", lang, 1, 1)}
+              value={facts.rainMm === null ? "–" : withUnit(facts.rainMm, "mm", lang, 1)}
               note="ERA5 · Open-Meteo"
               source="data/wet_spots/wet_spots.geojson"
             />

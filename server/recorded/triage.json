@@ -1,5 +1,5 @@
 {
-  "_about": "Recorded Claude triage run, replayed when no ANTHROPIC_API_KEY is set or a live call fails. Tool calls are re-executed against data/ on every replay, so every tool result shown comes from the data files. Decisions and reasons are the recording (English) with an Arabic translation; one reason was corrected to match data/ (see 'corrected').",
+  "_about": "Recorded Claude triage run, replayed when no ANTHROPIC_API_KEY is set or a live call fails. Tool calls are re-executed against data/ on every replay, so every tool result shown comes from the data files. Decisions and reasons are the recording (English) with an Arabic translation; two reasons were corrected to match data/ (see 'corrected', with 'original_reason').",
   "origin": "demo/missing-blue.html (DATA.recorded): written by Claude during preparation from the same tool results",
   "label": "Recorded run · Claude, 10 Oct 2026",
   "recorded_on": "2026-10-10",
@@ -145,8 +145,13 @@
         "id": "W5",
         "verdict": "reject",
         "priority": null,
-        "reason": "1.4 km from any pipe, mostly cropland; next to W6, same fields.",
-        "reason_ar": "على بُعد 1.4 كم من أي أنبوب، ومعظمها أرض محاصيل؛ بجانب W6، الحقول نفسها."
+        "reason": "1.4 km from any pipe, cropland in every year; next to W6, same fields.",
+        "reason_ar": "على بُعد 1.4 كم من أي أنبوب، وأرض محاصيل في كل السنوات؛ بجانب W6، الحقول نفسها.",
+        "corrected": {
+          "en": "Corrected to match data/wet_spots: the recording said \"mostly cropland\"; the land-cover columns say cropland in 2023, 2024 and 2025.",
+          "ar": "صُحّح ليطابق ملف البقع الرطبة: قال التسجيل «معظمها أرض محاصيل»؛ وأعمدة الغطاء الأرضي تقول أرض محاصيل في 2023 و2024 و2025."
+        },
+        "original_reason": "1.4 km from any pipe, mostly cropland; next to W6, same fields."
       },
       {
         "id": "W6",

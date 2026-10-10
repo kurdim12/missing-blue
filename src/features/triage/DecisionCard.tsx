@@ -10,8 +10,12 @@ const PRIO = { high: "prio_high", medium: "prio_medium", low: "prio_low" } as co
 export function DecisionCard({ d, radius }: { d: TriageDecision; radius: number | null }) {
   const { lang } = useI18n();
   const t = useT(triageStrings);
-  const n = d.checks?.numbers;
-  const reason = lang === "ar" && d.reason_ar ? d.reason_ar : d.reason;
+  const showAr = lang === "ar" && Boolean(d.reason_ar);
+  const reason = showAr ? d.reason_ar! : d.reason;
+  // the check for the text on screen (older recordings carry only the English check: say so)
+  const n = showAr ? d.checks?.numbers_ar ?? d.checks?.numbers : d.checks?.numbers;
+  const checkedOnEn = showAr && !d.checks?.numbers_ar;
+  const missing = d.checks?.tools_missing ?? [];
   return (
     <article className={`triage-card triage-card-${d.verdict}`}>
       <header className="triage-card-head">
@@ -28,7 +32,9 @@ export function DecisionCard({ d, radius }: { d: TriageDecision; radius: number 
         </p>
       ) : null}
       <footer className="triage-card-foot">
-        {n ? (
+        {n && missing.length ? (
+          <Tag tone="warn">{t("toolsMissing", { tools: missing.join(", "), k: n.unmatched.length })}</Tag>
+        ) : n ? (
           n.total === 0 ? (
             <span className="faint">{t("numbersNone")}</span>
           ) : n.unmatched.length ? (
@@ -36,6 +42,7 @@ export function DecisionCard({ d, radius }: { d: TriageDecision; radius: number 
           ) : (
             <span className="triage-check" title={n.rounded.length ? t("numbersRounded", { list: n.rounded.join(", ") }) : undefined}>
               <span aria-hidden="true">✓</span> {t("numbersOk", { m: n.matched, n: n.total })}
+              {checkedOnEn ? <> {t("checkedOnEn")}</> : null}
             </span>
           )
         ) : null}

@@ -35,10 +35,14 @@ import "../features/twin/twin.css";
 
 type All = Record<TwinScenario, TwinResponse>;
 
-/** "1.9 km" / "190 m" for model distances (rounded: no false precision). */
+/** "1.9 km" / "190 m" / "15 m" for model distances (rounded: no false precision; under 100 m to the nearest 5 m). */
 function approx(m: number, lang: Lang) {
-  return m >= 1000 ? withUnit(m / 1000, "km", lang, 1) : withUnit(Math.round(m / 10) * 10, "m", lang, 0);
+  if (m >= 1000) return withUnit(m / 1000, "km", lang, 1);
+  return withUnit(m < 100 ? Math.round(m / 5) * 5 : Math.round(m / 10) * 10, "m", lang, 0);
 }
+
+/** A distance the twin file states itself (key.<point>.dist_m) wins over one recomputed here. */
+const fileDist = (p: { [k: string]: number }, fallback: number) => (typeof p.dist_m === "number" && Number.isFinite(p.dist_m) ? p.dist_m : fallback);
 
 const maxIn = (edges: { in: number }[]) => edges.reduce((a, e) => Math.max(a, e.in), 0);
 
@@ -50,7 +54,7 @@ const KEY_VARS = {
   "--twin-leak": KEY_COLORS.leak,
 } as CSSProperties;
 
-export default function Twin({ query }: ScreenProps) {
+export default function Twin({ query, embedded }: ScreenProps) {
   const t = useT(twinStrings);
   const { lang } = useI18n();
   const all = useApi(() => Promise.all(SCENARIOS.map((s) => api.twin(s))), []);
@@ -85,8 +89,8 @@ export default function Twin({ query }: ScreenProps) {
       farIn: maxIn(edgesAt(base.edges, key.far)),
       candPipe,
       dFar: metres(key.cand, key.far),
-      dLogger: metres(key.cand, key.logger),
-      dMain: metres(key.cand, key.main),
+      dLogger: fileDist(key.logger, metres(key.cand, key.logger)),
+      dMain: fileDist(key.main, metres(key.cand, key.main)),
       dMainSupply: Math.min(metres(key.main, key.tank), metres(key.main, key.tank2)),
     };
   }, [all.data]);
@@ -155,7 +159,7 @@ export default function Twin({ query }: ScreenProps) {
     scenario === "base"
       ? t("msgBase")
       : scenario === "svc1"
-        ? t("msgSvc1", { pipe: pipeText(model.candPipe), id })
+        ? t("msgSvc1", { pipe: pipeText(model.candPipe), id, n: fmt(s.nOther, 0), total, th })
         : scenario === "far15"
           ? t("msgFar15", { pipe: inchText(model.farIn, lang), d: approx(model.dFar, lang), id })
           : t("msgMain", { d: approx(model.dMainSupply, lang) });
@@ -164,6 +168,29 @@ export default function Twin({ query }: ScreenProps) {
 
   const compareRows = (more ? [...PRIMARY.slice(1), ...EXTRA] : PRIMARY.slice(1)).map((sc) => model.sums[sc]);
   const leakSizes = [...new Set(SCENARIOS.map((sc) => model.sums[sc].leakLps).filter((v): v is number => v !== null))].sort((a, b) => a - b);
+
+  // Demo mode: the comparison (the cue's "{nSvc} other junction" and "{nFar} of {nJ}") sits above the fold.
+  const compareEl = (
+    <section className="twin-compare" aria-label={t("compareTitle", { th, total })}>
+      <h2 className="twin-h2">{t("compareTitle", { th, total })}</h2>
+      {compareRows.map((row) => (
+        <button
+          key={row.scenario}
+          type="button"
+          className={`twin-bar-row${row.scenario === scenario ? " is-active" : ""}`}
+          onClick={() => setScenario(row.scenario)}
+          aria-pressed={row.scenario === scenario}
+        >
+          <span className="twin-bar-label">{scLabel(row.scenario)}</span>
+          <span className="twin-bar-val num">{fmt(row.nAbove, 0)}</span>
+          <span className="twin-bar-track" aria-hidden="true">
+            <span className="twin-bar-fill" style={{ inlineSize: `${Math.max(0.6, (100 * row.nAbove) / row.nNodes)}%` }} />
+          </span>
+          {row.scenario !== "far15" && row.nOther !== row.nAbove ? <span className="twin-bar-note">{t("compareSvc1Note", { n: fmt(row.nOther, 0) })}</span> : null}
+        </button>
+      ))}
+      </section>
+  );
 
   return (
     <div className="map-screen twin" style={KEY_VARS}>
@@ -214,6 +241,8 @@ export default function Twin({ query }: ScreenProps) {
             </div>
           </details>
 
+          {embedded ? compareEl : null}
+
           <div className="twin-result" aria-live="polite">
             {!isBase && s.leakLps !== null ? (
               <div className="badge-row">
@@ -244,25 +273,7 @@ export default function Twin({ query }: ScreenProps) {
             </p>
           </div>
 
-          <section className="twin-compare" aria-label={t("compareTitle", { th, total })}>
-            <h2 className="twin-h2">{t("compareTitle", { th, total })}</h2>
-            {compareRows.map((row) => (
-              <button
-                key={row.scenario}
-                type="button"
-                className={`twin-bar-row${row.scenario === scenario ? " is-active" : ""}`}
-                onClick={() => setScenario(row.scenario)}
-                aria-pressed={row.scenario === scenario}
-              >
-                <span className="twin-bar-label">{scLabel(row.scenario)}</span>
-                <span className="twin-bar-val num">{fmt(row.nAbove, 0)}</span>
-                <span className="twin-bar-track" aria-hidden="true">
-                  <span className="twin-bar-fill" style={{ inlineSize: `${Math.max(0.6, (100 * row.nAbove) / row.nNodes)}%` }} />
-                </span>
-                {row.scenario !== "far15" && row.nOther !== row.nAbove ? <span className="twin-bar-note">{t("compareSvc1Note", { n: fmt(row.nOther, 0) })}</span> : null}
-              </button>
-            ))}
-          </section>
+          {!embedded ? compareEl : null}
 
           <p className="twin-story">{t("story")}</p>
 

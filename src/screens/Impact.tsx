@@ -2,7 +2,9 @@
 // computed from it, cited with a link, or labelled ASSUMED / PLAN. No prices. Strings: src/features/story/strings.ts.
 import type { ScreenProps } from "../screens";
 import { screenById } from "../screens";
-import { fmt, fmtDate, unit, useI18n, useT } from "../i18n";
+import { getJson, useApi } from "../api";
+import { fmt, fmtDate, unit, useI18n, useT, withUnit } from "../i18n";
+import type { TriageInfo } from "../features/triage/useTriageStream";
 import { href } from "../router";
 import { Badge, Button, EmptyState, Page, PageHeader, Panel, SourceNote, Stat, Tag } from "../ui";
 import { CitedSource } from "../features/story/CitedSource";
@@ -18,7 +20,10 @@ export default function Impact(_props: ScreenProps) {
   const t = useT(impactStrings);
   const facts = useStoryFacts();
   const usage = useTriageUsage();
-  const v = storyVars(facts, lang);
+  const info = useApi(() => getJson<TriageInfo>("/api/triage"), []);
+  const radiusM = info.data?.rules.dispatch_radius_m;
+  // the dispatch radius is the triage rule served by the API (server/triage.ts), never typed here
+  const v: Record<string, string> = { ...storyVars(facts, lang), d: typeof radiusM === "number" ? withUnit(radiusM, "m", lang, 0) : "–" };
   const def = screenById("impact")!;
 
   return (
@@ -130,7 +135,14 @@ export default function Impact(_props: ScreenProps) {
                 <span>{t("tokensLast")}</span>
                 {usage?.source === "recorded" ? <Badge kind="RECORDED" size="sm" /> : null}
               </div>
-              {usage ? (
+              {usage?.noTokens ? (
+                <div className="story-stack">
+                  <p className="muted">
+                    {t("tokensRecorded")}
+                    {usage.at ? <> · {fmtDate(usage.at, lang)}</> : null}
+                  </p>
+                </div>
+              ) : usage ? (
                 <>
                   <div className="story-tokens-total">
                     <span className="num">{fmt(usage.total, 0)}</span> <span className="muted">{t("tokensTotal")}</span>

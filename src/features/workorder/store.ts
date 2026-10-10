@@ -1,5 +1,7 @@
 // Demo-only persistence in localStorage (every access wrapped: storage can be blocked).
-// Order status (Sent / In progress / Confirmed / Not found) and the crew report written on the phone.
+// Order status (Sent / In progress / Crew reported: leak found / Crew reported: no leak) and the crew report written
+// on the phone. A crew report is what one device recorded in this demo, never a confirmed leak; resetDemoReports()
+// clears it (the Reset button on the work order, and Demo mode on start).
 import { useCallback, useEffect, useState } from "react";
 
 export const STATUSES = ["sent", "in_progress", "confirmed", "not_found"] as const;
@@ -82,3 +84,31 @@ export function useCrewReport(spotId: string) {
 }
 
 export const readCrewReport = (spotId: string) => read<CrewReport>(crewKey(spotId), EMPTY_REPORT);
+
+/** Clears every demo status and crew report in this browser (mb.wo.status and mb.crew.*). */
+export function resetDemoReports() {
+  try {
+    const keys: string[] = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k && (k === STATUS_KEY || k.startsWith("mb.crew."))) keys.push(k);
+    }
+    keys.forEach((k) => localStorage.removeItem(k));
+  } catch {
+    /* storage blocked: nothing was stored */
+  }
+  window.dispatchEvent(new Event(EVENT));
+}
+
+/** True when this browser holds any demo status or crew report. */
+export function hasDemoReports(): boolean {
+  try {
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k && (k === STATUS_KEY || k.startsWith("mb.crew."))) return true;
+    }
+  } catch {
+    /* storage blocked */
+  }
+  return false;
+}

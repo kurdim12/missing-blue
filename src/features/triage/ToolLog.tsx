@@ -4,7 +4,7 @@ import { fmt, fmtDate, pm, useI18n, useT, withUnit, type Lang } from "../../i18n
 import { Badge, Ltr, Spinner } from "../../ui";
 import { LAND_COVER_AR, triageStrings } from "./strings";
 import type { ToolEntry } from "./useTriageStream";
-import { inchText, parsePipeLabel } from "../overview/spotText";
+import { inchText, parsePipeLabel, pipeLabelText } from "../overview/spotText";
 import { MATERIALS } from "../overview/strings";
 
 type T = ReturnType<typeof useT<typeof triageStrings.en>>;
@@ -51,7 +51,7 @@ function Summary({ e, t, lang, radius }: { e: ToolEntry; t: T; lang: Lang; radiu
       return (
         <>
           <Ltr>{r.spot_id}</Ltr>: {t("sumPipe", { d: withUnit(r.spot_centre_to_pipe_m, "m", lang, 0), acc: pm(r.position_accuracy_m, "m", lang) })} ·{" "}
-          {lang === "ar" ? pipeAr(r.pipe) : <Ltr>{r.pipe}</Ltr>}
+          {lang === "ar" ? pipeAr(r.pipe) : pipeLabelText(r.pipe, "en")}
           {rec?.pipe_id ? (
             <>
               {" "}

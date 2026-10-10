@@ -7,6 +7,7 @@ import { Badge, EmptyState, Ltr, Page, PageHeader, Panel, Tag } from "../ui";
 import { fill, storyVars, useStoryFacts } from "../features/story/facts";
 import { DATASETS, RADAR_RULE, TWIN_SCENARIO_KEYS, leakOfScenario } from "../features/story/sources";
 import { sourcesStrings } from "../features/story/strings";
+import { rainSentence } from "../features/overview/spotText";
 import "../features/story/story.css";
 
 export default function Sources(_props: ScreenProps) {
@@ -74,7 +75,7 @@ export default function Sources(_props: ScreenProps) {
                 : d.id === "nisar" && facts.passes.length
                   ? v.dates
                   : d.id === "rain" && facts.rainCheck
-                    ? facts.rainCheck
+                    ? rainSentence(facts.rainCheck, lang)
                     : null;
             return (
               <div className="story-ds-row" role="row" key={d.id}>

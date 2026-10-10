@@ -585,3 +585,25 @@ html[lang="ar"] .wo-doc-kind {
   gap: var(--s-2);
   font-size: var(--fs-sm);
 }
+
+/* recorded text that was edited after Claude wrote it (or prepared by hand): say so on the sheet */
+.wo-edited {
+  margin: 0 0 12px;
+  padding: 8px 12px;
+  border-inline-start: 3px solid var(--amber);
+  font-size: 0.875rem;
+}
+.wo-edited p {
+  margin: 0;
+}
+.wo-original {
+  margin-top: 6px;
+}
+.wo-original summary {
+  cursor: pointer;
+}
+.wo-original-text {
+  white-space: pre-line;
+  margin: 6px 0 0;
+  color: var(--text-muted);
+}
