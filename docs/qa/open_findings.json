@@ -1,0 +1,170 @@
+[
+ {
+  "id": "UX-01",
+  "severity": "P0",
+  "screen": "Demo mode step 3 'Overview: radar time-lapse' (and step 4)",
+  "what": "Step 3 of the demo, the radar step, opens with the radar overlay switched off. The demo passes the hint `view=radar`, but Overview only reads `radar=1`, so the step shows plain pipes and no radar. At 1280x720 the 'Show radar overlay' checkbox and the date slider sit below the fold of the side panel, so the presenter has to scroll the panel to find them. That breaks the 'one click per step' rule and the pitch's radar-image moment. Steps 3 and 4 render the same screen.",
+  "evidence": "src/features/story/pitch.ts:54 `query: { view: \"radar\" }` and :67 `query: { view: \"pipes\" }`; src/screens/Overview.tsx:43 `on: query.get(\"radar\") === \"1\"` (no 'view' key read anywhere). Playwright demo walk: checkbox state on step 3 = [false, true] (overlay unchecked) in demo_1280x720_en.json and demo_1440x900_ar.json. Screenshot docs/qa/shots/verify-ux/demo_1280x720_en_step03.png: no radar, NISAR radar section cut off below the panel.",
+  "fix": "In pitch.ts set step 3 to `query: { radar: \"1\", date: \"2026-09-16\" }` and step 4 to `query: { radar: \"0\" }`. Alternatively make Overview accept `view===\"radar\"`. Overview reads the query only in a useState initialiser, and EmbeddedScreen is keyed by step.screen, so steps 3 and 4 share one instance. Key EmbeddedScreen by step.id (`key={step.id}`), or add an effect that syncs `rs.on` from the query. When embedded, also scroll the side panel so the NISAR radar block is in view."
+ },
+ {
+  "id": "UX-02",
+  "severity": "P1",
+  "screen": "Demo mode steps 6 (Twin), 7 (Records), 9 (Impact) at 1280x720; step 6 also at 1440x900",
+  "what": "The numbers the presenter says on these steps are below the fold of the demo stage. Twin: the '1 other junction' value is cut off at 1280x720, and '788 of 850' is off-screen at both 1280x720 and 1440x900. Records: only 'Doubt left' is visible; the Gap A–E probability bars and the 'Why AI' figures (46.9% vs 26.7%) are not, so a judge pressing 'AI: place next logger' cannot see the bars move. Impact: 86.4 m³/day, 31,536 m³/year and '2 sites vs 1,287 km' are below the fold. The pitch rule is that every number spoken is on screen at that moment.",
+  "evidence": "docs/qa/shots/verify-ux/demo_1280x720_en_step06.png (big '1' clipped at the panel bottom, no 788), demo_1440x900_ar_step06.png (788 card cut off), demo_1280x720_en_step07.png (no gap bars), demo_1280x720_en_step09.png. Stage scroll heights from the demo JSON: impact 1820/534, sources 2593/554.",
+  "fix": "Use the `embedded` prop, which Twin ignores and Records only turns into an unstyled `is-embedded` class. When embedded: hide the kicker and intro paragraph and collapse 'More scenarios'. Render the 'Junctions dropping more than 1 m' comparison card (leak 1 vs main break 788 of 850) directly under the scenario buttons. In Records put the gap bars right under the action row, so `.hf-screen.is-embedded` needs real CSS. For Impact, move the 'One hidden leak' and 'Crew effort' cards to the first row, or add a `focus` query that scrolls to them."
+ },
+ {
+  "id": "UX-03",
+  "severity": "P1",
+  "screen": "Overview (all sizes), demo steps 3–4",
+  "what": "The header says '7 persistent wet spots', but only 6 markers can be seen. W5 sits 3–4 px from W6 at the default zoom, so it is completely hidden, and W1's label is half-covered by the W2 marker. A judge who counts the markers sees 6. The integration agent reported this, and it is still unfixed.",
+  "evidence": "Marker rects from docs/qa/shots/verify-ux/probe.json: 1440 W5 (568,699) vs W6 (572,702); 1280 W5 (522,555) vs W6 (525,557); 1366 W5 (556,594) vs W6 (559,596). Screenshots 1440x900_en_overview.png, 1280x720_en_overview.png, 390x844_en_overview.png show W1, W2, W3, W4, W6, W7 only.",
+  "fix": "At low zoom, group the overlapping markers: draw one ring labelled 'W5 · W6' that fans out on hover or click, or offset the labels with a fixed leader line (W5 label to the left, W6 to the right). As a minimum, render the labels as a stacked list 'W5 / W6' at the shared point, so all 7 IDs can be read at the default fit."
+ },
+ {
+  "id": "UX-04",
+  "severity": "P1",
+  "screen": "AI triage (AR), Work order (AR + print), Demo cue step 5 (AR + EN), Sources (AR)",
+  "what": "Raw English data strings show inside the Arabic UI. (a) Triage rule 4 is a full English sentence, 'ERA5 via Open-Meteo: 0.0 mm at Mazar and Karak between 2026-09-04 and 2026-09-28', and the bidi mixing places the Arabic colon in the wrong spot. (b) The work order's 'أي أنبوب' line shows `3/4\" galvanized iron`. (c) The Arabic presenter cue on step 5 reads 'على بعد 6 م من خط 3/4\" galvanized iron'. (d) The Sources rain row repeats the English sentence. In English the same strings print `3/4\"` instead of the spec's ¾\" and use ISO dates instead of '4 Sep 2026'. The integration agent fixed this only in the crew view and the triage log.",
+  "evidence": "src/screens/Triage.tsx:136-137 renders `info.data.rules.rain_check` verbatim; src/screens/WorkOrder.tsx:209 `<Ltr>{f.pipe.description}</Ltr>`; src/features/story/facts.ts:113 `leadPipe: f.lead?.nearest_pipe`; src/screens/Sources.tsx:76-77 `facts.rainCheck`. Screenshots: 1440x900_ar_triage.png (rule 4), tall_1440_ar_workorder_W7.png / crop_ar_wo_facts.png, demo_1440x900_ar_step05.png (cue), tall_1440_ar_sources.png; latin1440.txt lines 35, 53.",
+  "fix": "Reuse the helpers already used in Crew.tsx (`describePipe`, `inchText`, `materialName` from features/overview/spotText) in WorkOrder.tsx:209 and facts.ts:113, so the Arabic reads «¾ إنش · الحديد المجلفن» and the English reads ¾\". For the rain sentence use `parseRain()` (already in Overview), then `withUnit(mm,'mm',lang)` plus `fmtDate(...)` for both passes, giving 'ERA5 عبر Open-Meteo: 0.0 مم في المزار والكرك بين 4 أيلول 2026 و28 أيلول 2026'. Wrap the source name in <bdi>."
+ },
+ {
+  "id": "UX-05",
+  "severity": "P1",
+  "screen": "Impact & business: 'Running cost' card",
+  "what": "The token count never appears. Impact reads `localStorage['mb.triage.usage' | 'mb.triage.last' | 'mb.triage']`, but nothing in the app writes those keys, so the card always says 'Run AI triage to see the token count of one run.', even right after a live triage run. The recorded run also has `usage: null`. The spec asks for the per-run token count from the triage response, and the pitch's answer to the business judge says 'the screen shows the token count'.",
+  "evidence": "`grep -rn \"mb\\.triage\" src` finds only src/features/story/usage.ts, the reader; there is no writer. server/recorded/triage.json:162 `\"usage\": null`. Screenshot tall_1440_ar_impact.png: the card shows the 'run triage' prompt.",
+  "fix": "In useTriageStream (or Triage.tsx when the final event arrives), add `localStorage.setItem('mb.triage.usage', JSON.stringify({input_tokens, output_tokens, source, model, at}))` whenever `usage` is present. Do one live run on the demo laptop now, and save its real usage into server/recorded/triage.json under the 'Recorded run' label, so the offline fallback also shows a sourced token count."
+ },
+ {
+  "id": "UX-06",
+  "severity": "P1",
+  "screen": "Top bar, English, at 1280 px width (every screen, including Demo)",
+  "what": "At 1280 px the top nav overflows, and the last tab shows as 'Der' (cut mid-word) with no scroll cue. In demo mode that clipped tab is the active one. It sits on top of every screen on a 1280x720 projector.",
+  "evidence": "probe.json at 1280: nav scrollWidth 608 > clientWidth 579; the 'Demo' link right edge 883 is past the nav's right edge. At 1366 it fits with 0 px to spare. Screenshots 1280x720_en_overview.png, demo_1280x720_en_step03.png.",
+  "fix": "Raise the legend breakpoint in src/styles.css:332 from `max-width: 1180px` to about 1360px, since the badges are repeated on every screen, and/or hide the 'Online' text label (keep the dot) below 1360px. Alternatively reduce `.topnav-link` horizontal padding at that width."
+ },
+ {
+  "id": "UX-07",
+  "severity": "P2",
+  "screen": "Triage (AR), Work order (AR), Impact token card",
+  "what": "The recorded-run label 'Recorded run · Claude, 10 Oct 2026' and the work-order line 'كتبه: Recorded run · Claude' stay in English inside the Arabic UI. On the English triage screen there are also four RECORDED RUN badges in a row: header badge, 'RECORDED RUN Recorded run · Claude…', and one on each panel.",
+  "evidence": "server/recorded/triage.json:4 `\"label\": \"Recorded run · Claude, 10 Oct 2026\"`; src/screens/WorkOrder.tsx:121 `<Ltr>{order.by}</Ltr>`. Screenshots demo_1440x900_ar_step05.png, 1440x900_ar_workorder_W7.png, off_1280x720_en_triage.png.",
+  "fix": "Build the label on the client: `t('recordedRun') + ' · Claude · ' + fmtDate(recorded_at, lang)`. Do the same for `order.by` when source==='recorded'. Show the RECORDED badge once per screen (in the header) and drop the per-panel duplicates."
+ },
+ {
+  "id": "UX-08",
+  "severity": "P2",
+  "screen": "Work order (screen + A4 print)",
+  "what": "The document header prints 'WORK ORDER أمر عمل ·' in English and '· WORK ORDER أمر عمل' in Arabic. The '·' separator sits inside the opposite-direction span, so it lands at the wrong end. This shows on the printed A4. The English facts line also prints 'at 1 other junction(s) of 850'. With background graphics on, the printed PDF also has a dark border and a dark area under the content, because `:root { color-scheme: dark }` is not reset for print.",
+  "evidence": "src/screens/WorkOrder.tsx:104-108 (the `· {t(\"docKindOther\")}` span carries `dir=other`); src/features/workorder/strings.ts:42 'junction(s)'. Print output docs/qa/shots/verify-ux/tall_1440_en_workorder_W7.pdf: header text '· أمر عمل ORDER WORK'; dark frame on both pages.",
+  "fix": "Move the separator outside the span: `{t('docKind')} <span aria-hidden> · </span><span lang={other} dir=...>{t('docKindOther')}</span>`. Pluralise twinLine (n===1 ? 'junction' : 'junctions'). Add `@media print { :root { color-scheme: light } }` to workorder.css."
+ },
+ {
+  "id": "UX-09",
+  "severity": "P2",
+  "screen": "All maps (Overview, Spot, Twin, Records, Crew)",
+  "what": "The map attribution text, including 'Pipes: AJI Group ArcGIS item (no licence stated)', renders black on the near-black attribution bar and cannot be read. Only the 'OpenStreetMap' link is visible. The pipe source credit is required.",
+  "evidence": "probe.json: `.maplibregl-ctrl-attrib-inner` computed colour rgb(0,0,0) on background rgba(8,18,24,0.8). Crop docs/qa/shots/verify-ux/crop_attrib.png.",
+  "fix": "In src/styles.css near line 853, add `.maplibregl-ctrl-attrib-inner, .maplibregl-ctrl-attrib-inner * { color: var(--text-muted) !important; }`. The project rule on `.maplibregl-ctrl-attrib` loses to maplibre's inner rule."
+ },
+ {
+  "id": "UX-10",
+  "severity": "P2",
+  "screen": "Twin (normal page and demo)",
+  "what": "For 'Leak at W7', the big number in 'Junctions dropping more than 1 m (of 850)' is 2, with the small text 'includes the leak junction; 1 other'. The pitch and the demo cue say 'only 1 other junction', so the largest number on screen contradicts what the presenter says. The twin legend's ASSUMED badge is also cut to 'demand, supply level, pipe…'.",
+  "evidence": "Screenshots 1440x900_en_twin.png (bar row 'Leak at W7 · 1 L/s  2'), 1280x720_en_twin.png (legend badge ellipsis). Sweep: clipped badge-label 'demand, supply level, pipe roughness' (scrollWidth 199 > clientWidth 152).",
+  "fix": "Show the excl-leak count (`stats.n_drop_gt1m_excl_svc`, 1) as the big number labelled 'other junctions', and move 'plus the leak junction itself' to the small text, matching the main-break row's '788 of 850'. In the legend, let the badge wrap or shorten its label to 'demand, supply, roughness'."
+ },
+ {
+  "id": "UX-11",
+  "severity": "P2",
+  "screen": "Spot detail W7 → 'Check in hydraulic twin'",
+  "what": "Journey 1 step 6 is broken in the normal, non-demo flow. 'Check in hydraulic twin' opens `#/twin` on 'Normal day' instead of the 'Leak at W7' scenario the button promises, so the user must find and click the scenario.",
+  "evidence": "src/screens/SpotDetail.tsx:129 and :232 `href(\"/twin\")`; Twin.tsx:58 already supports `?scenario=`.",
+  "fix": "Use `href(\"/twin?scenario=svc1\")` when the spot is inside the twin (the `twinInside` branch already computed at SpotDetail.tsx:93), and plain `/twin` otherwise."
+ },
+ {
+  "id": "UX-12",
+  "severity": "P2",
+  "screen": "Arabic copy (twin, work order, demo cues)",
+  "what": "Some Arabic phrasing is wrong or inconsistent. (a) The numeral 1 is followed by a noun: 'عند 1 عقدة أخرى', 'يحرّك الضغط في 1 عقدة أخرى فقط'; natural Arabic is 'عند عقدة أخرى واحدة'. (b) The Records demo cue quotes button labels that do not exist: «الذكاء الاصطناعي: ضع الجهاز التالي» where the button reads «… ضع المسجِّل التالي», and «لا يمكن الجزم» where the verdict reads «لا يمكن الحسم بعد». (c) The Problem hero shows '41%' with a Latin percent sign, while the rest of the Arabic UI uses '٪'.",
+  "evidence": "src/features/workorder/strings.ts:113 twinLine; src/features/story/pitch.ts (twin and records `ar` cues); screenshots tall_1440_ar_workorder_W7.png, demo_1440x900_ar_step06.png, 1440x900_ar_problem.png.",
+  "fix": "When n===1, use 'عقدة أخرى واحدة' in twinLine and in the twin cue. Copy the exact UI strings into the records cue (or interpolate them from hfStrings). Format the hero figure with `withUnit(41,'%',lang)`."
+ },
+ {
+  "id": "UX-13",
+  "severity": "P2",
+  "screen": "Records (HydroFingerprint) at projector distance",
+  "what": "The probability-bar axis labels ('not connected / can't tell / connected') are 10.5 px and the 0 and 1 ticks are 10 px. On a projector they cannot be read, yet these bars carry the main result of the 3:10–4:20 HydroFingerprint segment.",
+  "evidence": "Sweep: 17 text nodes under 11 px on /records at every size (sweep1440.json 'small'); screenshot 1440x900_en_records.png.",
+  "fix": "Raise these labels to at least 12–13 px (var(--fs-sm)) in src/features/hf/hf.css, and colour the verdict end labels to match the bar colours."
+ },
+ {
+  "id": "HON-07",
+  "severity": "P2",
+  "screen": "triage (recorded run)",
+  "what": "The recorded reasons state causes as fact. W1 says \"field watering, not the network\", the summary says \"5 rejected as irrigation\", and W7 says \"so only the radar can find it\". The rule shown on the same screen says only \"most likely irrigation\", and a crew with an acoustic detector can also find a leak. These lines appear in demo step 5.",
+  "evidence": "server/recorded/triage.json result.decisions (W1, W7) and summary. C:\\Users\\User\\Desktop\\missingblue-karak\\docs\\qa\\shots\\verify-honesty\\en_triage_done.png.",
+  "fix": "Record a fresh live triage run with the current prompt (the key is in .env), which also removes the hand-\"corrected\" W7 reason. If the text is edited instead, disclose it with the existing Corrected tag. Also add to the prompt: \"say 'most likely', never assert the cause\"."
+ },
+ {
+  "id": "HON-08",
+  "severity": "P2",
+  "screen": "triage tool log (EN), demo step 5 cue, work order facts panel (EN and AR)",
+  "what": "The raw file label `3/4\" galvanized iron` appears on screen while every other place says ¾\". The demo cue shown on screen in step 5 also says \"W7 is 6 m from a 3/4\" galvanized iron line, give or take ±50 m\" rather than \"spot centre 6 m from\".",
+  "evidence": "C:\\Users\\User\\Desktop\\missingblue-karak\\docs\\qa\\shots\\verify-honesty\\en_demo_step05.png (bottom cue) and en_triage_done.png (nearest_pipe(W7) row). Arabic work order facts panel: \"3/4\\\" galvanized iron · طبقة CAD 3-4GI\". Code: src/features/triage/ToolLog.tsx:54 (EN renders r.pipe raw); src/features/story/facts.ts:113 (leadPipe = raw nearest_pipe); the triage cue in src/features/story/pitch.ts.",
+  "fix": "Use inchText() and the MATERIALS names (as describePipe and pipeAr already do) for the EN tool log, storyVars.leadPipe and the work order facts panel. Change the cue to \"{lead}: spot centre {leadM} from a {leadPipe} line, position {acc}\"."
+ },
+ {
+  "id": "HON-09",
+  "severity": "P2",
+  "screen": "triage (Arabic) and triage decision card",
+  "what": "In the Arabic UI the recorded-run badge stays in English (\"Recorded run · Claude, 10 Oct 2026\"). The W7 card also reads \"Corrected Corrected to match data/twin…\" because both the tag and the note start with that word.",
+  "evidence": "C:\\Users\\User\\Desktop\\missingblue-karak\\docs\\qa\\shots\\verify-honesty\\ar_triage_done.png. src/screens/Triage.tsx:96 renders state.recorded.label from server/recorded/triage.json \"label\". src/features/triage/DecisionCard.tsx:27 plus server/recorded/triage.json corrected.en, which starts with \"Corrected to match\".",
+  "fix": "Build the label in i18n from recorded_on, for example t(\"recordedLabel\", {date: fmtDate(recorded_on, lang)}), giving «تشغيل مسجّل · Claude، 10 تشرين الأول 2026». Rename the tag to \"Edited\" / «معدَّل», or reword the note to \"Changed to match data/twin: …\"."
+ },
+ {
+  "id": "HON-10",
+  "severity": "P2",
+  "screen": "sources",
+  "what": "The Sources screen's dataset table has no OpenStreetMap basemap row (© OpenStreetMap contributors, ODbL), though OSM is used on every map and the README lists it. The spec asks the Sources screen to list every source with its licence.",
+  "evidence": "C:\\Users\\User\\Desktop\\missingblue-karak\\docs\\qa\\shots\\verify-honesty\\en_sources.png. src/features/story/sources.ts:72 (DATASETS has no OSM entry). OSM appears only in the map attribution at src/map/BaseMap.tsx:37.",
+  "fix": "Add a DATASETS row: \"OpenStreetMap basemap (online only; dark background offline)\", link openstreetmap.org/copyright, licence \"ODbL, © OpenStreetMap contributors\", in EN and AR."
+ },
+ {
+  "id": "HON-11",
+  "severity": "P2",
+  "screen": "overview (fresh clone without data/pipes)",
+  "what": "Without the pipe file, the header still shows a \"REAL · Karak pipe network\" badge and the map attribution \"Pipes: AJI Group…\", but no pipe layer is drawn and the fact reads \"– of pipe\". The badge vouches for a layer that is not on screen.",
+  "evidence": "C:\\Users\\User\\Desktop\\missingblue-karak\\docs\\qa\\shots\\verify-honesty\\fresh_en_overview.png. src/screens/Overview.tsx:122 renders the pipes badge unconditionally.",
+  "fix": "When the pipes summary errors, replace the badge with a neutral \"held back · npm run fetch:pipes\" tag and drop \"Pipes:\" from the attribution."
+ },
+ {
+  "id": "HON-12",
+  "severity": "P2",
+  "screen": "README quick start (npm run fetch:pipes)",
+  "what": "A fresh clone running `npm run fetch:pipes` does not reproduce the demo data. The total is 1,291 km instead of the 1,287 km in the README and pitch, because the script uses an equirectangular length. source_handle is null (it reads EntityHandle; the real field is Handle). 929 pipe_ids beyond about KRK-07474 map to different CAD layers, because paging has no orderByFields. The ids tied to the wet spots (KRK-02550, 05463, 02449, 00833) do match.",
+  "evidence": "Ran scripts/fetch_pipes.ts into a scratch folder and compared with data/pipes/karak_pipes.geojson. Same 8,778 features; km by class 359.8/395.6/321.9/169.7/44.2 vs 358.6/394.2/320.6/169.1/44.0; 929 layer mismatches by pipe_id. ArcGIS field list shows `Handle`. scripts/fetch_pipes.ts:39-46 (length) and the query URL in main().",
+  "fix": "Add &orderByFields=OBJECTID to the query, read f.properties.Handle, and compute geodesic length with a haversine, so a fresh clone shows the same 1,287 km and the same pipe ids."
+ },
+ {
+  "id": "HON-13",
+  "severity": "P2",
+  "screen": "README quick start / AI screens",
+  "what": "The README says \"Needs Node 20+\", but server/index.ts:30 calls process.loadEnvFile(), which needs Node 20.12+ or 21.7+. On an earlier Node 20 the call throws inside the try/catch, the key in .env is silently ignored, and the UI tells the user \"Why recorded: No ANTHROPIC_API_KEY on this machine\", which is the wrong reason.",
+  "evidence": "README.md:15; package.json engines \">=20\"; server/index.ts:29-33 (try { process.loadEnvFile() } catch {}).",
+  "fix": "Say \"Node 20.12+\" in the README and set engines to \">=20.12\". Or log a warning when process.loadEnvFile is missing and report that in the recorded-run reason."
+ },
+ {
+  "id": "HON-14",
+  "severity": "P2",
+  "screen": "README AI results table",
+  "what": "The README gives two different numbers for the same test (Bayesian, 10 loggers, all 5 gaps right, 1,440 cases): 46.1% (MLP 37.2%) from hydrofingerprint_results.json and 46.9% (MLP 46.2%) from hydrofingerprint_robustness.json. Nothing explains the gap; a judge reading the table will see an inconsistency. The app quotes only 46.9%.",
+  "evidence": "README.md:168 and README.md:169. data/hydrofingerprint/hydrofingerprint_robustness.json nominal_test.bayes_all5 = 46.9, mlp_all5 = 46.2.",
+  "fix": "Quote one run, or add a short note: \"two training runs: hf_train.py (46.1%) and the hf_baseline.py/hf_robust.py re-run (46.9%); the app shows the latter\"."
+ }
+]

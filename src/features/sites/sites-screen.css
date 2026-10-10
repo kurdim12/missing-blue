@@ -1,0 +1,344 @@
+/* Map & sites screen (#/sites): map + light side panel on the inline-end side; bottom sheet on phones. */
+.sp-screen {
+  --sp-bg: #ffffff;
+  --sp-soft: #f3f6fa;
+  --sp-line: #e1e7ee;
+  --sp-ink: #0f2340;
+  --sp-ink-2: #3c5068;
+  --sp-muted: #5d6f84;
+  --sp-navy: #10284a;
+  overflow: hidden;
+}
+
+/* W5 / W6 (and any close pair): the northern label sits on the left of its dot (map space, not mirrored in RTL) */
+.sm-marker.sm-label-left .ov-marker-label {
+  left: auto;
+  right: 22px;
+}
+.sm-marker.sm-reject .ov-marker-dot {
+  background: #8796a8;
+  box-shadow: 0 0 0 4px rgba(135, 150, 168, 0.25);
+}
+
+/* radar control: top, inline-start corner of the map */
+.sp-radar {
+  position: absolute;
+  inset-block-start: 12px;
+  inset-inline-start: 12px;
+  z-index: 3;
+  max-inline-size: 300px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.96);
+  color: var(--sp-ink);
+  box-shadow: 0 4px 18px rgba(8, 20, 40, 0.18);
+  font-size: 13px;
+  --text: var(--sp-ink);
+  --text-muted: var(--sp-muted);
+  --prov-real: #0a7a5f;
+  --prov-real-bg: #e7f6f1;
+}
+.sp-radar-toggle,
+.sp-radar-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.sp-radar-body {
+  display: grid;
+  gap: 6px;
+  margin-block-start: 8px;
+}
+.sp-radar-row {
+  font-weight: 500;
+}
+.sp-radar-row input[type="range"] {
+  flex: 1;
+  min-inline-size: 90px;
+}
+.sp-radar-note {
+  margin: 0;
+  color: var(--sp-muted);
+  font-size: 11.5px;
+  line-height: 1.4;
+}
+
+/* side panel */
+.sp-panel {
+  position: absolute;
+  inset-block: 12px;
+  inset-inline-end: 12px;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  inline-size: min(440px, 42vw);
+  border-radius: 14px;
+  background: var(--sp-bg);
+  color: var(--sp-ink);
+  box-shadow: 0 10px 40px rgba(8, 20, 40, 0.28);
+  overflow: hidden;
+  --text: var(--sp-ink);
+  --text-muted: var(--sp-muted);
+  --text-faint: #75869a;
+  --prov-real: #0a7a5f;
+  --prov-real-bg: #e7f6f1;
+  --prov-recorded: #1d5fa8;
+  --prov-recorded-bg: #eaf2fc;
+  --prov-sim: #6b4fc7;
+  --prov-sim-bg: #f1edfd;
+  --prov-assumed: #9a6400;
+  --prov-assumed-bg: #fff4dc;
+}
+.sp-head {
+  flex-shrink: 0;
+  padding: 16px 18px 8px;
+}
+.sp-title {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--sp-navy);
+}
+.sp-sub {
+  margin: 4px 0 0;
+  font-size: 12.5px;
+  color: var(--sp-muted);
+}
+.sp-panel .sp-tabs {
+  flex-shrink: 0;
+  padding-inline: 12px;
+  border-block-end: 1px solid var(--sp-line);
+  --tab-ink: var(--sp-ink-2);
+}
+.sp-panel .mb-tab {
+  color: var(--sp-ink-2);
+}
+.sp-panel .mb-tab.is-active {
+  color: var(--sp-navy);
+}
+.sp-body {
+  flex: 1;
+  min-block-size: 0;
+  overflow-y: auto;
+  padding: 12px 14px 18px;
+  overscroll-behavior: contain;
+}
+.sp-body .mb-tabpanel:focus-visible {
+  outline: 2px solid #1f63c6;
+  outline-offset: 2px;
+}
+.sp-card.sitecard {
+  max-inline-size: none;
+  border: 0;
+  padding: 0;
+  box-shadow: none;
+}
+.sp-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border: 1px solid var(--sp-line);
+  border-radius: 8px;
+  background: var(--sp-soft);
+  color: var(--sp-ink);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+[dir="rtl"] .sp-back-arrow {
+  display: inline-block;
+  transform: scaleX(-1);
+}
+
+.sp-srcrow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  margin-block-end: 10px;
+}
+.sp-src {
+  font-size: 12px;
+  color: var(--sp-ink-2);
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--sp-soft);
+  border: 1px solid var(--sp-line);
+}
+.sp-muted {
+  color: var(--sp-muted);
+  font-size: 13px;
+}
+.sp-list,
+.sp-feed {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+.sp-row {
+  display: grid;
+  gap: 4px;
+  inline-size: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--sp-line);
+  border-radius: 10px;
+  background: var(--sp-bg);
+  color: var(--sp-ink);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+.sp-row:hover,
+.sp-row:focus-visible {
+  border-color: #1f63c6;
+  background: #f7faff;
+}
+.sp-row-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.sp-row-id {
+  font-size: 15px;
+}
+.sp-chip {
+  font-size: 11.5px;
+}
+.sp-row-dist {
+  margin-inline-start: auto;
+  font-size: 12.5px;
+  color: var(--sp-ink-2);
+}
+.sp-row-why {
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--sp-ink-2);
+}
+.sp-row-pos {
+  font-size: 11.5px;
+  color: var(--sp-muted);
+}
+
+.sp-tab {
+  display: grid;
+  gap: 10px;
+}
+.sp-intro {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--sp-ink-2);
+}
+.sp-feed-item {
+  display: grid;
+  gap: 3px;
+  padding: 8px 10px;
+  border: 1px solid var(--sp-line);
+  border-radius: 10px;
+  background: var(--sp-soft);
+  font-size: 13px;
+}
+.sp-feed-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.sp-feed-text {
+  color: var(--sp-ink-2);
+  line-height: 1.45;
+}
+.sp-feed-meta {
+  font-size: 11.5px;
+  color: var(--sp-muted);
+}
+.sp-demo {
+  display: inline-block;
+  padding: 1px 7px;
+  border-radius: 999px;
+  border: 1px solid #e8b54d;
+  background: #fff4dc;
+  color: #7a4f00;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+.sp-link {
+  justify-self: start;
+  color: #1f63c6;
+  font-weight: 600;
+  font-size: 13.5px;
+  text-decoration: none;
+}
+.sp-link:hover {
+  text-decoration: underline;
+}
+.sp-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin: 0;
+}
+.sp-stats > div {
+  padding: 10px 12px;
+  border: 1px solid var(--sp-line);
+  border-radius: 10px;
+  background: var(--sp-soft);
+}
+.sp-stats dt {
+  font-size: 12px;
+  color: var(--sp-muted);
+}
+.sp-stats dd {
+  margin: 0;
+}
+.sp-stat-num {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--sp-navy);
+}
+.sp-stat-note {
+  font-size: 11.5px;
+  color: var(--sp-muted);
+}
+
+/* phones: the panel becomes a bottom sheet */
+@media (max-width: 640px) {
+  .sp-radar {
+    inset-inline: 10px auto;
+    max-inline-size: calc(100% - 20px);
+    padding: 6px 10px;
+  }
+  .sp-panel {
+    inset-block: auto 0;
+    inset-inline: 0;
+    inline-size: auto;
+    max-block-size: 55%;
+    border-radius: 16px 16px 0 0;
+  }
+  .sp-panel.has-card {
+    max-block-size: 72%;
+  }
+  .sp-head {
+    padding: 10px 14px 4px;
+  }
+  .sp-title {
+    font-size: 16px;
+  }
+  .sp-panel .sp-tabs {
+    padding-inline: 6px;
+  }
+  .sp-panel .mb-tab {
+    padding-inline: 7px;
+    font-size: 13px;
+  }
+  .sp-stats {
+    grid-template-columns: 1fr;
+  }
+}

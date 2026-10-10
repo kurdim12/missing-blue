@@ -13,6 +13,7 @@ import { crewStrings, woStrings } from "../features/workorder/strings";
 import { CrewMap } from "../features/workorder/CrewMap";
 import { CHECKS, useCrewReport } from "../features/workorder/store";
 import { describePipe, inchText, materialName } from "../features/overview/spotText";
+import { postCrewOutcome } from "../features/learning/api";
 import "../features/workorder/workorder.css";
 
 /** The crew view opens in Arabic (or ?lang=); the presenter's own language comes back when they leave, unless they toggled here. */
@@ -54,7 +55,11 @@ export default function Crew({ params, query, embedded }: ScreenProps) {
   const other: Lang = lang === "ar" ? "en" : "ar";
   const orderId = o?.order_id ?? `MB-KRK-${id.replace(/\D/g, "").padStart(4, "0")}`;
 
-  const save = (result: "leak" | "no_leak") => update({ result, note, saved_at: new Date().toISOString() });
+  const save = (result: "leak" | "no_leak") => {
+    update({ result, note, saved_at: new Date().toISOString() });
+    // Also a demo label for adaptive learning (server/learning.ts); offline it is simply kept on the phone.
+    void postCrewOutcome(id, result, note);
+  };
 
   return (
     <div className="crew">

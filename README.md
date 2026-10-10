@@ -8,6 +8,13 @@ AI Quest 2026 (HTU, Amman) · AI App Hackathon · Sector 2 next.society() · wat
 
 *Overview screen: the real Karak pipe network coloured by class, the 7 NISAR wet spots and the radar controls. Every layer carries a provenance badge.*
 
+## New: sidebar console, AI council, Ask Missing Blue, adaptive learning
+
+- **Sidebar console:** every desktop screen now sits in one shell (navy sidebar with Operations / Data & evidence / Links, workspace card «مكتب فاقد المياه · الكرك», data date and language toggle). `#/sites` is the main map: real radar and real pipes with a side panel of tabs (Sites, Field reports, Map edits, Log) and a site card (inspect-first button, before/after radar slider, stats, trend chart with dashed threshold). Wet spots stay *candidates*, never confirmed leaks; positions are ±50 m.
+- **Multi-agent AI council (`#/council`, `POST /api/council`):** three specialists (radar, network, land use) work in parallel with their own data tools, a skeptic argues against every dispatch, and a dispatcher decides. Every number is checked against tool results. Offline or without a key it replays a real recorded live run, labelled "Recorded run".
+- **Ask Missing Blue (`#/assistant`, `POST /api/assistant`):** ask questions about spots, pipes and loggers; Claude answers only through read-only tools over `data/`, and the numbers are checked. Recorded answers are the offline fallback, labelled "Recorded run".
+- **Adaptive learning (`#/learning`, `/api/learning`):** crew outcomes nudge the dispatch weights and re-rank where to send a crew next. **No real field outcome exists yet:** every label is a demo label typed into this demo, and the screen says so. Reset returns to the dispatch rule. Writes are logged (`/api/audit`).
+
 ---
 
 ## Quick start
@@ -140,6 +147,7 @@ flowchart LR
 
 - **Frontend:** Vite 7, React 18, TypeScript, MapLibre GL 5 (OSM raster basemap when online, dark background offline), self-hosted Inter and IBM Plex Sans Arabic.
 - **Backend:** Hono on Node (`server/index.ts`, run with `tsx`). Typed JSON routes over `data/`; raw `data/` files are never served directly.
+- **AI agents:** `server/council.ts` (three specialists, skeptic, dispatcher; server-sent events), `server/assistant.ts` (tool-using Q&A), `server/learning.ts` (demo-label weight updates), `server/audit.ts` (write log); live Claude with a recorded fallback in `server/recorded/`.
 - **AI:** Claude Messages API with tool use (`@anthropic-ai/sdk`) for triage and work orders. Facts are passed as JSON, and every number in the model's text is checked against the tool results. HydroFingerprint inference runs in the browser.
 
 API: `GET /api/spots`, `GET /api/spots/:id`, `GET /api/pipes?bbox=`, `GET /api/pipes/summary`, `POST /api/triage` (server-sent events), `POST /api/workorder`, `GET /api/twin/mazar?scenario=base|svc1|m5|m15|far15`, `GET /api/hf/model`, `GET /api/hf/results`, `GET /api/health`.

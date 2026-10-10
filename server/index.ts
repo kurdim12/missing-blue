@@ -25,6 +25,10 @@ import {
 // ---- AI route mount points (owned by screen agents; the stubs return 501 until they are filled in)
 import triage from "./triage";
 import workorder from "./workorder";
+import council from "./council";
+import assistant from "./assistant";
+import learning from "./learning";
+import audit from "./audit";
 
 try {
   process.loadEnvFile();
@@ -168,6 +172,10 @@ app.get(
 // ------------------------------------------------------------------ AI routes (mount points)
 app.route("/api/triage", triage); // server/triage.ts   (POST /api/triage)
 app.route("/api/workorder", workorder); // server/workorder.ts (POST /api/workorder)
+app.route("/api/council", council); // server/council.ts
+app.route("/api/assistant", assistant); // server/assistant.ts
+app.route("/api/learning", learning); // server/learning.ts
+app.route("/api/audit", audit); // server/audit.ts
 
 app.all("/api/*", (c) => c.json({ error: "not_found", message: { en: `No API route ${c.req.path}`, ar: `لا يوجد مسار ${c.req.path}` } }, 404));
 

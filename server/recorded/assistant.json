@@ -1,0 +1,288 @@
+{
+  "_about": "Live Claude answers of the Ask Missing Blue agent (server/assistant.ts), recorded on this machine with the real API key for the four suggested questions in English and Arabic. Replayed with source \"recorded\" (badge: Recorded run / تشغيل مسجّل) when no key is set or a live call fails; the tool calls are re-executed against data/ on replay. Every number in each answer matched a tool result when it was recorded (checks).",
+  "label": {
+    "en": "Recorded run",
+    "ar": "تشغيل مسجّل"
+  },
+  "origin": "live Claude run recorded during preparation (10 Oct 2026)",
+  "answers": [
+    {
+      "id": "w7_vs_w5",
+      "lang": "en",
+      "question": "Why does W7 get a crew and W5 not?",
+      "answer": "It comes down to how close each spot is to a pipe. W7's spot centre is 6 m from a 3/4\" galvanized iron pipe, inside the 40 m dispatch radius, and the land there has been built area every year from 2023 to 2025, so the dispatch rule marks it \"inspect\". W5's spot centre is 1,400 m from the nearest pipe, far outside the 40 m radius, and the land has been crops every year from 2023 to 2025, so the rule marks it \"skip\". The land-cover data doesn't say whether W5's wetness is irrigation, but it is cropland with no pipe nearby. W5 actually shows a slightly larger radar rise (2.58 dB HH against 2.44 dB for W7), but the rule ranks spots by pipe distance, not by signal strength. Both are only inspection candidates, not confirmed leaks, and the radar positions are accurate to about ±50 m.",
+      "calls": [
+        {
+          "name": "spot_detail",
+          "input": {
+            "spot_id": "W7"
+          }
+        },
+        {
+          "name": "spot_detail",
+          "input": {
+            "spot_id": "W5"
+          }
+        }
+      ],
+      "tools_used": [
+        "spot_detail"
+      ],
+      "model": "claude-opus-5-5",
+      "recorded_at": "2026-10-10T07:19:16.243Z",
+      "usage": {
+        "input_tokens": 1025,
+        "output_tokens": 458,
+        "cache_creation_input_tokens": 2135,
+        "cache_read_input_tokens": 2135,
+        "requests": 2
+      },
+      "checks": {
+        "total": 13,
+        "matched": 13,
+        "rounded": [],
+        "unmatched": []
+      }
+    },
+    {
+      "id": "w7_vs_w5",
+      "lang": "ar",
+      "question": "لماذا يُرسَل فريق إلى W7 ولا يُرسَل إلى W5؟",
+      "answer": "علّة الاختلاف هي المسافة إلى الأنابيب ونوع الأرض، لا قوة إشارة الرادار. فمركز البقعة W7 يبعد 6 m عن أنبوب حديد مجلفن قطره 3/4\"، وهذا داخل نصف قطر الإرسال البالغ 40 m، وتقع في منطقة مبنية في الأعوام 2023 إلى 2025، ولذلك حكمت قاعدة الإرسال بفحصها. أما مركز البقعة W5 فيبعد 1,400 m عن أقرب أنبوب، وهي أرض محاصيل في الأعوام الثلاثة، فالرطوبة فيها على الأرجح من الري، ولذلك حكمت القاعدة بتخطيها. وارتفاع إشارة الرادار في W5 أعلى قليلاً (HH بمقدار 2.58 dB مقابل 2.44 dB في W7)، ومساحتها أكبر (4,800 m² مقابل 1,600 m²). مع ذلك تبقى W7 مرشحة للفحص فقط وليست تسرباً مؤكداً، ودقة موقع الرادار نحو ±50 m.",
+      "calls": [
+        {
+          "name": "spot_detail",
+          "input": {
+            "spot_id": "W7"
+          }
+        },
+        {
+          "name": "spot_detail",
+          "input": {
+            "spot_id": "W5"
+          }
+        }
+      ],
+      "tools_used": [
+        "spot_detail"
+      ],
+      "model": "claude-opus-5-5",
+      "recorded_at": "2026-10-10T07:19:28.409Z",
+      "usage": {
+        "input_tokens": 1063,
+        "output_tokens": 524,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 4426,
+        "requests": 2
+      },
+      "checks": {
+        "total": 12,
+        "matched": 12,
+        "rounded": [],
+        "unmatched": []
+      }
+    },
+    {
+      "id": "loggers_w7",
+      "lang": "en",
+      "question": "Why can't pressure loggers see a small leak at W7?",
+      "answer": "The simulation says a small leak at W7 would barely affect pressure across the zone. In the hydraulic twin, an assumed 1 L/s leak on the service pipe at W7 drops pressure by more than 1 m at only 2 of the zone's 850 junctions. One of those 2 is the leak junction itself, so just one other junction would register the drop. The biggest drop is 29.85 m, but it stays concentrated at that spot, so a logger would have to sit almost exactly there to notice it. The pipe there is a small 3/4\" galvanized iron service line, and the spot centre is 6 m from it.\n\nThat doesn't mean the loss is small: if it kept running, that assumed leak would lose 86.4 m³ a day, or 31,536 m³ a year. These pressures are simulated, and the leak size, demand and tank level are all assumptions. W7 is only a candidate for inspection, not a confirmed leak, and its radar position is accurate to about ±50 m.",
+      "calls": [
+        {
+          "name": "twin_scenario",
+          "input": {
+            "scenario": "svc1"
+          }
+        },
+        {
+          "name": "spot_detail",
+          "input": {
+            "spot_id": "W7"
+          }
+        }
+      ],
+      "tools_used": [
+        "twin_scenario",
+        "spot_detail"
+      ],
+      "model": "claude-opus-5-5",
+      "recorded_at": "2026-10-10T07:19:28.214Z",
+      "usage": {
+        "input_tokens": 1041,
+        "output_tokens": 492,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 4270,
+        "requests": 2
+      },
+      "checks": {
+        "total": 12,
+        "matched": 12,
+        "rounded": [],
+        "unmatched": []
+      }
+    },
+    {
+      "id": "loggers_w7",
+      "lang": "ar",
+      "question": "لماذا لا ترى أجهزة تسجيل الضغط تسربًا صغيرًا عند W7؟",
+      "answer": "يصعب على أجهزة تسجيل الضغط ملاحظة التسرب لأن أثره يبقى محصوراً في موضعه تقريباً. ففي التوأم الهيدروليكي لمنطقة مزار، يُفترض تسرب بمقدار 1 L/s على أنبوب الخدمة عند W7، وهو أنبوب حديد مجلفن قطره 3/4\" يبعد عنه مركز البقعة 6 m (دقة الموقع حوالي ±50 m). في هذه الحالة لا تنخفض الضغوط بأكثر من 1 m إلا عند 2 من أصل 850 تقاطعاً، منها تقاطع واحد فقط غير تقاطع التسرب نفسه. أما أكبر انخفاض وهو 29.85 m، فيقع في الموضع نفسه، لذا لن يلاحظ جهاز التسجيل التسرب إلا إذا كان قريباً جداً منه. ومع ذلك، فإن تسرباً كهذا لو استمر يفقد 86.4 m³ يومياً، أي 31,536 m³ سنوياً. تنبيه: هذه الضغوط محاكاة، وحجم التسرب والطلب ومستوى الخزان كلها مفترضة، وW7 مرشح للفحص فقط وليس تسرباً مؤكداً.",
+      "calls": [
+        {
+          "name": "twin_scenario",
+          "input": {
+            "scenario": "svc1"
+          }
+        },
+        {
+          "name": "nearest_pipe",
+          "input": {
+            "spot_id": "W7"
+          }
+        }
+      ],
+      "tools_used": [
+        "twin_scenario",
+        "nearest_pipe"
+      ],
+      "model": "claude-opus-5-5",
+      "recorded_at": "2026-10-10T07:19:36.653Z",
+      "usage": {
+        "input_tokens": 912,
+        "output_tokens": 649,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 4426,
+        "requests": 2
+      },
+      "checks": {
+        "total": 11,
+        "matched": 11,
+        "rounded": [],
+        "unmatched": []
+      }
+    },
+    {
+      "id": "gap_e",
+      "lang": "en",
+      "question": "How sure is the AI about Gap E?",
+      "answer": "The AI isn't sure about Gap E at all. On held-out simulated tests it decides correctly only 49.8% of the time, which is about the same as a coin toss. That is close to the plain least-squares algorithm's 49.5% and to 51.7% when the network differs from the model. More loggers don't help either: accuracy is 49.5% with 3, 50.5% with 4 and 49.3% with 10. Pressure barely changes when this 1-inch, 6.13 m gap (G6 in the record) opens or closes. So the system says \"can't tell yet\" and sends a crew to check the valve chamber instead of guessing. All of these results come from simulated pressure readings on the real pipe-network layout.",
+      "calls": [
+        {
+          "name": "hf_results",
+          "input": {}
+        }
+      ],
+      "tools_used": [
+        "hf_results"
+      ],
+      "model": "claude-opus-5-5",
+      "recorded_at": "2026-10-10T07:19:32.220Z",
+      "usage": {
+        "input_tokens": 1674,
+        "output_tokens": 263,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 4270,
+        "requests": 2
+      },
+      "checks": {
+        "total": 11,
+        "matched": 11,
+        "rounded": [],
+        "unmatched": []
+      }
+    },
+    {
+      "id": "gap_e",
+      "lang": "ar",
+      "question": "ما مدى ثقة الذكاء الاصطناعي بشأن الفجوة E؟",
+      "answer": "ثقة النظام بشأن الفجوة E منخفضة جداً. دقته فيها 49.8% في اختبارات محاكاة لم يتدرّب عليها، و51.7% عندما تختلف الشبكة عن النموذج، وهذا يساوي تقريباً رمي عملة معدنية. الخوارزمية العادية بطريقة المربعات الصغرى لا تفعل أفضل منه، فدقتها 49.5%، وزيادة أجهزة تسجيل الضغط إلى 10 لا تحسّن النتيجة (49.3%). السبب أن الضغط يكاد لا يتغيّر عند فتح هذه الفجوة أو إغلاقها، لذلك يقول النظام \"لا يمكن الحسم بعد\" ويقترح إرسال فريق لفحص غرفة المحبس بدلاً من التخمين. انتبه إلى أن هذه النتائج مبنية على قراءات ضغط محاكاة فوق الشكل الحقيقي لشبكة الأنابيب.",
+      "calls": [
+        {
+          "name": "hf_results",
+          "input": {}
+        }
+      ],
+      "tools_used": [
+        "hf_results"
+      ],
+      "model": "claude-opus-5-5",
+      "recorded_at": "2026-10-10T07:19:16.730Z",
+      "usage": {
+        "input_tokens": 1714,
+        "output_tokens": 390,
+        "cache_creation_input_tokens": 2213,
+        "cache_read_input_tokens": 2213,
+        "requests": 2
+      },
+      "checks": {
+        "total": 5,
+        "matched": 5,
+        "rounded": [],
+        "unmatched": []
+      }
+    },
+    {
+      "id": "leak_water",
+      "lang": "en",
+      "question": "What would one hidden 1 L/s leak cost in water?",
+      "answer": "If it keeps running, an assumed 1 L/s leak would lose about 86.4 m³ of water per day, or about 31,536 m³ per year. That figure is a volume only, because the demo's data has no water price, so I can't give a cost in money. The simulated hydraulic twin placed this leak on the service pipe at wet spot W7 in the Mazar zone. Of the zone's 850 junctions, only 2 lost more than 1 m of pressure, so a leak this small would be easy to miss. The leak size, demand and tank level are assumed, and the pressures are simulated. W7 is only an inspection candidate, not a confirmed leak.",
+      "calls": [
+        {
+          "name": "twin_scenario",
+          "input": {
+            "scenario": "svc1"
+          }
+        }
+      ],
+      "tools_used": [
+        "twin_scenario"
+      ],
+      "model": "claude-opus-5-5",
+      "recorded_at": "2026-10-10T07:19:40.926Z",
+      "usage": {
+        "input_tokens": 595,
+        "output_tokens": 279,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 4270,
+        "requests": 2
+      },
+      "checks": {
+        "total": 6,
+        "matched": 6,
+        "rounded": [],
+        "unmatched": []
+      }
+    },
+    {
+      "id": "leak_water",
+      "lang": "ar",
+      "question": "كم يكلّف تسرب خفي واحد بمعدل 1 لتر/ثانية من المياه؟",
+      "answer": "إذا استمر تسرب بمعدل 1 L/s فإنه يهدر 86.4 m³ من المياه يومياً، أي نحو 31,536 m³ سنوياً. هذا الرقم حجم مياه فقط، أما التكلفة المالية فغير موجودة في البيانات لأن العرض لا يتضمن سعراً للمياه. حجم التسرب هنا افتراضي، ووُضع في التوأم الهيدروليكي لمنطقة المزار على أنبوب الخدمة عند البقعة الرطبة W7. وفي هذه المحاكاة تنخفض الضغوط بأكثر من 1 m عند 2 فقط من أصل 850 عقدة، ما يعني أن مسجلات الضغط بالكاد ستلاحظ تسرباً بهذا الحجم. ضغوط التوأم محاكاة، والطلب على المياه افتراضي أيضاً.",
+      "calls": [
+        {
+          "name": "twin_scenario",
+          "input": {
+            "scenario": "svc1"
+          }
+        }
+      ],
+      "tools_used": [
+        "twin_scenario"
+      ],
+      "model": "claude-opus-5-5",
+      "recorded_at": "2026-10-10T07:19:38.300Z",
+      "usage": {
+        "input_tokens": 635,
+        "output_tokens": 397,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 4426,
+        "requests": 2
+      },
+      "checks": {
+        "total": 6,
+        "matched": 6,
+        "rounded": [],
+        "unmatched": []
+      }
+    }
+  ]
+}

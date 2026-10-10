@@ -1,0 +1,1257 @@
+{
+ "_about": "A real live run of the Missing Blue AI council (5 Claude agents), recorded so the demo can replay it instantly and offline. On replay every tool call is re-executed against data/, so the tool results shown are computed from the data files; the agents' texts, decisions and token counts are this recording. Number checks are recomputed on replay.",
+ "label": "Recorded run · Claude council, 2026-10-10",
+ "recorded_at": "2026-10-10T07:20:00.412Z",
+ "model": "claude-opus-5-5",
+ "wall_ms": 59550,
+ "events": [
+  {
+   "t": 0,
+   "event": "run_start",
+   "data": {
+    "source": "live",
+    "model": "claude-opus-5-5",
+    "agents": [
+     {
+      "agent": "radar",
+      "role_en": "Radar analyst",
+      "role_ar": "محلل الرادار",
+      "phase": 1
+     },
+     {
+      "agent": "network",
+      "role_en": "Network engineer",
+      "role_ar": "مهندس الشبكة",
+      "phase": 1
+     },
+     {
+      "agent": "landuse",
+      "role_en": "Land-use analyst",
+      "role_ar": "محلل استخدامات الأراضي",
+      "phase": 1
+     },
+     {
+      "agent": "skeptic",
+      "role_en": "Skeptic (red team)",
+      "role_ar": "المشكّك (الفريق الأحمر)",
+      "phase": 2
+     },
+     {
+      "agent": "dispatcher",
+      "role_en": "Dispatcher",
+      "role_ar": "مسؤول الإيفاد",
+      "phase": 3
+     }
+    ]
+   }
+  },
+  {
+   "t": 0,
+   "event": "agent_start",
+   "data": {
+    "source": "live",
+    "agent": "radar",
+    "role_en": "Radar analyst",
+    "role_ar": "محلل الرادار",
+    "phase": 1
+   }
+  },
+  {
+   "t": 0,
+   "event": "agent_start",
+   "data": {
+    "source": "live",
+    "agent": "network",
+    "role_en": "Network engineer",
+    "role_ar": "مهندس الشبكة",
+    "phase": 1
+   }
+  },
+  {
+   "t": 0,
+   "event": "agent_start",
+   "data": {
+    "source": "live",
+    "agent": "landuse",
+    "role_en": "Land-use analyst",
+    "role_ar": "محلل استخدامات الأراضي",
+    "phase": 1
+   }
+  },
+  {
+   "t": 3099,
+   "event": "tool_call",
+   "data": {
+    "source": "live",
+    "agent": "radar",
+    "name": "list_wet_spots",
+    "input": {},
+    "is_error": false,
+    "result_summary": {
+     "en": "7 wet spots · passes 2026-09-04, 2026-09-16, 2026-09-28",
+     "ar": "7 بقع رطبة · المرورات 2026-09-04، 2026-09-16، 2026-09-28"
+    }
+   }
+  },
+  {
+   "t": 3846,
+   "event": "tool_call",
+   "data": {
+    "source": "live",
+    "agent": "landuse",
+    "name": "rain_check",
+    "input": {},
+    "is_error": false,
+    "result_summary": {
+     "en": "ERA5 via Open-Meteo: 0.0 mm at Mazar and Karak between 2026-09-04 and 2026-09-28",
+     "ar": "ERA5 via Open-Meteo: 0.0 mm at Mazar and Karak between 2026-09-04 and 2026-09-28"
+    }
+   }
+  },
+  {
+   "t": 3846,
+   "event": "tool_call",
+   "data": {
+    "source": "live",
+    "agent": "landuse",
+    "name": "land_cover",
+    "input": {
+     "spot_id": "W1"
+    },
+    "is_error": false,
+    "result_summary": {
+     "en": "W1: 2023 Crops, 2024 Rangeland, 2025 Rangeland",
+     "ar": "W1: 2023 Crops، 2024 Rangeland، 2025 Rangeland"
+    }
+   }
+  },
+  {
+   "t": 3846,
+   "event": "tool_call",
+   "data": {
+    "source": "live",
+    "agent": "landuse",
+    "name": "land_cover",
+    "input": {
+     "spot_id": "W2"
+    },
+    "is_error": false,
+    "result_summary": {
+     "en": "W2: 2023 Crops, 2024 Crops, 2025 Rangeland",
+     "ar": "W2: 2023 Crops، 2024 Crops، 2025 Rangeland"
+    }
+   }
+  },
+  {
+   "t": 3846,
+   "event": "tool_call",
+   "data": {
+    "source": "live",
+    "agent": "landuse",
+    "name": "land_cover",
+    "input": {
+     "spot_id": "W3"
+    },
+    "is_error": false,
+    "result_summary": {
+     "en": "W3: 2023 Rangeland, 2024 Rangeland, 2025 Rangeland",
+     "ar": "W3: 2023 Rangeland، 2024 Rangeland، 2025 Rangeland"
+    }
+   }
+  },
+  {
+   "t": 3846,
+   "event": "tool_call",
+   "data": {
+    "source": "live",
+    "agent": "landuse",
+    "name": "land_cover",
+    "input": {
+     "spot_id": "W4"
+    },
+    "is_error": false,
+    "result_summary": {
+     "en": "W4: 2023 Crops, 2024 Crops, 2025 Crops",
+     "ar": "W4: 2023 Crops، 2024 Crops، 2025 Crops"
+    }
+   }
+  },
+  {
+   "t": 3846,
+   "event": "tool_call",
+   "data": {
+    "source": "live",
+    "agent": "landuse",
+    "name": "land_cover",
+    "input": {
+     "spot_id": "W5"
+    },
+    "is_error": false,
+    "result_summary": {
+     "en": "W5: 2023 Crops, 2024 Crops, 2025 Crops",
+     "ar": "W5: 2023 Crops، 2024 Crops، 2025 Crops"
+    }
+   }
+  },
+  {
+   "t": 3846,
+   "event": "tool_call",
+   "data": {
+    "source": "live",
+    "agent": "landuse",
+    "name": "land_cover",
+    "input": {
+     "spot_id": "W6"
+    },
+    "is_error": false,
+    "result_summary": {
+     "en": "W6: 2023 Crops, 2024 Crops, 2025 Crops",
+     "ar": "W6: 2023 Crops، 2024 Crops، 2025 Crops"
+    }
+   }
+  },
+  {
+   "t": 3847,
+   "event": "tool_call",
+   "data": {
+    "source": "live",
+    "agent": "landuse",
+    "name": "land_cover",
+    "input": {
+     "spot_id": "W7"
+    },
+    "is_error": false,
+    "result_summary": {
+     "en": "W7: 2023 Built area, 2024 Built area, 2025 Built area",
+     "ar": "W7: 2023 Built area، 2024 Built area، 2025 Built area"
+    }
+   }
+  },
+  {
+   "t": 5746,
+   "event": "tool_call",
+   "data": {
+    "source": "live",
+    "agent": "network",
+    "name": "nearest_pipe",
+    "input": {
+     "spot_id": "W1"
+    },
+    "is_error": false,
+    "result_summary": {
+     "en": "W1: spot centre 177 m from a 2\" galvanized iron pipe · beyond 40 m",
+     "ar": "W1: مركز البقعة على بعد 177 م من أنبوب 2\" galvanized iron · أبعد من 40 م"
+    }
+   }
+  },
+  {
+   "t": 5747,
+   "event": "tool_call",
+   "data": {
+    "source": "live",
+    "agent": "network",
+    "name": "nearest_pipe",
+    "input": {
+     "spot_id": "W2"
+    },
+    "is_error": false,
+    "result_summary": {
+     "en": "W2: spot centre 323 m from a 2\" galvanized iron pipe · beyond 40 m",
+     "ar": "W2: مركز البقعة على بعد 323 م من أنبوب 2\" galvanized iron · أبعد من 40 م"
+    }
+   }
+  },
+  {
+   "t": 5747,
+   "event": "tool_call",
+   "data": {
+    "source": "live",
+    "agent": "network",
+    "name": "nearest_pipe",
+    "input": {
+     "spot_id": "W3"
+    },
+    "is_error": false,
+    "result_summary": {
+     "en": "W3: spot centre 38 m from a 1\" galvanized iron pipe · within 40 m",
+     "ar": "W3: مركز البقعة على بعد 38 م من أنبوب 1\" galvanized iron · ضمن 40 م"
+    }
+   }
+  },
+  {
+   "t": 5747,
+   "event": "tool_call",
+   "data": {
+    "source": "live",
+    "agent": "network",
+    "name": "nearest_pipe",
+    "input": {
+     "spot_id": "W4"
+    },
+    "is_error": false,
+    "result_summary": {
+     "en": "W4: spot centre 736 m from a 3\" galvanized iron pipe · beyond 40 m",
+     "ar": "W4: مركز البقعة على بعد 736 م من أنبوب 3\" galvanized iron · أبعد من 40 م"
+    }
+   }
+  },
+  {
+   "t": 5747,
+   "event": "tool_call",
+   "data": {
+    "source": "live",
+    "agent": "network",
+    "name": "nearest_pipe",
+    "input": {
+     "spot_id": "W5"
+    },
+    "is_error": false,
+    "result_summary": {
+     "en": "W5: spot centre 1400 m from a 2\" galvanized iron pipe · beyond 40 m",
+     "ar": "W5: مركز البقعة على بعد 1400 م من أنبوب 2\" galvanized iron · أبعد من 40 م"
+    }
+   }
+  },
+  {
+   "t": 5748,
+   "event": "tool_call",
+   "data": {
+    "source": "live",
+    "agent": "network",
+    "name": "nearest_pipe",
+    "input": {
+     "spot_id": "W6"
+    },
+    "is_error": false,
+    "result_summary": {
+     "en": "W6: spot centre 1371 m from a 2\" galvanized iron pipe · beyond 40 m",
+     "ar": "W6: مركز البقعة على بعد 1371 م من أنبوب 2\" galvanized iron · أبعد من 40 م"
+    }
+   }
+  },
+  {
+   "t": 5748,
+   "event": "tool_call",
+   "data": {
+    "source": "live",
+    "agent": "network",
+    "name": "nearest_pipe",
+    "input": {
+     "spot_id": "W7"
+    },
+    "is_error": false,
+    "result_summary": {
+     "en": "W7: spot centre 6 m from a 3/4\" galvanized iron pipe · within 40 m",
+     "ar": "W7: مركز البقعة على بعد 6 م من أنبوب 3/4\" galvanized iron · ضمن 40 م"
+    }
+   }
+  },
+  {
+   "t": 5748,
+   "event": "tool_call",
+   "data": {
+    "source": "live",
+    "agent": "network",
+    "name": "simulate_leak",
+    "input": {
+     "spot_id": "W1"
+    },
+    "is_error": false,
+    "result_summary": {
+     "en": "W1: no twin scenario at this spot",
+     "ar": "W1: لا يوجد سيناريو في التوأم عند هذه البقعة"
+    }
+   }
+  },
+  {
+   "t": 5748,
+   "event": "tool_call",
+   "data": {
+    "source": "live",
+    "agent": "network",
+    "name": "simulate_leak",
+    "input": {
+     "spot_id": "W2"
+    },
+    "is_error": false,
+    "result_summary": {
+     "en": "W2: no twin scenario at this spot",
+     "ar": "W2: لا يوجد سيناريو في التوأم عند هذه البقعة"
+    }
+   }
+  },
+  {
+   "t": 5748,
+   "event": "tool_call",
+   "data": {
+    "source": "live",
+    "agent": "network",
+    "name": "simulate_leak",
+    "input": {
+     "spot_id": "W3"
+    },
+    "is_error": false,
+    "result_summary": {
+     "en": "W3: no twin scenario at this spot",
+     "ar": "W3: لا يوجد سيناريو في التوأم عند هذه البقعة"
+    }
+   }
+  },
+  {
+   "t": 5748,
+   "event": "tool_call",
+   "data": {
+    "source": "live",
+    "agent": "network",
+    "name": "simulate_leak",
+    "input": {
+     "spot_id": "W4"
+    },
+    "is_error": false,
+    "result_summary": {
+     "en": "W4: no twin scenario at this spot",
+     "ar": "W4: لا يوجد سيناريو في التوأم عند هذه البقعة"
+    }
+   }
+  },
+  {
+   "t": 5748,
+   "event": "tool_call",
+   "data": {
+    "source": "live",
+    "agent": "network",
+    "name": "simulate_leak",
+    "input": {
+     "spot_id": "W5"
+    },
+    "is_error": false,
+    "result_summary": {
+     "en": "W5: no twin scenario at this spot",
+     "ar": "W5: لا يوجد سيناريو في التوأم عند هذه البقعة"
+    }
+   }
+  },
+  {
+   "t": 5748,
+   "event": "tool_call",
+   "data": {
+    "source": "live",
+    "agent": "network",
+    "name": "simulate_leak",
+    "input": {
+     "spot_id": "W6"
+    },
+    "is_error": false,
+    "result_summary": {
+     "en": "W6: no twin scenario at this spot",
+     "ar": "W6: لا يوجد سيناريو في التوأم عند هذه البقعة"
+    }
+   }
+  },
+  {
+   "t": 5748,
+   "event": "tool_call",
+   "data": {
+    "source": "live",
+    "agent": "network",
+    "name": "simulate_leak",
+    "input": {
+     "spot_id": "W7"
+    },
+    "is_error": false,
+    "result_summary": {
+     "en": "W7: a 1 L/s leak here moves 1 other junction(s) by > 1 m; a 15 L/s main break moves 788 of 850",
+     "ar": "W7: تسرّب 1 L/s هنا يخفض ضغط 1 عقدة أخرى أكثر من 1 م؛ كسر خط رئيسي 15 L/s يخفض 788 من 850"
+    }
+   }
+  },
+  {
+   "t": 7157,
+   "event": "tool_call",
+   "data": {
+    "source": "live",
+    "agent": "radar",
+    "name": "radar_timeseries",
+    "input": {
+     "spot_id": "W1"
+    },
+    "is_error": false,
+    "result_summary": {
+     "en": "W1: HH change +2.72 dB (2026-09-16), +2.67 dB (2026-09-28) on the wet pixels",
+     "ar": "W1: تغيّر HH +2.72 dB (2026-09-16)، +2.67 dB (2026-09-28) على البكسلات الرطبة"
+    }
+   }
+  },
+  {
+   "t": 7157,
+   "event": "tool_call",
+   "data": {
+    "source": "live",
+    "agent": "radar",
+    "name": "radar_timeseries",
+    "input": {
+     "spot_id": "W2"
+    },
+    "is_error": false,
+    "result_summary": {
+     "en": "W2: HH change +2.65 dB (2026-09-16), +2.58 dB (2026-09-28) on the wet pixels",
+     "ar": "W2: تغيّر HH +2.65 dB (2026-09-16)، +2.58 dB (2026-09-28) على البكسلات الرطبة"
+    }
+   }
+  },
+  {
+   "t": 7157,
+   "event": "tool_call",
+   "data": {
+    "source": "live",
+    "agent": "radar",
+    "name": "radar_timeseries",
+    "input": {
+     "spot_id": "W3"
+    },
+    "is_error": false,
+    "result_summary": {
+     "en": "W3: HH change +2.26 dB (2026-09-16), +2.66 dB (2026-09-28) on the wet pixels",
+     "ar": "W3: تغيّر HH +2.26 dB (2026-09-16)، +2.66 dB (2026-09-28) على البكسلات الرطبة"
+    }
+   }
+  },
+  {
+   "t": 7157,
+   "event": "tool_call",
+   "data": {
+    "source": "live",
+    "agent": "radar",
+    "name": "radar_timeseries",
+    "input": {
+     "spot_id": "W4"
+    },
+    "is_error": false,
+    "result_summary": {
+     "en": "W4: HH change +2.57 dB (2026-09-16), +2.79 dB (2026-09-28) on the wet pixels",
+     "ar": "W4: تغيّر HH +2.57 dB (2026-09-16)، +2.79 dB (2026-09-28) على البكسلات الرطبة"
+    }
+   }
+  },
+  {
+   "t": 7158,
+   "event": "tool_call",
+   "data": {
+    "source": "live",
+    "agent": "radar",
+    "name": "radar_timeseries",
+    "input": {
+     "spot_id": "W5"
+    },
+    "is_error": false,
+    "result_summary": {
+     "en": "W5: HH change +2.57 dB (2026-09-16), +2.58 dB (2026-09-28) on the wet pixels",
+     "ar": "W5: تغيّر HH +2.57 dB (2026-09-16)، +2.58 dB (2026-09-28) على البكسلات الرطبة"
+    }
+   }
+  },
+  {
+   "t": 7158,
+   "event": "tool_call",
+   "data": {
+    "source": "live",
+    "agent": "radar",
+    "name": "radar_timeseries",
+    "input": {
+     "spot_id": "W6"
+    },
+    "is_error": false,
+    "result_summary": {
+     "en": "W6: HH change +2.57 dB (2026-09-16), +2.7 dB (2026-09-28) on the wet pixels",
+     "ar": "W6: تغيّر HH +2.57 dB (2026-09-16)، +2.7 dB (2026-09-28) على البكسلات الرطبة"
+    }
+   }
+  },
+  {
+   "t": 7158,
+   "event": "tool_call",
+   "data": {
+    "source": "live",
+    "agent": "radar",
+    "name": "radar_timeseries",
+    "input": {
+     "spot_id": "W7"
+    },
+    "is_error": false,
+    "result_summary": {
+     "en": "W7: HH change +2.66 dB (2026-09-16), +2.21 dB (2026-09-28) on the wet pixels",
+     "ar": "W7: تغيّر HH +2.66 dB (2026-09-16)، +2.21 dB (2026-09-28) على البكسلات الرطبة"
+    }
+   }
+  },
+  {
+   "t": 15749,
+   "event": "agent_report",
+   "data": {
+    "source": "live",
+    "agent": "landuse",
+    "role_en": "Land-use analyst",
+    "role_ar": "محلل استخدامات الأراضي",
+    "phase": 1,
+    "text": "Rain was 0.0 mm at Mazar and Karak between 2026-09-04 and 2026-09-28, so rain cannot explain any spot. W4, W5 and W6 are farmland every year, where irrigation could explain the water. W7 is built area, where irrigation is unlikely, and W1, W2 and W3 are unclear rangeland.",
+    "text_ar": "بلغ المطر 0.0 mm في مزار والكرك بين 2026-09-04 و2026-09-28، لذا لا يفسر المطر أي بقعة. البقع W4 وW5 وW6 أراضٍ زراعية في كل السنوات، ويمكن أن يفسر الري الماء فيها. أما W7 فمنطقة مبنية والري فيها مستبعد، والبقع W1 وW2 وW3 مراعٍ غير واضحة.",
+    "per_spot": [
+     {
+      "id": "W1",
+      "signal": "neutral",
+      "finding": "Crops in 2023 changed to Rangeland in 2024 and 2025, so irrigation is possible but unclear, and with 0.0 mm of rain, rain cannot explain the water.",
+      "finding_ar": "تغير الغطاء من محاصيل في 2023 إلى مراعٍ في 2024 و2025، فالري ممكن لكنه غير واضح، ومع 0.0 mm من المطر لا يفسر المطر الماء."
+     },
+     {
+      "id": "W2",
+      "signal": "neutral",
+      "finding": "Crops in 2023 and 2024 changed to Rangeland in 2025, so irrigation is unclear, and with 0.0 mm of rain, rain cannot explain the water.",
+      "finding_ar": "تغير الغطاء من محاصيل في 2023 و2024 إلى مراعٍ في 2025، فالري غير واضح، ومع 0.0 mm من المطر لا يفسر المطر الماء."
+     },
+     {
+      "id": "W3",
+      "signal": "neutral",
+      "finding": "Rangeland in 2023, 2024 and 2025, so irrigation is uncertain, and with 0.0 mm of rain, rain cannot explain the water.",
+      "finding_ar": "مراعٍ في 2023 و2024 و2025، فالري غير مؤكد، ومع 0.0 mm من المطر لا يفسر المطر الماء."
+     },
+     {
+      "id": "W4",
+      "signal": "against_dispatch",
+      "finding": "Crops in 2023, 2024 and 2025, so irrigation explains the water well, and rain was 0.0 mm.",
+      "finding_ar": "محاصيل في 2023 و2024 و2025، فالري يفسر الماء جيداً، وكان المطر 0.0 mm."
+     },
+     {
+      "id": "W5",
+      "signal": "against_dispatch",
+      "finding": "Crops in 2023, 2024 and 2025, so irrigation explains the water well, and rain was 0.0 mm.",
+      "finding_ar": "محاصيل في 2023 و2024 و2025، فالري يفسر الماء جيداً، وكان المطر 0.0 mm."
+     },
+     {
+      "id": "W6",
+      "signal": "against_dispatch",
+      "finding": "Crops in 2023, 2024 and 2025, so irrigation explains the water well, and rain was 0.0 mm.",
+      "finding_ar": "محاصيل في 2023 و2024 و2025، فالري يفسر الماء جيداً، وكان المطر 0.0 mm."
+     },
+     {
+      "id": "W7",
+      "signal": "for_dispatch",
+      "finding": "Built area in 2023, 2024 and 2025, so irrigation is unlikely, and with 0.0 mm of rain, rain cannot explain the water.",
+      "finding_ar": "منطقة مبنية في 2023 و2024 و2025، فالري مستبعد، ومع 0.0 mm من المطر لا يفسر المطر الماء."
+     }
+    ],
+    "checks": {
+     "ok": true,
+     "total": 70,
+     "matched": 70,
+     "rounded": [],
+     "unmatched": []
+    }
+   }
+  },
+  {
+   "t": 15749,
+   "event": "agent_done",
+   "data": {
+    "source": "live",
+    "agent": "landuse",
+    "usage": {
+     "input_tokens": 5294,
+     "output_tokens": 1839,
+     "cache_creation_input_tokens": 0,
+     "cache_read_input_tokens": 0,
+     "requests": 2
+    },
+    "ms": 15749
+   }
+  },
+  {
+   "t": 20724,
+   "event": "agent_report",
+   "data": {
+    "source": "live",
+    "agent": "network",
+    "role_en": "Network engineer",
+    "role_ar": "مهندس الشبكة",
+    "phase": 1,
+    "text": "W7 (spot centre 6 m from a 3/4\" galvanized iron service line) and W3 (spot centre 38 m from a 1\" galvanized iron service line) are within 40 m of a real pipe; the other five are 177 m or more from any recorded pipe. In the Mazar twin, an assumed 1 L/s leak at W7 drops only 1 other junction by more than 1 m, but an assumed 15 L/s main break drops 788 of 850 junctions, so a small service-line leak is almost invisible to pressure monitoring.",
+    "text_ar": "W7 (مركز البقعة على بعد 6 م من خط خدمة 3/4\" من الحديد المجلفن) وW3 (مركز البقعة على بعد 38 م من خط خدمة 1\" من الحديد المجلفن) تقعان ضمن 40 م من أنبوب حقيقي، أما البقع الخمس الأخرى فتبعد 177 م أو أكثر عن أي أنبوب مسجل. في التوأم الرقمي لمنطقة مزار، يؤدي تسرب مفترض بمعدل 1 L/s عند W7 إلى انخفاض الضغط بأكثر من 1 م في عقدة واحدة أخرى فقط، بينما يؤدي كسر مفترض في خط رئيسي بمعدل 15 L/s إلى انخفاضه في 788 عقدة من أصل 850، لذلك يكاد تسرب خط الخدمة الصغير لا يظهر في مراقبة الضغط.",
+    "per_spot": [
+     {
+      "id": "W1",
+      "signal": "against_dispatch",
+      "finding": "Spot centre 177 m from the nearest pipe, a 2\" galvanized iron distribution pipe, not within 40 m; no twin scenario.",
+      "finding_ar": "مركز البقعة على بعد 177 م من أقرب أنبوب، وهو أنبوب توزيع 2\" من الحديد المجلفن، أي ليس ضمن 40 م؛ ولا يوجد لها سيناريو في التوأم الرقمي."
+     },
+     {
+      "id": "W2",
+      "signal": "against_dispatch",
+      "finding": "Spot centre 323 m from the nearest pipe, a 2\" galvanized iron distribution pipe, not within 40 m; no twin scenario.",
+      "finding_ar": "مركز البقعة على بعد 323 م من أقرب أنبوب، وهو أنبوب توزيع 2\" من الحديد المجلفن، أي ليس ضمن 40 م؛ ولا يوجد لها سيناريو في التوأم الرقمي."
+     },
+     {
+      "id": "W3",
+      "signal": "for_dispatch",
+      "finding": "Spot centre 38 m from a 1\" galvanized iron service line, within 40 m; no twin scenario.",
+      "finding_ar": "مركز البقعة على بعد 38 م من خط خدمة 1\" من الحديد المجلفن، أي ضمن 40 م؛ ولا يوجد لها سيناريو في التوأم الرقمي."
+     },
+     {
+      "id": "W4",
+      "signal": "against_dispatch",
+      "finding": "Spot centre 736 m from the nearest pipe, a 3\" galvanized iron distribution pipe, not within 40 m; no twin scenario.",
+      "finding_ar": "مركز البقعة على بعد 736 م من أقرب أنبوب، وهو أنبوب توزيع 3\" من الحديد المجلفن، أي ليس ضمن 40 م؛ ولا يوجد لها سيناريو في التوأم الرقمي."
+     },
+     {
+      "id": "W5",
+      "signal": "against_dispatch",
+      "finding": "Spot centre 1.4 km from the nearest pipe, a 2\" galvanized iron distribution pipe, not within 40 m; no twin scenario.",
+      "finding_ar": "مركز البقعة على بعد 1.4 كم من أقرب أنبوب، وهو أنبوب توزيع 2\" من الحديد المجلفن، أي ليس ضمن 40 م؛ ولا يوجد لها سيناريو في التوأم الرقمي."
+     },
+     {
+      "id": "W6",
+      "signal": "against_dispatch",
+      "finding": "Spot centre 1371 m from the nearest pipe, a 2\" galvanized iron distribution pipe, not within 40 m; no twin scenario.",
+      "finding_ar": "مركز البقعة على بعد 1371 م من أقرب أنبوب، وهو أنبوب توزيع 2\" من الحديد المجلفن، أي ليس ضمن 40 م؛ ولا يوجد لها سيناريو في التوأم الرقمي."
+     },
+     {
+      "id": "W7",
+      "signal": "for_dispatch",
+      "finding": "Spot centre 6 m from a 3/4\" galvanized iron service line, within 40 m; in the twin an assumed 1 L/s leak drops only 1 other junction by more than 1 m, but an assumed 15 L/s main break drops 788 of 850 junctions.",
+      "finding_ar": "مركز البقعة على بعد 6 م من خط خدمة 3/4\" من الحديد المجلفن، أي ضمن 40 م؛ وفي التوأم الرقمي يؤدي تسرب مفترض بمعدل 1 L/s إلى انخفاض الضغط بأكثر من 1 م في عقدة واحدة أخرى فقط، بينما يؤدي كسر مفترض في خط رئيسي بمعدل 15 L/s إلى انخفاضه في 788 عقدة من أصل 850."
+     }
+    ],
+    "checks": {
+     "ok": true,
+     "total": 80,
+     "matched": 80,
+     "rounded": [
+      "W5.finding: 1.4",
+      "W5.finding_ar: 1.4"
+     ],
+     "unmatched": []
+    }
+   }
+  },
+  {
+   "t": 20724,
+   "event": "agent_done",
+   "data": {
+    "source": "live",
+    "agent": "network",
+    "usage": {
+     "input_tokens": 6977,
+     "output_tokens": 2672,
+     "cache_creation_input_tokens": 0,
+     "cache_read_input_tokens": 0,
+     "requests": 2
+    },
+    "ms": 20724
+   }
+  },
+  {
+   "t": 22134,
+   "event": "agent_report",
+   "data": {
+    "source": "live",
+    "agent": "radar",
+    "role_en": "Radar analyst",
+    "role_ar": "محلل الرادار",
+    "phase": 1,
+    "text": "On their wet pixels, all 7 spots stayed above the 2 dB HH and 1.5 dB HV thresholds on both 2026-09-16 and 2026-09-28. W1 is the largest and strongest, and W7 is the smallest, with a weak signal in the area around it.",
+    "text_ar": "على بكسلاتها الرطبة، بقيت البقع السبع جميعها فوق عتبتي 2 dB في HH و1.5 dB في HV في مرورَي 2026-09-16 و2026-09-28. وW1 هي الأكبر والأقوى، أما W7 فهي الأصغر وإشارتها ضعيفة في المنطقة المحيطة بها.",
+    "per_spot": [
+     {
+      "id": "W1",
+      "signal": "for_dispatch",
+      "finding": "W1 is the largest spot at 22800 m², and its rise held on both later passes with HH at 2.72 and 2.67 dB and HV at 2.77 and 2.35 dB.",
+      "finding_ar": "W1 هي أكبر بقعة بمساحة 22800 m²، وبقي الارتفاع قائماً في المرورين اللاحقين، إذ بلغ HH ‏2.72 و2.67 dB وبلغ HV ‏2.77 و2.35 dB."
+     },
+     {
+      "id": "W2",
+      "signal": "for_dispatch",
+      "finding": "W2 covers 9600 m², and its rise held on both later passes with HH at 2.65 and 2.58 dB and HV at 2.28 and 2.92 dB.",
+      "finding_ar": "تغطي W2 مساحة 9600 m²، وبقي الارتفاع قائماً في المرورين اللاحقين، إذ بلغ HH ‏2.65 و2.58 dB وبلغ HV ‏2.28 و2.92 dB."
+     },
+     {
+      "id": "W3",
+      "signal": "neutral",
+      "finding": "W3 is small at 4000 m² but its rise held, with HH at 2.26 and 2.66 dB and HV at 2.45 and 2.83 dB.",
+      "finding_ar": "W3 صغيرة بمساحة 4000 m² لكن ارتفاعها بقي قائماً، إذ بلغ HH ‏2.26 و2.66 dB وبلغ HV ‏2.45 و2.83 dB."
+     },
+     {
+      "id": "W4",
+      "signal": "for_dispatch",
+      "finding": "W4 covers 8000 m², and its rise held on both later passes with HH at 2.57 and 2.79 dB and HV at 2.35 and 2.21 dB.",
+      "finding_ar": "تغطي W4 مساحة 8000 m²، وبقي الارتفاع قائماً في المرورين اللاحقين، إذ بلغ HH ‏2.57 و2.79 dB وبلغ HV ‏2.35 و2.21 dB."
+     },
+     {
+      "id": "W5",
+      "signal": "neutral",
+      "finding": "W5 is small at 4800 m², and its rise held with HH at 2.57 and 2.58 dB and HV at 2.33 and 2.11 dB.",
+      "finding_ar": "W5 صغيرة بمساحة 4800 m²، وبقي ارتفاعها قائماً، إذ بلغ HH ‏2.57 و2.58 dB وبلغ HV ‏2.33 و2.11 dB."
+     },
+     {
+      "id": "W6",
+      "signal": "neutral",
+      "finding": "W6 covers 7200 m², and its rise held, but HV was only 1.87 dB on both later passes, close to the 1.5 dB threshold.",
+      "finding_ar": "تغطي W6 مساحة 7200 m²، وبقي ارتفاعها قائماً، لكن HV لم يتجاوز 1.87 dB في المرورين اللاحقين، وهي قيمة قريبة من عتبة 1.5 dB."
+     },
+     {
+      "id": "W7",
+      "signal": "against_dispatch",
+      "finding": "W7 is the smallest spot at 1600 m², with only 4 wet pixels, and in the area around it HV rose only 0.51 and 0.69 dB.",
+      "finding_ar": "W7 هي أصغر بقعة بمساحة 1600 m² ولا تضم سوى 4 بكسلات رطبة، وفي المنطقة المحيطة بها لم يرتفع HV إلا 0.51 و0.69 dB."
+     }
+    ],
+    "checks": {
+     "ok": true,
+     "total": 81,
+     "matched": 81,
+     "rounded": [],
+     "unmatched": []
+    }
+   }
+  },
+  {
+   "t": 22134,
+   "event": "agent_done",
+   "data": {
+    "source": "live",
+    "agent": "radar",
+    "usage": {
+     "input_tokens": 9447,
+     "output_tokens": 2055,
+     "cache_creation_input_tokens": 0,
+     "cache_read_input_tokens": 0,
+     "requests": 3
+    },
+    "ms": 22134
+   }
+  },
+  {
+   "t": 22135,
+   "event": "agent_start",
+   "data": {
+    "source": "live",
+    "agent": "skeptic",
+    "role_en": "Skeptic (red team)",
+    "role_ar": "المشكّك (الفريق الأحمر)",
+    "phase": 2
+   }
+  },
+  {
+   "t": 34370,
+   "event": "agent_report",
+   "data": {
+    "source": "live",
+    "agent": "skeptic",
+    "role_en": "Skeptic (red team)",
+    "role_ar": "المشكّك (الفريق الأحمر)",
+    "phase": 2,
+    "text": "Only W3 and W7 sit within 40 m of a recorded pipe, and W3 is on the edge, since its spot centre is 38 m from the pipe and the position is only good to about ±50 m. W1, W2 and W4 are far from any recorded pipe, and W4 has been farmland every year, so irrigation is a likely cause.",
+    "text_ar": "البقعتان W3 وW7 فقط تقعان ضمن 40 m من أنبوب مسجل، وW3 على الحد، إذ يبعد مركز البقعة 38 m عن الأنبوب ودقة الموقع نحو ±50 m فقط. أما W1 وW2 وW4 فبعيدة عن أي أنبوب مسجل، وW4 أرض زراعية كل عام، فالري سبب مرجح.",
+    "per_spot": [
+     {
+      "id": "W1",
+      "strength": "strong",
+      "concern": "The spot centre is 177 m from the nearest recorded pipe, far outside 40 m, and the land was Crops in 2023, so irrigation is possible.",
+      "concern_ar": "يبعد مركز البقعة 177 m عن أقرب أنبوب مسجل، أي خارج 40 m بكثير، وكانت الأرض مزروعة في 2023، فالري ممكن."
+     },
+     {
+      "id": "W2",
+      "strength": "strong",
+      "concern": "The spot centre is 323 m from the nearest recorded pipe, and the land was Crops in 2023 and 2024, so irrigation or a cistern could explain the water.",
+      "concern_ar": "يبعد مركز البقعة 323 m عن أقرب أنبوب مسجل، وكانت الأرض مزروعة في 2023 و2024، فقد يفسر الري أو صهريج الماء."
+     },
+     {
+      "id": "W3",
+      "strength": "moderate",
+      "concern": "The spot centre is 38 m from the service line, but with about ±50 m position accuracy the pipe may not be the source, and the 2020 record may miss newer pipes or other water such as a cistern.",
+      "concern_ar": "يبعد مركز البقعة 38 m عن خط الخدمة، لكن مع دقة موقع نحو ±50 m قد لا يكون الأنبوب هو المصدر، وقد يغفل سجل 2020 أنابيب أحدث أو مياه أخرى مثل صهريج."
+     },
+     {
+      "id": "W4",
+      "strength": "strong",
+      "concern": "The land was Crops in 2023, 2024 and 2025 and the spot centre is 736 m from any recorded pipe, so irrigation explains the water well.",
+      "concern_ar": "كانت الأرض مزروعة في 2023 و2024 و2025 ويبعد مركز البقعة 736 m عن أي أنبوب مسجل، فالري يفسر الماء جيداً."
+     },
+     {
+      "id": "W7",
+      "strength": "weak",
+      "concern": "The spot has only 4 wet pixels and HV rose only 0.51 and 0.69 dB in the area around it, but it is built area with the spot centre 6 m from a service line, so the evidence largely answers this.",
+      "concern_ar": "للبقعة 4 بكسلات رطبة فقط وارتفع HV بمقدار 0.51 و0.69 dB فقط في المنطقة المحيطة، لكنها منطقة مبنية ويبعد مركز البقعة 6 m عن خط خدمة، فالأدلة تجيب عن هذا الاعتراض إلى حد كبير."
+     }
+    ],
+    "checks": {
+     "ok": true,
+     "total": 40,
+     "matched": 40,
+     "rounded": [],
+     "unmatched": []
+    }
+   }
+  },
+  {
+   "t": 34370,
+   "event": "agent_done",
+   "data": {
+    "source": "live",
+    "agent": "skeptic",
+    "usage": {
+     "input_tokens": 9059,
+     "output_tokens": 1230,
+     "cache_creation_input_tokens": 0,
+     "cache_read_input_tokens": 0,
+     "requests": 1
+    },
+    "ms": 12235
+   }
+  },
+  {
+   "t": 34370,
+   "event": "agent_start",
+   "data": {
+    "source": "live",
+    "agent": "dispatcher",
+    "role_en": "Dispatcher",
+    "role_ar": "مسؤول الإيفاد",
+    "phase": 3
+   }
+  },
+  {
+   "t": 59549,
+   "event": "agent_report",
+   "data": {
+    "source": "live",
+    "agent": "dispatcher",
+    "role_en": "Dispatcher",
+    "role_ar": "مسؤول الإيفاد",
+    "phase": 3,
+    "text": "Crews with acoustic detectors go to W7 (high) and W3 (medium), the only spots within 40 m of a recorded pipe; W1, W2, W4, W5 and W6 are rejected as far from any pipe on farmland.",
+    "text_ar": "تُرسل طواقم مزودة بأجهزة كشف صوتي إلى W7 (أولوية عالية) وW3 (متوسطة)، وهما البقعتان الوحيدتان ضمن 40 m من أنبوب مسجل؛ وتُرفض W1 وW2 وW4 وW5 وW6 لبعدها عن أي أنبوب في أراض زراعية.",
+    "per_spot": [
+     {
+      "id": "W7",
+      "verdict": "dispatch",
+      "priority": "high",
+      "reason": "Spot centre about 6 m from a 3/4\" galvanized iron service line on land that was built area in 2023, 2024 and 2025, with 0.0 mm of rain, so irrigation and rain are unlikely causes.",
+      "reason_ar": "مركز البقعة على بعد نحو 6 m من خط خدمة 3/4\" من الحديد المجلفن في أرض مبنية في 2023 و2024 و2025، مع 0.0 mm من المطر، لذا يُستبعد الري والمطر كسببين."
+     },
+     {
+      "id": "W3",
+      "verdict": "dispatch",
+      "priority": "medium",
+      "reason": "Spot centre about 38 m from a 1\" galvanized iron service line, within 40 m, and its rise held on both later passes with 0.0 mm of rain.",
+      "reason_ar": "مركز البقعة على بعد نحو 38 m من خط خدمة 1\" من الحديد المجلفن، أي ضمن 40 m، واستمر الارتفاع في المرورين اللاحقين مع 0.0 mm من المطر."
+     },
+     {
+      "id": "W1",
+      "verdict": "reject",
+      "priority": null,
+      "reason": "Spot centre is 177 m from the nearest recorded pipe, not within 40 m, on land that was Crops in 2023 and Rangeland in 2024 and 2025.",
+      "reason_ar": "مركز البقعة على بعد 177 m من أقرب أنبوب مسجل، أي خارج 40 m، في أرض كانت محاصيل في 2023 ومراعي في 2024 و2025."
+     },
+     {
+      "id": "W2",
+      "verdict": "reject",
+      "priority": null,
+      "reason": "Spot centre is 323 m from the nearest recorded pipe, not within 40 m, on land that was Crops in 2023 and 2024 and Rangeland in 2025.",
+      "reason_ar": "مركز البقعة على بعد 323 m من أقرب أنبوب مسجل، أي خارج 40 m، في أرض كانت محاصيل في 2023 و2024 ومراعي في 2025."
+     },
+     {
+      "id": "W4",
+      "verdict": "reject",
+      "priority": null,
+      "reason": "Spot centre is 736 m from the nearest recorded pipe on land that was Crops in 2023, 2024 and 2025, so irrigation is the likely cause.",
+      "reason_ar": "مركز البقعة على بعد 736 m من أقرب أنبوب مسجل في أرض محاصيل في 2023 و2024 و2025، لذا الري هو السبب المرجح."
+     },
+     {
+      "id": "W5",
+      "verdict": "reject",
+      "priority": null,
+      "reason": "Spot centre is 1.4 km from the nearest recorded pipe on land that was Crops in 2023, 2024 and 2025, so irrigation is the likely cause.",
+      "reason_ar": "مركز البقعة على بعد 1.4 km من أقرب أنبوب مسجل في أرض محاصيل في 2023 و2024 و2025، لذا الري هو السبب المرجح."
+     },
+     {
+      "id": "W6",
+      "verdict": "reject",
+      "priority": null,
+      "reason": "Spot centre is 1371 m from the nearest recorded pipe on land that was Crops in 2023, 2024 and 2025, and HV was only 1.87 dB.",
+      "reason_ar": "مركز البقعة على بعد 1371 m من أقرب أنبوب مسجل في أرض محاصيل في 2023 و2024 و2025، وكان HV فقط 1.87 dB."
+     }
+    ],
+    "checks": {
+     "ok": true,
+     "total": 8,
+     "matched": 8,
+     "rounded": [],
+     "unmatched": []
+    }
+   }
+  },
+  {
+   "t": 59549,
+   "event": "agent_done",
+   "data": {
+    "source": "live",
+    "agent": "dispatcher",
+    "usage": {
+     "input_tokens": 9962,
+     "output_tokens": 3243,
+     "cache_creation_input_tokens": 0,
+     "cache_read_input_tokens": 0,
+     "requests": 1
+    },
+    "ms": 25179
+   }
+  },
+  {
+   "t": 59549,
+   "event": "final",
+   "data": {
+    "source": "live",
+    "decisions": [
+     {
+      "id": "W7",
+      "verdict": "dispatch",
+      "priority": "high",
+      "reason": "Spot centre about 6 m from a 3/4\" galvanized iron service line on land that was built area in 2023, 2024 and 2025, with 0.0 mm of rain, so irrigation and rain are unlikely causes.",
+      "reason_ar": "مركز البقعة على بعد نحو 6 m من خط خدمة 3/4\" من الحديد المجلفن في أرض مبنية في 2023 و2024 و2025، مع 0.0 mm من المطر، لذا يُستبعد الري والمطر كسببين.",
+      "skeptic_concern": "Only 4 wet pixels and HV rose only 0.51 and 0.69 dB in the surrounding area.",
+      "skeptic_concern_ar": "4 بكسلات رطبة فقط، وارتفع HV بمقدار 0.51 و0.69 dB فقط في المنطقة المحيطة.",
+      "resolved_by": "The wet pixels stayed above both thresholds on both later passes, and the twin shows that a 1 L/s service-line leak would be almost invisible to pressure monitoring; the crew should run an acoustic survey along the service line.",
+      "resolved_by_ar": "بقيت البكسلات الرطبة فوق العتبتين في المرورين اللاحقين، ويُظهر النموذج الهيدروليكي أن تسربا بمقدار 1 L/s في خط الخدمة لا يكاد يظهر في مراقبة الضغط؛ على الطاقم إجراء مسح صوتي على طول خط الخدمة.",
+      "checks": {
+       "numbers": {
+        "ok": true,
+        "total": 22,
+        "matched": 22,
+        "rounded": [],
+        "unmatched": []
+       },
+       "rule": "ok"
+      }
+     },
+     {
+      "id": "W3",
+      "verdict": "dispatch",
+      "priority": "medium",
+      "reason": "Spot centre about 38 m from a 1\" galvanized iron service line, within 40 m, and its rise held on both later passes with 0.0 mm of rain.",
+      "reason_ar": "مركز البقعة على بعد نحو 38 m من خط خدمة 1\" من الحديد المجلفن، أي ضمن 40 m، واستمر الارتفاع في المرورين اللاحقين مع 0.0 mm من المطر.",
+      "skeptic_concern": "At 38 m with about ±50 m accuracy, the pipe may not be the source; a cistern or newer unrecorded pipe is possible.",
+      "skeptic_concern_ar": "عند 38 m ودقة تقارب ±50 m قد لا يكون الأنبوب هو المصدر، ويحتمل وجود خزان أو أنبوب أحدث غير مسجل.",
+      "resolved_by": "The crew must check the 1\" service line with the acoustic detector and look for cisterns, irrigation or unrecorded pipes near the spot.",
+      "resolved_by_ar": "على الطاقم فحص خط الخدمة 1\" بجهاز الكشف الصوتي والبحث عن خزانات أو ري أو أنابيب غير مسجلة قرب البقعة.",
+      "checks": {
+       "numbers": {
+        "ok": true,
+        "total": 14,
+        "matched": 14,
+        "rounded": [],
+        "unmatched": []
+       },
+       "rule": "ok"
+      }
+     },
+     {
+      "id": "W1",
+      "verdict": "reject",
+      "priority": null,
+      "reason": "Spot centre is 177 m from the nearest recorded pipe, not within 40 m, on land that was Crops in 2023 and Rangeland in 2024 and 2025.",
+      "reason_ar": "مركز البقعة على بعد 177 m من أقرب أنبوب مسجل، أي خارج 40 m، في أرض كانت محاصيل في 2023 ومراعي في 2024 و2025.",
+      "skeptic_concern": "Far from any recorded pipe and irrigation is possible.",
+      "skeptic_concern_ar": "بعيدة عن أي أنبوب مسجل والري محتمل.",
+      "resolved_by": "Accepted: the spot is outside the dispatch radius, though it is the largest and strongest spot, so a pipe laid after 2020 cannot be excluded.",
+      "resolved_by_ar": "مقبول: البقعة خارج نطاق الإرسال، مع أنها الأكبر والأقوى، لذا لا يمكن استبعاد أنبوب مُدّ بعد 2020.",
+      "checks": {
+       "numbers": {
+        "ok": true,
+        "total": 12,
+        "matched": 12,
+        "rounded": [],
+        "unmatched": []
+       },
+       "rule": "ok"
+      }
+     },
+     {
+      "id": "W2",
+      "verdict": "reject",
+      "priority": null,
+      "reason": "Spot centre is 323 m from the nearest recorded pipe, not within 40 m, on land that was Crops in 2023 and 2024 and Rangeland in 2025.",
+      "reason_ar": "مركز البقعة على بعد 323 m من أقرب أنبوب مسجل، أي خارج 40 m، في أرض كانت محاصيل في 2023 و2024 ومراعي في 2025.",
+      "skeptic_concern": "Far from any recorded pipe; irrigation or a cistern could explain the water.",
+      "skeptic_concern_ar": "بعيدة عن أي أنبوب مسجل، وقد يفسر الري أو خزان الماء.",
+      "resolved_by": "Accepted: outside the dispatch radius on farmland.",
+      "resolved_by_ar": "مقبول: خارج نطاق الإرسال في أرض زراعية.",
+      "checks": {
+       "numbers": {
+        "ok": true,
+        "total": 10,
+        "matched": 10,
+        "rounded": [],
+        "unmatched": []
+       },
+       "rule": "ok"
+      }
+     },
+     {
+      "id": "W4",
+      "verdict": "reject",
+      "priority": null,
+      "reason": "Spot centre is 736 m from the nearest recorded pipe on land that was Crops in 2023, 2024 and 2025, so irrigation is the likely cause.",
+      "reason_ar": "مركز البقعة على بعد 736 m من أقرب أنبوب مسجل في أرض محاصيل في 2023 و2024 و2025، لذا الري هو السبب المرجح.",
+      "skeptic_concern": "Farmland every year and far from any pipe, so irrigation explains the water.",
+      "skeptic_concern_ar": "أرض زراعية كل عام وبعيدة عن أي أنبوب، فالري يفسر الماء.",
+      "resolved_by": "Accepted: outside the dispatch radius on cropland.",
+      "resolved_by_ar": "مقبول: خارج نطاق الإرسال في أرض محاصيل.",
+      "checks": {
+       "numbers": {
+        "ok": true,
+        "total": 8,
+        "matched": 8,
+        "rounded": [],
+        "unmatched": []
+       },
+       "rule": "ok"
+      }
+     },
+     {
+      "id": "W5",
+      "verdict": "reject",
+      "priority": null,
+      "reason": "Spot centre is 1.4 km from the nearest recorded pipe on land that was Crops in 2023, 2024 and 2025, so irrigation is the likely cause.",
+      "reason_ar": "مركز البقعة على بعد 1.4 km من أقرب أنبوب مسجل في أرض محاصيل في 2023 و2024 و2025، لذا الري هو السبب المرجح.",
+      "skeptic_concern": "none raised",
+      "skeptic_concern_ar": "لم يُثر أي اعتراض",
+      "resolved_by": "Outside the dispatch radius on cropland, so no crew is needed.",
+      "resolved_by_ar": "خارج نطاق الإرسال في أرض محاصيل، فلا حاجة لطاقم.",
+      "checks": {
+       "numbers": {
+        "ok": true,
+        "total": 8,
+        "matched": 8,
+        "rounded": [
+         "W5.reason: 1.4",
+         "W5.reason_ar: 1.4"
+        ],
+        "unmatched": []
+       },
+       "rule": "ok"
+      }
+     },
+     {
+      "id": "W6",
+      "verdict": "reject",
+      "priority": null,
+      "reason": "Spot centre is 1371 m from the nearest recorded pipe on land that was Crops in 2023, 2024 and 2025, and HV was only 1.87 dB.",
+      "reason_ar": "مركز البقعة على بعد 1371 m من أقرب أنبوب مسجل في أرض محاصيل في 2023 و2024 و2025، وكان HV فقط 1.87 dB.",
+      "skeptic_concern": "none raised",
+      "skeptic_concern_ar": "لم يُثر أي اعتراض",
+      "resolved_by": "Outside the dispatch radius on cropland, so no crew is needed.",
+      "resolved_by_ar": "خارج نطاق الإرسال في أرض محاصيل، فلا حاجة لطاقم.",
+      "checks": {
+       "numbers": {
+        "ok": true,
+        "total": 10,
+        "matched": 10,
+        "rounded": [],
+        "unmatched": []
+       },
+       "rule": "ok"
+      }
+     }
+    ],
+    "summary": "Crews with acoustic detectors go to W7 (high) and W3 (medium), the only spots within 40 m of a recorded pipe; W1, W2, W4, W5 and W6 are rejected as far from any pipe on farmland.",
+    "summary_ar": "تُرسل طواقم مزودة بأجهزة كشف صوتي إلى W7 (أولوية عالية) وW3 (متوسطة)، وهما البقعتان الوحيدتان ضمن 40 m من أنبوب مسجل؛ وتُرفض W1 وW2 وW4 وW5 وW6 لبعدها عن أي أنبوب في أراض زراعية.",
+    "dissent": "W3's spot centre is 38 m from the service line while the position is only good to about ±50 m, and the 2020 pipe record may miss newer pipes or cisterns, so the service line may not be the source.",
+    "dissent_ar": "مركز البقعة W3 على بعد 38 m من خط الخدمة بينما دقة الموقع نحو ±50 m فقط، وقد يغفل سجل الأنابيب لعام 2020 أنابيب أحدث أو خزانات، لذا قد لا يكون خط الخدمة هو المصدر.",
+    "candidates": [
+     "W1",
+     "W2",
+     "W3",
+     "W4",
+     "W7"
+    ],
+    "missing_ids": [],
+    "checks": {
+     "numbers": {
+      "ok": true,
+      "total": 8,
+      "matched": 8,
+      "rounded": [],
+      "unmatched": []
+     }
+    }
+   }
+  },
+  {
+   "t": 59550,
+   "event": "usage",
+   "data": {
+    "source": "live",
+    "live": true,
+    "model": "claude-opus-5-5",
+    "per_agent": {
+     "landuse": {
+      "usage": {
+       "input_tokens": 5294,
+       "output_tokens": 1839,
+       "cache_creation_input_tokens": 0,
+       "cache_read_input_tokens": 0,
+       "requests": 2
+      },
+      "ms": 15749
+     },
+     "network": {
+      "usage": {
+       "input_tokens": 6977,
+       "output_tokens": 2672,
+       "cache_creation_input_tokens": 0,
+       "cache_read_input_tokens": 0,
+       "requests": 2
+      },
+      "ms": 20724
+     },
+     "radar": {
+      "usage": {
+       "input_tokens": 9447,
+       "output_tokens": 2055,
+       "cache_creation_input_tokens": 0,
+       "cache_read_input_tokens": 0,
+       "requests": 3
+      },
+      "ms": 22134
+     },
+     "skeptic": {
+      "usage": {
+       "input_tokens": 9059,
+       "output_tokens": 1230,
+       "cache_creation_input_tokens": 0,
+       "cache_read_input_tokens": 0,
+       "requests": 1
+      },
+      "ms": 12235
+     },
+     "dispatcher": {
+      "usage": {
+       "input_tokens": 9962,
+       "output_tokens": 3243,
+       "cache_creation_input_tokens": 0,
+       "cache_read_input_tokens": 0,
+       "requests": 1
+      },
+      "ms": 25179
+     }
+    },
+    "total": {
+     "input_tokens": 40739,
+     "output_tokens": 11039,
+     "cache_creation_input_tokens": 0,
+     "cache_read_input_tokens": 0,
+     "requests": 9
+    },
+    "wall_ms": 59550
+   }
+  }
+ ]
+}

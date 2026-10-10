@@ -1,0 +1,49 @@
+/* Adaptive learning screen (src/screens/Learning.tsx) */
+.lrn { display: grid; gap: var(--s-4, 16px); }
+.lrn-honest { margin: 0; padding: 10px 14px; border-radius: 10px; border: 1px solid var(--prov-plan, #888); background: var(--prov-plan-bg, transparent); color: var(--text); font-size: 0.92rem; }
+.lrn-flash { margin: 0; padding: 8px 12px; border-radius: 8px; background: color-mix(in srgb, var(--blue) 14%, transparent); color: var(--text); font-size: 0.9rem; }
+.lrn-err { margin: 0; padding: 8px 12px; border-radius: 8px; background: color-mix(in srgb, var(--danger) 16%, transparent); color: var(--text); }
+.lrn-grid { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: var(--s-4, 16px); align-items: start; }
+@media (max-width: 1000px) { .lrn-grid { grid-template-columns: 1fr; } }
+.lrn-table-wrap { overflow-x: auto; }
+.lrn-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+.lrn-table th { text-align: start; font-weight: 600; color: var(--text-muted); font-size: 0.78rem; padding: 6px 8px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+.lrn-table td { padding: 7px 8px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+.lrn-table tr.lrn-labelled td { background: color-mix(in srgb, var(--prov-plan, #888) 8%, transparent); }
+.lrn-num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.lrn-pair { margin-inline-end: 6px; }
+.lrn-faint { color: var(--text-faint); }
+.lrn-band { display: block; color: var(--text-faint); font-size: 0.74rem; }
+.lrn-spot { color: var(--blue); font-weight: 600; text-decoration: none; }
+.lrn-move { display: inline-flex; gap: 2px; align-items: center; font-size: 0.78rem; font-weight: 700; padding: 1px 6px; border-radius: 999px; }
+.lrn-move-up { color: var(--ok); background: color-mix(in srgb, var(--ok) 14%, transparent); }
+.lrn-move-down { color: var(--danger); background: color-mix(in srgb, var(--danger) 14%, transparent); }
+.lrn-move-0 { color: var(--text-faint); }
+.lrn-acts { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.lrn-lab { font-size: 0.78rem; font-weight: 600; padding: 2px 8px; border-radius: 999px; }
+.lrn-lab-leak { color: var(--warn); background: color-mix(in srgb, var(--warn) 16%, transparent); }
+.lrn-lab-no_leak { color: var(--text-muted); background: color-mix(in srgb, var(--text-muted) 14%, transparent); }
+.lrn-w-legend { display: flex; flex-wrap: wrap; gap: 12px; font-size: 0.78rem; color: var(--text-muted); margin-bottom: 8px; }
+.lrn-key { display: inline-block; vertical-align: middle; width: 14px; height: 8px; border-radius: 2px; }
+.lrn-key-prior { width: 3px; height: 14px; background: var(--text); }
+.lrn-key-post { background: var(--blue); }
+.lrn-key-err { height: 2px; background: var(--text-muted); }
+.lrn-w { padding: 6px 0; border-bottom: 1px dashed var(--border); }
+.lrn-w-name { display: flex; justify-content: space-between; gap: 8px; font-size: 0.86rem; flex-wrap: wrap; }
+.lrn-w-nums { font-variant-numeric: tabular-nums; color: var(--text-muted); font-size: 0.8rem; }
+.lrn-w-track { position: relative; height: 18px; margin-top: 4px; background: var(--surface-2); border-radius: 4px; }
+.lrn-w-zero { position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: var(--border-strong); }
+.lrn-w-bar { position: absolute; top: 4px; height: 10px; border-radius: 2px; }
+.lrn-w-bar.pos { background: var(--blue); }
+.lrn-w-bar.neg { background: var(--amber); }
+.lrn-w-err { position: absolute; top: 8px; height: 2px; background: var(--text-muted); }
+.lrn-w-prior { position: absolute; top: 1px; bottom: 1px; width: 3px; margin-left: -1px; background: var(--text); border-radius: 1px; }
+.lrn-small { color: var(--text-faint); font-size: 0.76rem; margin: 8px 0 0; overflow-wrap: anywhere; }
+.lrn-labels { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.lrn-labels li { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; font-size: 0.88rem; }
+.lrn-note { color: var(--text-muted); }
+.lrn-ts { color: var(--text-faint); font-size: 0.76rem; margin-inline-start: auto; }
+@media (max-width: 520px) {
+  .lrn-table th:nth-child(3), .lrn-table td:nth-child(3) { display: none; }
+  .lrn-table td { padding: 6px 4px; }
+}

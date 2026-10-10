@@ -20,3 +20,7 @@ data/hydrofingerprint/hf_gaps_pick.json
 demo/missing-blue.html
 # QA screenshots (local only)
 docs/qa/shots/
+
+# Demo crew outcomes and audit entries (local only)
+data/learning/
+.gstack/

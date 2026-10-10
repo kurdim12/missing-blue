@@ -12,11 +12,11 @@ export type PipeClassDef = { key: PipeClass; color: string; width: number; label
 
 /** Classes as defined in CLAUDE.md: trunk >= 8", main 4–6", distribution 1.5–3", service < 1.5", unknown = numeric CAD layers. */
 export const PIPE_CLASSES: PipeClassDef[] = [
-  { key: "trunk", color: "#FF5A4E", width: 2.6, label: { en: "Trunk main", ar: "خط ناقل رئيسي" }, range: { en: '≥ 8"', ar: "8 إنش فأكثر" } },
-  { key: "main", color: "#FFB547", width: 1.9, label: { en: "Main", ar: "خط رئيسي" }, range: { en: '4–6"', ar: "4–6 إنش" } },
-  { key: "distribution", color: "#6FE3C7", width: 1.25, label: { en: "Distribution", ar: "خط توزيع" }, range: { en: '1.5–3"', ar: "1.5–3 إنش" } },
-  { key: "service", color: "#9FB4BE", width: 0.8, label: { en: "Service line", ar: "خط خدمة" }, range: { en: '< 1.5"', ar: "أقل من 1.5 إنش" } },
-  { key: "unknown", color: "#5E717B", width: 0.8, label: { en: "Unknown size", ar: "قطر غير معروف" }, range: { en: "CAD layer without size", ar: "طبقة CAD دون قطر" } },
+  { key: "trunk", color: "#FF5A4E", width: 3, label: { en: "Trunk main", ar: "خط ناقل رئيسي" }, range: { en: '≥ 8"', ar: "8 إنش فأكثر" } },
+  { key: "main", color: "#FFB547", width: 2.2, label: { en: "Main", ar: "خط رئيسي" }, range: { en: '4–6"', ar: "4–6 إنش" } },
+  { key: "distribution", color: "#6FE3C7", width: 1.5, label: { en: "Distribution", ar: "خط توزيع" }, range: { en: '1.5–3"', ar: "1.5–3 إنش" } },
+  { key: "service", color: "#9FB4BE", width: 1, label: { en: "Service line", ar: "خط خدمة" }, range: { en: '< 1.5"', ar: "أقل من 1.5 إنش" } },
+  { key: "unknown", color: "#6E838D", width: 1, label: { en: "Unknown size", ar: "قطر غير معروف" }, range: { en: "CAD layer without size", ar: "طبقة CAD دون قطر" } },
 ];
 export const pipeClass = (k: string) => PIPE_CLASSES.find((c) => c.key === k) ?? PIPE_CLASSES[PIPE_CLASSES.length - 1];
 

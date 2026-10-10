@@ -1,0 +1,46 @@
+/* Ask Missing Blue (src/screens/Assistant.tsx) */
+.asst { display: grid; gap: 12px; max-width: 920px; }
+.asst-log { display: grid; gap: 12px; min-height: 160px; }
+.asst-empty { color: var(--text-muted); padding: 16px; border: 1px dashed var(--border); border-radius: 12px; }
+.asst-empty p { margin: 0; }
+.asst-msg { border-radius: 12px; padding: 10px 14px; line-height: 1.6; }
+.asst-user { justify-self: end; max-width: 80%; background: color-mix(in srgb, var(--blue) 18%, var(--surface-2)); color: var(--text); white-space: pre-wrap; }
+.asst-bot { background: var(--surface-1); border: 1px solid var(--border); }
+.asst-bot-head { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 6px; }
+.asst-who { font-weight: 700; font-size: 0.86rem; }
+.asst-live { display: inline-flex; gap: 4px; align-items: center; font-size: 0.76rem; font-weight: 600; padding: 2px 8px; border-radius: 999px; color: var(--ok); background: color-mix(in srgb, var(--ok) 14%, transparent); }
+.asst-unavail { font-size: 0.76rem; font-weight: 600; padding: 2px 8px; border-radius: 999px; color: var(--warn); background: color-mix(in srgb, var(--warn) 14%, transparent); }
+.asst-why { margin: 0 0 6px; font-size: 0.8rem; color: var(--text-muted); }
+.asst-tools { display: grid; gap: 4px; margin-bottom: 8px; }
+.asst-tool { border: 1px solid var(--border); border-radius: 8px; background: var(--surface-2); font-size: 0.8rem; }
+.asst-tool > summary { cursor: pointer; display: flex; gap: 6px; align-items: center; padding: 4px 8px; list-style: none; }
+.asst-tool > summary::-webkit-details-marker { display: none; }
+.asst-tool > summary::before { content: "▸"; color: var(--text-faint); }
+.asst-tool[open] > summary::before { content: "▾"; }
+.asst-tool-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ok); }
+.asst-tool-dot[data-pending="1"] { background: var(--amber); }
+.asst-tool-err .asst-tool-dot { background: var(--danger); }
+.asst-tool-label { color: var(--text-muted); }
+.asst-tool-state { color: var(--text-faint); margin-inline-start: auto; }
+.asst-tool-body { padding: 4px 8px 8px; }
+.asst-tool-h { font-size: 0.7rem; text-transform: uppercase; color: var(--text-faint); margin-top: 4px; }
+.asst-tool-body pre { margin: 2px 0 0; max-height: 220px; overflow: auto; font-size: 0.74rem; white-space: pre-wrap; word-break: break-word; }
+.asst-text p { margin: 0 0 8px; }
+.asst-text p:last-child { margin-bottom: 0; }
+.asst-text ul { margin: 0 0 8px; padding-inline-start: 20px; }
+.asst-faint { color: var(--text-faint); }
+.asst-err { color: var(--danger); margin: 6px 0 0; font-size: 0.86rem; }
+.asst-checks { margin: 8px 0 0; font-size: 0.76rem; color: var(--text-faint); }
+.asst-sugg { display: flex; flex-wrap: wrap; gap: 8px; }
+.asst-chip { border: 1px solid var(--border-strong); background: var(--surface-1); color: var(--text); border-radius: 999px; padding: 6px 12px; font: inherit; font-size: 0.86rem; cursor: pointer; display: inline-flex; gap: 6px; align-items: center; text-align: start; }
+.asst-chip:hover:not(:disabled) { border-color: var(--blue); }
+.asst-chip:disabled { opacity: 0.55; cursor: default; }
+.asst-chip-rec { font-size: 0.68rem; color: var(--prov-recorded); background: var(--prov-recorded-bg); border-radius: 999px; padding: 0 6px; }
+.asst-form { display: flex; gap: 8px; align-items: stretch; }
+.asst-form textarea { flex: 1; min-width: 0; resize: vertical; font: inherit; padding: 8px 10px; border-radius: 10px; border: 1px solid var(--border-strong); background: var(--surface-1); color: var(--text); }
+.asst-form textarea:focus { outline: 2px solid var(--focus); outline-offset: 1px; }
+.asst-foot { margin: 0; font-size: 0.76rem; color: var(--text-faint); }
+@media (max-width: 520px) {
+  .asst-user { max-width: 92%; }
+  .asst-form { flex-direction: column; }
+}

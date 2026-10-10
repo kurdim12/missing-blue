@@ -15,7 +15,13 @@
   /* text */
   --text: #e6eef1;
   --text-muted: #9fb2ba;
-  --text-faint: #7d929b;
+  --text-faint: #8fa3ab; /* >= 4.5:1 on every surface incl. --surface-3 */
+  --control-border: #5e7883; /* >= 3:1 against surfaces (WCAG 1.4.11) */
+  /* map chrome is always dark (the basemap is dark), even inside a light content surface */
+  --map-chrome-bg: #13262f;
+  --map-chrome-border: #5e7883;
+  --map-chrome-text: #e6eef1;
+  --map-chrome-muted: #b4c4cb;
 
   /* accents (shared with src/map/style.ts) */
   --blue: #3fa2ff;
@@ -66,7 +72,7 @@
   --font-ar: "IBM Plex Sans Arabic", "Inter", Tahoma, sans-serif;
   --font: var(--font-latin);
   --font-mono: ui-monospace, "Cascadia Mono", Consolas, Menlo, monospace;
-  --fs-xs: 12px;
+  --fs-xs: 13px;
   --fs-sm: 14px;
   --fs-md: 16px;
   --fs-lg: 19px;
@@ -82,7 +88,12 @@
 
 html[lang="ar"] {
   --font: var(--font-ar);
-  --lh: 1.65;
+  /* Arabic needs ~10% more size and >= 1.6 line-height to read at projector distance */
+  --fs-xs: 14px;
+  --fs-sm: 15.5px;
+  --fs-md: 17.5px;
+  --fs-lg: 20px;
+  --lh: 1.7;
   --lh-tight: 1.4;
 }
 
@@ -144,8 +155,9 @@ code,
   color: var(--text-faint);
 }
 :focus-visible {
-  outline: 2px solid var(--focus);
+  outline: 3px solid var(--focus);
   outline-offset: 2px;
+  box-shadow: 0 0 0 5px rgba(8, 18, 24, 0.9);
 }
 ::selection {
   background: rgba(63, 162, 255, 0.35);
@@ -313,7 +325,7 @@ code,
   min-height: 36px;
   padding-inline: var(--s-3);
   border-radius: var(--r-2);
-  border: 1px solid var(--border-strong);
+  border: 1px solid var(--control-border);
   background: var(--surface-2);
   color: var(--text);
   font: 600 var(--fs-sm) / 1 var(--font);
@@ -373,12 +385,12 @@ html[lang="ar"] .lang-toggle {
   --cbg: transparent;
   color: var(--c);
   background: var(--cbg);
-  border-color: color-mix(in srgb, var(--c) 45%, transparent);
+  border-color: color-mix(in srgb, var(--c) 75%, transparent);
 }
 .badge-sm {
   padding-block: 3px;
   padding-inline: 6px;
-  font-size: 11px;
+  font-size: 12px;
 }
 .badge-dot {
   width: 6px;
@@ -563,7 +575,7 @@ html[lang="ar"] .badge-kind {
 .btn-secondary {
   background: var(--surface-2);
   color: var(--text);
-  border-color: var(--border-strong);
+  border-color: var(--control-border);
 }
 .btn-secondary:hover:not(:disabled) {
   border-color: var(--blue);
@@ -602,9 +614,10 @@ html[lang="ar"] .badge-kind {
   align-items: baseline;
   flex-wrap: wrap;
   gap: 6px;
-  font-size: var(--fs-xl);
+  font-size: var(--fs-2xl);
   font-weight: 650;
   line-height: var(--lh-tight);
+  font-variant-numeric: tabular-nums;
 }
 .stat-sm .stat-value {
   font-size: var(--fs-lg);
@@ -839,27 +852,46 @@ html[lang="ar"] .page-title {
   inset-inline-end: var(--s-4);
 }
 /* MapLibre controls in the dark theme */
-.maplibregl-ctrl-group {
-  background: var(--surface-2) !important;
-  border: 1px solid var(--border-strong);
+.maplibregl-map .maplibregl-ctrl-group {
+  background: var(--map-chrome-bg) !important;
+  border: 1px solid var(--map-chrome-border);
   box-shadow: none !important;
 }
-.maplibregl-ctrl-group button + button {
-  border-top-color: var(--border-strong) !important;
+.maplibregl-map .maplibregl-ctrl-group button {
+  width: 36px;
+  height: 36px;
+}
+.maplibregl-map .maplibregl-ctrl-group button + button {
+  border-top-color: var(--map-chrome-border) !important;
 }
 .maplibregl-ctrl-group button .maplibregl-ctrl-icon {
   filter: invert(0.9);
 }
-.maplibregl-ctrl-attrib {
-  background: rgba(8, 18, 24, 0.8) !important;
-  color: var(--text-muted);
-  font-size: 11px;
+/* UX-09: attribution must be readable on the dark map (MapLibre default is black on white/transparent) */
+.maplibregl-map .maplibregl-ctrl.maplibregl-ctrl-attrib,
+.maplibregl-map .maplibregl-ctrl-attrib.maplibregl-compact,
+.maplibregl-map .maplibregl-ctrl-attrib.maplibregl-compact-show {
+  background: rgba(8, 18, 24, 0.88) !important;
+  color: var(--map-chrome-muted) !important;
+  font-size: 12px;
+  line-height: 1.5;
+  border-radius: var(--r-1);
 }
-.maplibregl-ctrl-attrib a {
-  color: var(--text-muted);
+.maplibregl-map .maplibregl-ctrl-attrib-inner,
+.maplibregl-map .maplibregl-ctrl-attrib a,
+.maplibregl-map .maplibregl-ctrl-attrib-inner a {
+  color: var(--map-chrome-muted) !important;
 }
-.maplibregl-ctrl-attrib-button {
+.maplibregl-map .maplibregl-ctrl-attrib a:hover {
+  color: var(--map-chrome-text) !important;
+}
+.maplibregl-map .maplibregl-ctrl-attrib-button {
   filter: invert(0.85);
+  background-color: transparent;
+}
+/* Labels drawn on the dark map keep light text even when the page surface is light (twin key labels were dark on dark) */
+.maplibregl-map .twin-key-label {
+  color: var(--map-chrome-text);
 }
 .maplibregl-popup-content {
   background: var(--surface-2);
@@ -894,5 +926,82 @@ html[lang="ar"] .page-title {
   body {
     background: #fff;
     color: #000;
+  }
+}
+
+/* ------------------------------------------------------------------ polish (UX_CHECKLIST.md, 10 Oct) */
+/* Arabic: never letter-space (it breaks the joined script) */
+html[lang="ar"],
+html[lang="ar"] *,
+[lang="ar"],
+[lang="ar"] * {
+  letter-spacing: 0 !important;
+}
+/* Big numbers: tabular figures, LTR isolated inside Arabic text */
+.stat-value,
+.stat-lg .stat-value,
+.kpi,
+.kpi-value {
+  font-variant-numeric: tabular-nums;
+}
+bdi,
+.ltr {
+  unicode-bidi: isolate;
+}
+.ltr {
+  direction: ltr;
+}
+/* Direction-bearing icons (chevrons, arrows, "next") mirror in RTL; add .flip-rtl to the icon */
+[dir="rtl"] .flip-rtl,
+html[dir="rtl"] .flip-rtl {
+  transform: scaleX(-1);
+}
+/* One card language: panels share radius, border and padding */
+.panel {
+  border-radius: var(--r-3);
+}
+/* Primary action is the only filled button; make it unmistakable */
+.btn-primary {
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.08) inset;
+}
+.btn:focus-visible {
+  outline-offset: 3px;
+}
+.btn:disabled {
+  opacity: 0.6;
+}
+/* Small labels stay legible at projector distance */
+.badge-label {
+  font-weight: 600;
+}
+/* Phones: 44 px touch targets */
+@media (max-width: 760px) {
+  .btn,
+  .btn-sm,
+  .lang-toggle,
+  .topnav a,
+  .tab,
+  [role="tab"],
+  .chip {
+    min-height: 44px;
+  }
+  .maplibregl-map .maplibregl-ctrl-group button {
+    width: 44px;
+    height: 44px;
+  }
+}
+/* Reduced motion: no spins, slides or smooth scroll */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .spinner-ring {
+    animation-duration: 2.4s !important;
+    animation-iteration-count: infinite !important;
   }
 }

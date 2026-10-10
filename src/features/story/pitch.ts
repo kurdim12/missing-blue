@@ -50,11 +50,11 @@ export const PITCH: PitchStep[] = [
   },
   {
     id: "radar",
-    screen: "overview",
-    query: { view: "radar" },
+    screen: "sites",
+    query: { radar: "1" },
     start: 60,
     end: 100,
-    title: { en: "Overview: radar time-lapse", ar: "نظرة عامة: تتابع صور الرادار" },
+    title: { en: "Map & sites: radar time-lapse", ar: "الخريطة والمواقع: تتابع صور الرادار" },
     criterion: { en: "Innovation", ar: "الابتكار" },
     cue: {
       en: "NISAR, NASA–ISRO, public since July 2026. Karak, {dates}. Wet, then still wet, with {rain} of rain between passes. {n} spots.",
@@ -63,11 +63,11 @@ export const PITCH: PitchStep[] = [
   },
   {
     id: "pipes",
-    screen: "overview",
-    query: { view: "pipes" },
+    screen: "sites",
+    query: { radar: "1" },
     start: 100,
     end: 120,
-    title: { en: "Overview: the real pipes", ar: "نظرة عامة: الأنابيب الحقيقية" },
+    title: { en: "Map & sites: the real pipes", ar: "الخريطة والمواقع: الأنابيب الحقيقية" },
     criterion: { en: "Impact", ar: "الأثر" },
     cue: {
       en: "This is the real Karak network, {km}. It lands on the built-up areas without any adjustment.",
@@ -75,15 +75,16 @@ export const PITCH: PitchStep[] = [
     },
   },
   {
-    id: "triage",
-    screen: "triage",
+    id: "council",
+    screen: "council",
+    query: { mode: "recorded" },
     start: 120,
     end: 160,
-    title: { en: "AI triage", ar: "الفرز بالذكاء الاصطناعي" },
+    title: { en: "AI council", ar: "المجلس الذكي" },
     criterion: { en: "Innovation · Technical", ar: "الابتكار · التنفيذ التقني" },
     cue: {
-      en: "The AI checks each spot with tools: nearest pipe, land cover, leak simulation. It keeps {nGo} and rejects {nNo} farmland spots, and explains every decision. {lead} is {leadM} from a {leadPipe} line; the radar position is good to {acc}.",
-      ar: "يفحص الذكاء الاصطناعي كل بقعة بأدوات: أقرب أنبوب، الغطاء الأرضي، محاكاة التسرب. يُبقي {nGo} ويرفض {nNo} بقع زراعية، ويشرح كل قرار. {lead} على بعد {leadM} من خط {leadPipe}، بهامش {acc}.",
+      en: "Five AI agents review every spot with tools: radar, pipe network, land use, a skeptic that argues against, and a dispatcher. Every number they quote is checked against the tool results. {lead} is {leadM} from a {leadPipe} line; the radar position is good to {acc}.",
+      ar: "خمسة وكلاء ذكاء اصطناعي يراجعون كل بقعة بأدوات: الرادار، شبكة الأنابيب، استخدام الأرض، ومشكّك يعارض، ومُرسِل. كل رقم يذكرونه يُطابَق مع نتائج الأدوات. {lead} على بعد {leadM} من خط {leadPipe}، بهامش {acc}.",
     },
   },
   {
@@ -116,12 +117,24 @@ export const PITCH: PitchStep[] = [
     screen: "crew-phone",
     params: lead,
     start: 260,
-    end: 300,
+    end: 285,
     title: { en: "Work order and crew phone", ar: "أمر العمل وهاتف الطاقم" },
     criterion: { en: "User experience", ar: "تجربة المستخدم" },
     cue: {
       en: "Hold up the phone. The crew gets this in Arabic: pin, {acc} search circle, the pipe to walk, a checklist, and two buttons: leak found, no leak.",
       ar: "ارفع الهاتف. يصل هذا إلى الطاقم بالعربية: دبوس، ودائرة بحث {acc}، والأنبوب الذي يُمشى عليه، وقائمة فحص، وزرّان: وُجد تسرب، لا تسرب.",
+    },
+  },
+  {
+    id: "learning",
+    screen: "learning",
+    start: 285,
+    end: 300,
+    title: { en: "Adaptive learning", ar: "التعلّم التكيّفي" },
+    criterion: { en: "Innovation", ar: "الابتكار" },
+    cue: {
+      en: "Every crew answer comes back as a label and the ranking updates from it. No real field outcomes exist yet: what you see is driven by DEMO labels, and it says so.",
+      ar: "كل إجابة من الطاقم تعود كعلامة ويُحدَّث الترتيب منها. لا توجد نتائج ميدانية حقيقية بعد: ما ترونه مبني على علامات تجريبية، والشاشة تقول ذلك.",
     },
   },
   {
