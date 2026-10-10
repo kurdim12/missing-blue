@@ -1,0 +1,163 @@
+{
+  "_about": "Recorded Claude triage run, replayed when no ANTHROPIC_API_KEY is set or a live call fails. Tool calls are re-executed against data/ on every replay, so every tool result shown comes from the data files. Decisions and reasons are the recording (English) with an Arabic translation; one reason was corrected to match data/ (see 'corrected').",
+  "origin": "demo/missing-blue.html (DATA.recorded): written by Claude during preparation from the same tool results",
+  "label": "Recorded run · Claude, 10 Oct 2026",
+  "recorded_on": "2026-10-10",
+  "calls": [
+    {
+      "name": "list_wet_spots",
+      "input": {}
+    },
+    {
+      "name": "nearest_pipe",
+      "input": {
+        "spot_id": "W1"
+      }
+    },
+    {
+      "name": "land_cover",
+      "input": {
+        "spot_id": "W1"
+      }
+    },
+    {
+      "name": "nearest_pipe",
+      "input": {
+        "spot_id": "W2"
+      }
+    },
+    {
+      "name": "land_cover",
+      "input": {
+        "spot_id": "W2"
+      }
+    },
+    {
+      "name": "nearest_pipe",
+      "input": {
+        "spot_id": "W3"
+      }
+    },
+    {
+      "name": "land_cover",
+      "input": {
+        "spot_id": "W3"
+      }
+    },
+    {
+      "name": "nearest_pipe",
+      "input": {
+        "spot_id": "W4"
+      }
+    },
+    {
+      "name": "land_cover",
+      "input": {
+        "spot_id": "W4"
+      }
+    },
+    {
+      "name": "nearest_pipe",
+      "input": {
+        "spot_id": "W5"
+      }
+    },
+    {
+      "name": "land_cover",
+      "input": {
+        "spot_id": "W5"
+      }
+    },
+    {
+      "name": "nearest_pipe",
+      "input": {
+        "spot_id": "W6"
+      }
+    },
+    {
+      "name": "land_cover",
+      "input": {
+        "spot_id": "W6"
+      }
+    },
+    {
+      "name": "nearest_pipe",
+      "input": {
+        "spot_id": "W7"
+      }
+    },
+    {
+      "name": "land_cover",
+      "input": {
+        "spot_id": "W7"
+      }
+    },
+    {
+      "name": "simulate_leak",
+      "input": {
+        "spot_id": "W7"
+      }
+    }
+  ],
+  "result": {
+    "decisions": [
+      {
+        "id": "W7",
+        "verdict": "dispatch",
+        "priority": "high",
+        "reason": "Spot centre 6 m from a ¾\" galvanized iron service line, inside built area in all three land-cover years, wet on both passes with no rain; the twin shows this leak moves only 1 other junction by more than 1 m, so only the radar can find it.",
+        "reason_ar": "مركز البقعة على بُعد 6 م من خط خدمة حديد مجلفن ¾ إنش، داخل منطقة مبنية في سنوات الغطاء الأرضي الثلاث، ورطبة في المرورين دون مطر؛ يُظهر التوأم أن هذا التسرب لا يغيّر ضغط سوى عقدة واحدة أخرى بأكثر من 1 م، لذا لا يجده إلا الرادار.",
+        "corrected": {
+          "en": "Corrected to match data/twin: the recording said the leak moves no other junction by more than 1 m; the twin file counts 1 other junction.",
+          "ar": "صُحّح ليطابق ملف التوأم: قال التسجيل إن التسرب لا يغيّر ضغط أي عقدة أخرى بأكثر من 1 م؛ ملف التوأم يعدّ عقدة واحدة أخرى."
+        },
+        "original_reason": "Spot centre 6 m from a ¾\" galvanized iron service line, inside built area in all three land-cover years, wet on both passes with no rain; the twin shows this leak moves no other junction by more than 1 m, so only the radar can find it."
+      },
+      {
+        "id": "W3",
+        "verdict": "dispatch",
+        "priority": "medium",
+        "reason": "38 m from a 1\" galvanized iron line on open rangeland at the north-east edge of Karak, wet on both passes (HH +2.46 dB, HV +2.64 dB); within the radar's position accuracy of the pipe, so worth one visit.",
+        "reason_ar": "على بُعد 38 م من خط حديد مجلفن 1 إنش في مرعى مفتوح على الطرف الشمالي الشرقي للكرك، ورطبة في المرورين (HH +2.46 dB، HV +2.64 dB)؛ ضمن دقة موقع الرادار من الأنبوب، لذا تستحق زيارة واحدة."
+      },
+      {
+        "id": "W1",
+        "verdict": "reject",
+        "priority": null,
+        "reason": "177 m from the nearest pipe on farmland (crops in 2023, rangeland since), 22,800 m² across: field watering, not the network.",
+        "reason_ar": "على بُعد 177 م من أقرب أنبوب في أرض زراعية (محاصيل في 2023 ومرعى بعدها)، ومساحتها 22,800 م²: ري حقول، لا الشبكة."
+      },
+      {
+        "id": "W2",
+        "verdict": "reject",
+        "priority": null,
+        "reason": "323 m from any pipe on farmland (crops 2023–2024): field watering.",
+        "reason_ar": "على بُعد 323 م من أي أنبوب في أرض زراعية (محاصيل 2023–2024): ري حقول."
+      },
+      {
+        "id": "W4",
+        "verdict": "reject",
+        "priority": null,
+        "reason": "736 m from any pipe, cropland in every year: irrigation.",
+        "reason_ar": "على بُعد 736 م من أي أنبوب، وأرض محاصيل في كل السنوات: ري."
+      },
+      {
+        "id": "W5",
+        "verdict": "reject",
+        "priority": null,
+        "reason": "1.4 km from any pipe, mostly cropland; next to W6, same fields.",
+        "reason_ar": "على بُعد 1.4 كم من أي أنبوب، ومعظمها أرض محاصيل؛ بجانب W6، الحقول نفسها."
+      },
+      {
+        "id": "W6",
+        "verdict": "reject",
+        "priority": null,
+        "reason": "1.4 km from any pipe, cropland in every year; next to W5, same fields.",
+        "reason_ar": "على بُعد 1.4 كم من أي أنبوب، وأرض محاصيل في كل السنوات؛ بجانب W5، الحقول نفسها."
+      }
+    ],
+    "summary": "2 spots to a crew, 5 rejected as irrigation.",
+    "summary_ar": "بقعتان إلى فريق ميداني، و5 مرفوضة على أنها ري."
+  },
+  "usage": null
+}

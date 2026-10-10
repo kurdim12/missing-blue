@@ -1,0 +1,498 @@
+/* Hydraulic twin screen. Logical properties only (RTL mirrors); map marker label sides are physical
+   because the map itself does not mirror. Symbol colours arrive as --twin-* variables from src/map/style.ts. */
+
+.twin-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ------------------------------------------------------------------ side panel */
+.twin-panel-wrap {
+  width: min(420px, calc(100% - 2 * var(--s-4)));
+}
+.twin-panel {
+  gap: var(--s-3);
+}
+.twin-kicker {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--text-faint);
+}
+.twin-title {
+  font-size: var(--fs-xl);
+  line-height: var(--lh-tight);
+}
+.twin-lead {
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+}
+.twin-h2 {
+  font-size: var(--fs-sm);
+  font-weight: 650;
+  color: var(--text-muted);
+}
+
+/* scenario switch */
+.twin-seg {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-1);
+  padding: var(--s-1);
+  border-radius: var(--r-2);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+}
+.twin-seg-btn {
+  flex: 1 1 auto;
+  min-height: 40px;
+  padding-block: 6px;
+  padding-inline: var(--s-3);
+  border: 1px solid transparent;
+  border-radius: var(--r-1);
+  background: transparent;
+  color: var(--text-muted);
+  font: 600 var(--fs-sm) / 1.25 var(--font);
+  cursor: pointer;
+  text-align: center;
+}
+.twin-seg-btn:hover {
+  color: var(--text);
+  background: var(--surface-3);
+}
+.twin-seg-btn[aria-pressed="true"] {
+  color: var(--text);
+  background: var(--surface-3);
+  border-color: var(--blue);
+  box-shadow: inset 0 -2px 0 var(--blue);
+}
+.twin-seg-btn:focus-visible,
+.twin-bar-row:focus-visible,
+.twin-more summary:focus-visible,
+.twin-details summary:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+.twin-seg-sm .twin-seg-btn {
+  min-height: 34px;
+  font-size: var(--fs-xs);
+}
+.twin-more {
+  font-size: var(--fs-sm);
+}
+.twin-more summary,
+.twin-details summary {
+  cursor: pointer;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+.twin-more[open] summary {
+  margin-block-end: var(--s-2);
+}
+.twin-more-hint {
+  font-size: var(--fs-xs);
+  color: var(--text-faint);
+  margin-block-end: var(--s-2);
+}
+
+/* result */
+.twin-result {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  padding: var(--s-3);
+  border-radius: var(--r-2);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+}
+.twin-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--s-3);
+}
+.twin-stats .stat-lg .stat-value {
+  font-size: var(--fs-2xl);
+}
+.twin-msg {
+  font-size: var(--fs-sm);
+}
+.twin-msg-warn {
+  color: var(--amber);
+}
+.twin-logger {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-2);
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+}
+
+/* comparison bars */
+.twin-compare {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+.twin-bar-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 4px var(--s-2);
+  align-items: center;
+  width: 100%;
+  padding: 6px var(--s-2);
+  border: 1px solid transparent;
+  border-radius: var(--r-1);
+  background: transparent;
+  color: var(--text-muted);
+  font: 500 var(--fs-xs) / 1.3 var(--font);
+  text-align: start;
+  cursor: pointer;
+}
+.twin-bar-row:hover {
+  background: var(--surface-2);
+}
+.twin-bar-row.is-active {
+  border-color: var(--border-strong);
+  background: var(--surface-2);
+  color: var(--text);
+}
+.twin-bar-label {
+  overflow-wrap: anywhere;
+}
+.twin-bar-val {
+  font-size: var(--fs-lg);
+  font-weight: 700;
+  color: var(--text);
+}
+.twin-bar-track {
+  grid-column: 1 / -1;
+  height: 8px;
+  border-radius: var(--r-pill);
+  background: var(--surface-3);
+  overflow: hidden;
+}
+.twin-bar-fill {
+  display: block;
+  height: 100%;
+  border-radius: var(--r-pill);
+  background: var(--twin-leak);
+}
+.twin-bar-note {
+  grid-column: 1 / -1;
+  color: var(--text-faint);
+}
+
+.twin-story {
+  padding-block: var(--s-2);
+  padding-inline: var(--s-3);
+  border-inline-start: 3px solid var(--blue);
+  background: rgba(63, 162, 255, 0.08);
+  border-radius: var(--r-1);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--text);
+}
+.twin-story-page {
+  margin-block-start: var(--s-5);
+  max-width: 70ch;
+}
+
+.twin-details {
+  font-size: var(--fs-sm);
+}
+.twin-details summary {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+}
+.twin-list {
+  margin-block-start: var(--s-2);
+  padding-inline-start: var(--s-5);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: var(--text-muted);
+  font-size: var(--fs-xs);
+}
+.twin-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+}
+
+/* ------------------------------------------------------------------ legend (map corner, inline-end) */
+.twin-legend {
+  position: absolute;
+  z-index: 3;
+  inset-block-end: 34px;
+  inset-inline-end: var(--s-4);
+  width: 270px;
+  max-height: calc(100% - 140px);
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  padding: var(--s-3);
+  border-radius: var(--r-2);
+  border: 1px solid var(--border);
+  background: color-mix(in srgb, var(--surface-1) 92%, transparent);
+  box-shadow: var(--shadow);
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+}
+.twin-legend-head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-1);
+  font-weight: 650;
+  color: var(--text);
+  font-size: var(--fs-sm);
+}
+.twin-legend-unit {
+  font-weight: 500;
+  color: var(--text-muted);
+}
+.twin-scale {
+  display: flex;
+  gap: 4px;
+  height: 10px;
+}
+.twin-scale-none {
+  flex: 0 0 22px;
+  border-radius: var(--r-1);
+}
+.twin-scale-bar {
+  flex: 1;
+  border-radius: var(--r-1);
+}
+.twin-scale-ticks {
+  display: flex;
+  justify-content: space-between;
+  gap: 4px;
+  color: var(--text-muted);
+}
+.twin-scale-tick-none {
+  flex: 0 0 22px;
+  text-align: center;
+}
+.twin-legend-note {
+  color: var(--text-faint);
+}
+.twin-legend-keys {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.twin-legend-keys li {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+}
+
+/* symbols shared by legend, panel and map */
+.twin-sw {
+  flex: none;
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+}
+.twin-sw-line {
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--slate), var(--slate));
+  box-shadow: 0 3px 0 -1px var(--slate);
+}
+.twin-sw-supply {
+  background: var(--twin-supply);
+  border: 2px solid #081218;
+  outline: 1px solid var(--twin-supply);
+}
+.twin-sw-spot {
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--twin-spot) 20%, transparent);
+  border: 2px dashed var(--twin-spot);
+}
+.twin-sw-logger {
+  background: var(--twin-logger);
+  border: 2px solid #081218;
+  transform: rotate(45deg) scale(0.85);
+}
+.twin-sw-leak {
+  border-radius: 50%;
+  border: 3px solid var(--twin-leak);
+}
+
+/* ------------------------------------------------------------------ map markers */
+.twin-key {
+  /* no `position` here: MapLibre's .maplibregl-marker is absolute and must stay so */
+  width: 14px;
+  height: 14px;
+  pointer-events: none;
+}
+.twin-key-sym {
+  position: absolute;
+  inset: 0;
+  border: 2px solid #081218;
+  box-shadow: 0 0 0 1px rgba(230, 238, 241, 0.6);
+}
+.twin-key-supply .twin-key-sym {
+  background: var(--twin-supply);
+}
+.twin-key-logger .twin-key-sym {
+  background: var(--twin-logger);
+  transform: rotate(45deg) scale(0.9);
+}
+.twin-key-spot .twin-key-sym {
+  border-radius: 50%;
+  background: var(--twin-spot);
+  border-color: #e6eef1;
+}
+.twin-key-break .twin-key-sym,
+.twin-key-main .twin-key-sym {
+  border-radius: 50%;
+  background: #081218;
+  border: 3px solid var(--twin-leak);
+  box-shadow: none;
+}
+.twin-key.is-dim {
+  opacity: 0.6;
+}
+.twin-key-label {
+  position: absolute;
+  white-space: nowrap;
+  padding: 2px 6px;
+  border-radius: var(--r-1);
+  background: rgba(8, 18, 24, 0.86);
+  border: 1px solid var(--border-strong);
+  color: var(--text);
+  font: 600 12px / 1.3 var(--font);
+}
+.twin-key-label:empty {
+  display: none;
+}
+/* physical sides: the map is never mirrored */
+.twin-key-e .twin-key-label {
+  left: calc(100% + 6px);
+  top: 50%;
+  transform: translateY(-50%);
+}
+.twin-key-w .twin-key-label {
+  right: calc(100% + 6px);
+  top: 50%;
+  transform: translateY(-50%);
+}
+.twin-key-n .twin-key-label {
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+}
+.twin-key-s .twin-key-label {
+  top: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.twin-ring {
+  width: 30px;
+  height: 30px;
+  pointer-events: none;
+}
+/* animate the inner ring: MapLibre positions the marker element itself with `transform` */
+.twin-ring-inner {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 3px solid var(--twin-leak);
+  animation: twin-pulse 1.6s ease-out infinite;
+}
+@keyframes twin-pulse {
+  0% {
+    transform: scale(0.6);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .twin-ring-inner {
+    animation: none;
+  }
+}
+
+.twin-pop {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: var(--fs-xs);
+  padding-inline-end: var(--s-4);
+}
+.twin-pop strong {
+  font-size: var(--fs-sm);
+}
+
+/* ------------------------------------------------------------------ phone */
+@media (max-width: 640px) {
+  .twin-panel-wrap {
+    width: auto;
+    max-height: 52%;
+  }
+  .twin-title {
+    font-size: var(--fs-lg);
+  }
+  /* phone: the scenario switch and the result come first, context after */
+  .twin-kicker {
+    display: none;
+  }
+  .twin-panel > .twin-title {
+    order: 0;
+  }
+  .twin-panel > .twin-seg {
+    order: 1;
+  }
+  .twin-panel > .twin-more {
+    order: 2;
+  }
+  .twin-panel > .twin-result {
+    order: 3;
+  }
+  .twin-panel > .twin-story {
+    order: 4;
+  }
+  .twin-panel > .twin-badges {
+    order: 5;
+  }
+  .twin-panel > .twin-lead {
+    order: 6;
+  }
+  .twin-panel > * {
+    order: 7;
+  }
+  .twin-stats .stat-lg .stat-value {
+    font-size: var(--fs-xl);
+  }
+  .twin-legend {
+    inset-block-start: var(--s-3);
+    inset-block-end: auto;
+    inset-inline-start: var(--s-3);
+    inset-inline-end: auto;
+    width: min(220px, calc(100% - 80px));
+    max-height: 40%;
+    padding: var(--s-2);
+    gap: 4px;
+  }
+  .twin-legend-keys,
+  .twin-legend .badge-row,
+  .twin-legend-note {
+    display: none;
+  }
+  /* phone: only the focus labels (wet spot, current break); other key sites keep their symbol */
+  .twin-key:not(.is-focus) .twin-key-label {
+    display: none;
+  }
+}

@@ -1,5 +1,6 @@
 node_modules/
 dist/
+dist-*/
 .env
 *.log
 # The raw pipe network is NOT redistributed (critical infrastructure, no licence stated).
@@ -17,3 +18,5 @@ data/hydrofingerprint/hf_live_model.json
 data/hydrofingerprint/hf_gaps_pick.json
 .qa-lock/
 demo/missing-blue.html
+# QA screenshots (local only)
+docs/qa/shots/
