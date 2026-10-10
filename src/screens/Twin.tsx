@@ -194,7 +194,7 @@ export default function Twin({ query, embedded }: ScreenProps) {
 
   return (
     <div className="map-screen twin" style={KEY_VARS}>
-      <BaseMap attribution="Pipes: AJI Group ArcGIS item (no licence stated) · Elevation: Copernicus DEM GLO-30 © DLR/Airbus · Model: EPANET 2.2 (WNTR)">
+      <BaseMap attribution="Pipes: AJI Group ArcGIS item (no licence stated) · Elevation: Copernicus DEM GLO-30 © DLR/Airbus · Model: EPANET 2.2 (WNTR)" allow3d>
         <TwinMap by={model.by} ends={model.ends} bounds={model.bounds} sums={model.sums} scenario={scenario} spot={spot} marks={marks} />
       </BaseMap>
 

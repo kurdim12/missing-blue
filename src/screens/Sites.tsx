@@ -153,7 +153,7 @@ export default function Sites({ query }: ScreenProps) {
 
   return (
     <div className="map-screen sp-screen">
-      <BaseMap attribution="NISAR: NASA/ISRO (ASF DAAC) · Pipes: AJI Group ArcGIS item (no licence stated)" onReady={setMap}>
+      <BaseMap attribution="NISAR: NASA/ISRO (ASF DAAC) · Pipes: AJI Group ArcGIS item (no licence stated)" onReady={setMap} allow3d>
         {rb.data ? <RadarLayers bounds={rb.data} state={radarState} /> : null}
         <PipesLayer data={pipes.data} />
         <AccuracyCircle spot={selFeature} />

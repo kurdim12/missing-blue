@@ -6,7 +6,7 @@ import { api, useApi } from "../../api";
 import { useI18n, useT } from "../../i18n";
 import { BaseMap, useGeoJson, useMap } from "../../map/BaseMap";
 import { boundsAround } from "../../map/geo";
-import { COLORS, PIPE_CLASSES, pipeLineLayer } from "../../map/style";
+import { COLORS, PIPE_CLASSES, pipeLayers } from "../../map/style";
 import type { HfGap, HfLiveModel } from "../../types";
 import { Badge } from "../../ui";
 import type { Verdict } from "./engine";
@@ -106,8 +106,9 @@ export function HfMap({ model, gaps, S, last, gains, bestBits, verdicts, onToggl
 }
 
 function PipesLayer({ data }: { data: unknown }) {
-  const base = pipeLineLayer("hf-pipes");
-  useGeoJson("hf-pipes", data as object | null, [{ ...base, paint: { ...base.paint, "line-opacity": 0.5 } }], { beforeId: "hf-cand-dot" });
+  // context pipes: dimmed, on a dark casing so they still read on the satellite photo
+  const layers = useMemo(() => pipeLayers("hf-pipes", 0.6), []);
+  useGeoJson("hf-pipes", data as object | null, layers, { beforeId: "hf-cand-dot" });
   return null;
 }
 
@@ -149,9 +150,10 @@ function Candidates({
       paint: {
         "circle-radius": ["interpolate", ["linear"], ["zoom"], 12, ["+", 2.2, ["*", 3, ["get", "r"]]], 16, ["+", 4, ["*", 5, ["get", "r"]]]],
         "circle-color": ["interpolate", ["linear"], ["get", "r"], 0, "#4f6670", 0.35, "#9fb4be", 1, "#ffffff"],
-        "circle-opacity": ["interpolate", ["linear"], ["get", "r"], 0, 0.55, 1, 1],
-        "circle-stroke-width": ["case", [">=", ["get", "r"], 0.999], 2, 0],
-        "circle-stroke-color": COLORS.logger,
+        "circle-opacity": ["interpolate", ["linear"], ["get", "r"], 0, 0.7, 1, 1],
+        // the best site keeps its violet ring; the others get a thin dark edge so grey dots read on the satellite photo
+        "circle-stroke-width": ["case", [">=", ["get", "r"], 0.999], 2, 1],
+        "circle-stroke-color": ["case", [">=", ["get", "r"], 0.999], COLORS.logger, COLORS.casingStrong],
       },
     },
     { id: "hf-cand-hit", type: "circle", paint: { "circle-radius": 13, "circle-color": "#000", "circle-opacity": 0.01 } },

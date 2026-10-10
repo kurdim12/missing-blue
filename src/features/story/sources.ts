@@ -127,6 +127,77 @@ export const DATASETS: DatasetRow[] = [
     kind: "REAL",
     file: "data/wet_spots/wet_spots.geojson",
   },
+  // Basemap and 3D terrain tiles: online only, never cached; offline the map falls back to a plain dark ground.
+  // Credits and the capture date below were read from Esri's service and item metadata on 10 Oct 2026 (SOURCES.md).
+  {
+    id: "imagery",
+    name: { en: "Esri World Imagery (satellite basemap)", ar: "صور Esri World Imagery (خلفية القمر الصناعي)" },
+    use: {
+      en: "Default basemap, for orientation only: it shows the ground, not leaks. Capture dates vary by place and are not the NISAR radar dates; Esri's metadata (checked 10 Oct 2026) gives a WorldView-2 image of 27 May 2020 at W7, W3 and Karak Castle. Online only: offline, the map falls back to a plain dark ground and every data layer still works. The \"Map\" style (OpenStreetMap) is still on the switch.",
+      ar: "خلفية الخريطة الافتراضية، للتوجيه فقط: تُظهر الأرض لا التسربات. تواريخ التقاط الصور تختلف من مكان لآخر وليست تواريخ مرورات رادار NISAR؛ فبيانات Esri الوصفية (فُحصت في 10 تشرين الأول 2026) تذكر صورة WorldView-2 بتاريخ 27 أيار 2020 عند W7 وW3 وقلعة الكرك. تعمل مع الاتصال فقط: دون اتصال تعود الخريطة إلى أرضية داكنة بسيطة وتبقى كل طبقات البيانات تعمل. ونمط «خريطة» (OpenStreetMap) ما زال متاحًا في المبدّل.",
+    },
+    links: [
+      { label: "arcgis.com · World Imagery", url: "https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9" },
+      { label: "World_Imagery MapServer", url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer" },
+      {
+        label: "metadata at W7",
+        url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/13/query?geometry=35.68692,31.05727&geometryType=esriGeometryPoint&inSR=4326&outFields=SRC_DATE,SRC_DESC,SRC_RES,NICE_DESC&returnGeometry=false&f=pjson",
+      },
+    ],
+    licence: {
+      en: "Esri Master License Agreement; attribution required and shown on the map: \"Esri, Vantor, Earthstar Geographics, and the GIS User Community\". Used for a non-commercial hackathon demo; tiles are not cached for offline use.",
+      ar: "اتفاقية ترخيص Esri الرئيسية؛ الإسناد مطلوب ويظهر على الخريطة: «\u2066Esri, Vantor, Earthstar Geographics, and the GIS User Community\u2069». نستخدمها في عرض هاكاثون غير تجاري، ولا نخزّن البلاطات للعمل دون اتصال.",
+    },
+    kind: "REAL",
+  },
+  {
+    id: "imageryLabels",
+    name: {
+      en: "Esri reference overlays: World Transportation (roads), World Boundaries and Places (place names)",
+      ar: "طبقات Esri المرجعية: World Transportation (الطرق) وWorld Boundaries and Places (أسماء الأماكن)",
+    },
+    use: {
+      en: "Roads and place names over the satellite image, below every data layer, so the photo reads like a map. Orientation only; online only.",
+      ar: "الطرق وأسماء الأماكن فوق صورة القمر الصناعي وتحت كل طبقات البيانات، لتُقرأ الصورة كخريطة. للتوجيه فقط، ومع الاتصال فقط.",
+    },
+    links: [
+      { label: "arcgis.com · World Transportation", url: "https://www.arcgis.com/home/item.html?id=94f838a535334cf1aa061846514b77c7" },
+      { label: "arcgis.com · World Boundaries and Places", url: "https://www.arcgis.com/home/item.html?id=a842e359856a4365b1ddf8cc34fde079" },
+    ],
+    licence: {
+      en: "Esri Master License Agreement; attribution required: \"Esri, HERE, Garmin, © OpenStreetMap contributors, and the GIS User Community\". Non-commercial hackathon demo.",
+      ar: "اتفاقية ترخيص Esri الرئيسية؛ الإسناد مطلوب: «\u2066Esri, HERE, Garmin, © OpenStreetMap contributors, and the GIS User Community\u2069». عرض هاكاثون غير تجاري.",
+    },
+    kind: "REAL",
+  },
+  {
+    id: "terrain",
+    name: { en: "AWS Terrain Tiles (Terrarium), for the optional 3D view", ar: "بلاطات التضاريس AWS Terrain Tiles (ترميز Terrarium) للعرض ثلاثي الأبعاد الاختياري" },
+    use: {
+      en: "Relief for the optional 3D view on the large desktop maps; off by default. Visual only: the twin's junction elevations come from Copernicus DEM, not from these tiles. Online only; if the tiles fail, 3D switches off.",
+      ar: "التضاريس للعرض ثلاثي الأبعاد الاختياري في خرائط سطح المكتب الكبيرة؛ مطفأ افتراضيًا. للعرض فقط: ارتفاعات عُقد التوأم من Copernicus DEM لا من هذه البلاطات. مع الاتصال فقط؛ وإذا تعذّر تحميل البلاطات يُطفأ العرض ثلاثي الأبعاد.",
+    },
+    links: [
+      { label: "registry.opendata.aws/terrain-tiles", url: "https://registry.opendata.aws/terrain-tiles/" },
+      { label: "attribution (tilezen/joerd)", url: "https://github.com/tilezen/joerd/blob/master/docs/attribution.md" },
+    ],
+    licence: {
+      en: "Open data on AWS, managed by Mapzen (a Linux Foundation project); attribution required for its sources, e.g. SRTM and GMTED2010 (courtesy of the U.S. Geological Survey) and ETOPO1 (NOAA)",
+      ar: "بيانات مفتوحة على AWS تديرها Mapzen (مشروع تابع لمؤسسة Linux)؛ الإسناد مطلوب لمصادرها، مثل SRTM وGMTED2010 (بإذن من هيئة المسح الجيولوجي الأمريكية) وETOPO1 (NOAA)",
+    },
+    kind: "REAL",
+  },
+  {
+    id: "osm",
+    name: { en: "OpenStreetMap tiles (the \"Map\" basemap)", ar: "بلاطات OpenStreetMap (خلفية «خريطة»)" },
+    use: {
+      en: "The other choice on the basemap switch: the dimmed dark street map. Online only.",
+      ar: "الخيار الآخر في مبدّل خلفية الخريطة: خريطة الشوارع الداكنة الخافتة. مع الاتصال فقط.",
+    },
+    links: [{ label: "openstreetmap.org/copyright", url: "https://www.openstreetmap.org/copyright" }],
+    licence: { en: "© OpenStreetMap contributors, ODbL", ar: "© مساهمو OpenStreetMap، ترخيص ODbL" },
+    kind: "REAL",
+  },
   {
     id: "nrw41",
     name: { en: "Non-revenue water 41% (Aug 2026), target 25% by 2040", ar: "المياه غير المدرّة للدخل 41٪ (آب 2026)، والهدف 25٪ بحلول 2040" },

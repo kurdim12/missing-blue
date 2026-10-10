@@ -45,13 +45,46 @@ export const PIPE_WIDTH_EXPR: ExpressionSpecification = [
   ["*", 3, matchClass("width")],
 ];
 
-/** Ready-made line layer for a pipes GeoJSON source (feature property `class`). */
+/** Ready-made line layer for a pipes GeoJSON source (feature property `class`). Put pipeCasingLayer(id) under it. */
 export const pipeLineLayer = (id = "pipes"): Omit<LineLayerSpecification, "source"> => ({
   id,
   type: "line",
   layout: { "line-cap": "round", "line-join": "round" },
-  paint: { "line-color": PIPE_COLOR_EXPR, "line-width": PIPE_WIDTH_EXPR, "line-opacity": 0.9 },
+  paint: { "line-color": PIPE_COLOR_EXPR, "line-width": PIPE_WIDTH_EXPR, "line-opacity": 0.95 },
 });
+
+/** Dark casing width: the class width at each zoom plus a dark edge on both sides (same stops as PIPE_WIDTH_EXPR). */
+export const PIPE_CASING_WIDTH_EXPR: ExpressionSpecification = [
+  "interpolate",
+  ["linear"],
+  ["zoom"],
+  11,
+  ["+", 1.2, ["*", 0.5, matchClass("width")]],
+  15,
+  ["+", 2.2, ["*", 1.4, matchClass("width")]],
+  18,
+  ["+", 3, ["*", 3, matchClass("width")]],
+];
+
+/** The id of the casing that pipeCasingLayer(id) adds (radar overlays go below it). */
+export const casingId = (id: string) => `${id}-casing`;
+
+/**
+ * Dark casing drawn UNDER a pipe line so the class colours read over bright satellite imagery and still over the dark map.
+ * Use as [pipeCasingLayer(id, opacity), pipeLineLayer(id)] in the same useGeoJson call (casing first = below).
+ */
+export const pipeCasingLayer = (id = "pipes", opacity = 1): Omit<LineLayerSpecification, "source"> => ({
+  id: casingId(id),
+  type: "line",
+  layout: { "line-cap": "round", "line-join": "round" },
+  paint: { "line-color": COLORS.casing, "line-width": PIPE_CASING_WIDTH_EXPR, "line-opacity": opacity },
+});
+
+/** Casing + coloured line for a pipes source; `opacity` dims both (context pipes on the crew and HydroFingerprint maps). */
+export const pipeLayers = (id = "pipes", opacity = 0.95): Omit<LineLayerSpecification, "source">[] => {
+  const line = pipeLineLayer(id);
+  return [pipeCasingLayer(id, Math.min(1, opacity + 0.05)), { ...line, paint: { ...line.paint, "line-opacity": opacity } }];
+};
 
 /** Wet spots and AI verdict colours. */
 export const COLORS = {
@@ -64,6 +97,10 @@ export const COLORS = {
   logger: "#B79CFF",
   gap: "#FFB547",
   ground: "#081218", // map background when offline
+  /** Dark edge under lines and around circles: keeps data legible over bright satellite imagery (and on the dark map). */
+  casing: "rgba(3, 10, 14, 0.62)",
+  /** Stronger dark edge for single highlighted features (nearest pipe, ±50 m circle outline). */
+  casingStrong: "rgba(3, 10, 14, 0.78)",
 };
 
 /** Sequential ramp for pressure / drop (dark → bright). Use with ["interpolate", ["linear"], ["get", "value"], ...]. */

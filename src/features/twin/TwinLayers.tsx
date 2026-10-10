@@ -5,6 +5,7 @@ import { useEffect, useMemo, useRef } from "react";
 import { useI18n, useT, withUnit } from "../../i18n";
 import { useGeoJson, useMap } from "../../map/BaseMap";
 import { circlePolygon } from "../../map/geo";
+import { COLORS } from "../../map/style";
 import type { TwinResponse } from "../../types";
 import { KEY_COLORS, edgesGeoJson, nodesGeoJson, type ScenarioSummary } from "./model";
 import { twinStrings } from "./strings";
@@ -20,10 +21,28 @@ const EDGE_WIDTH = [
   18,
   ["+", 2.5, ["*", 1.1, ["get", "in"]]],
 ];
+/** Same stops plus a dark edge on both sides: the casing under the coloured pipes (legible on satellite imagery). */
+const EDGE_CASING_WIDTH = [
+  "interpolate",
+  ["linear"],
+  ["zoom"],
+  12,
+  ["+", 1.7, ["*", 0.22, ["get", "in"]]],
+  15,
+  ["+", 3.2, ["*", 0.5, ["get", "in"]]],
+  18,
+  ["+", 5, ["*", 1.1, ["get", "in"]]],
+];
 
 export function TwinEdges({ data, ends }: { data: TwinResponse; ends: [number, number][] }) {
   const fc = useMemo(() => edgesGeoJson(data, ends), [data, ends]);
   useGeoJson("twin-edges", fc, [
+    {
+      id: "twin-edges-casing",
+      type: "line",
+      layout: { "line-cap": "round", "line-join": "round" },
+      paint: { "line-color": COLORS.casing, "line-width": EDGE_CASING_WIDTH as never },
+    },
     {
       id: "twin-edges",
       type: "line",
@@ -46,7 +65,7 @@ export function TwinNodes({ data, onPick }: { data: TwinResponse; onPick: (i: nu
         "circle-color": ["get", "col"],
         "circle-radius": ["interpolate", ["linear"], ["zoom"], 12, ["*", 1.8, ["get", "r"]], 15, ["*", 3.6, ["get", "r"]], 18, ["*", 6, ["get", "r"]]] as never,
         "circle-stroke-color": "#081218",
-        "circle-stroke-width": ["interpolate", ["linear"], ["zoom"], 12, 0.4, 16, 1] as never,
+        "circle-stroke-width": ["interpolate", ["linear"], ["zoom"], 12, 0.8, 16, 1.4] as never,
       },
     },
   ]);
@@ -79,7 +98,9 @@ export function SpotCircle({ lon, lat, radiusM }: { lon: number; lat: number; ra
   const fc = useMemo(() => ({ type: "FeatureCollection" as const, features: [circlePolygon(lon, lat, radiusM)] }), [lon, lat, radiusM]);
   useGeoJson("twin-spot-acc", fc, [
     { id: "twin-spot-acc-fill", type: "fill", paint: { "fill-color": KEY_COLORS.spot, "fill-opacity": 0.14 } },
-    { id: "twin-spot-acc-line", type: "line", paint: { "line-color": KEY_COLORS.spot, "line-width": 1.5, "line-dasharray": [2, 2] } },
+    // dark casing under the dashed edge so the circle reads on the satellite photo
+    { id: "twin-spot-acc-casing", type: "line", paint: { "line-color": COLORS.casingStrong, "line-width": 4 } },
+    { id: "twin-spot-acc-line", type: "line", paint: { "line-color": KEY_COLORS.spot, "line-width": 2, "line-dasharray": [2, 1.5] } },
   ]);
   return null;
 }
@@ -136,7 +157,10 @@ export function LeakRing({ s }: { s: ScenarioSummary }) {
     el.setAttribute("aria-hidden", "true");
     const inner = document.createElement("span");
     inner.className = "twin-ring-inner";
-    el.append(inner);
+    // static core: the pulse fades to nothing, the core keeps the spot visible on the satellite photo at every frame
+    const core = document.createElement("span");
+    core.className = "twin-ring-core";
+    el.append(inner, core);
     const mk = new maplibregl.Marker({ element: el, anchor: "center" }).setLngLat([at.lon, at.lat]).addTo(map);
     return () => {
       mk.remove();

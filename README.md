@@ -1,3 +1,5 @@
+<img src="docs/img/missing-blue-logo.jpg" alt="Missing Blue logo" width="320">
+
 # Missing Blue · الأزرق المفقود
 
 Free NASA–ISRO **NISAR** L-band radar finds ground in Karak (Jordan) that turned wet and stayed wet through the dry season. We check every wet spot against the utility's **real pipe network**, an AI agent decides where the crew goes, a hydraulic twin shows why pressure loggers miss these leaks, and the AI writes a bilingual (Arabic/English) work order.
@@ -46,7 +48,15 @@ The two Claude screens (AI triage and the work order) call the Claude API only w
 
 ### Works offline
 
-Everything is local except the optional OpenStreetMap basemap and live Claude calls. With Wi-Fi off the map falls back to a plain dark background (pipes, spots and radar overlays are local data), the AI screens show recorded runs, and the HydroFingerprint model runs in the browser.
+Everything is local except the online map tiles (satellite imagery, the OpenStreetMap "Map" style and the optional 3D terrain) and live Claude calls. With Wi-Fi off, or after repeated tile errors, the map falls back to a plain dark background (pipes, spots and radar overlays are local data), the AI screens show recorded runs, and the HydroFingerprint model runs in the browser.
+
+### Basemap: satellite by default
+
+- **Satellite (default):** Esri World Imagery in natural colour, with Esri's roads and place-name overlays on top of the photo and below every data layer. The credit "Esri, Vantor, Earthstar Geographics, and the GIS User Community" is on the map whenever satellite is on.
+- **Map:** the earlier dimmed dark OpenStreetMap style, one click away on the **Satellite | Map** switch («قمر صناعي» | «خريطة»). The choice is remembered in this browser.
+- **3D (optional):** relief from AWS Terrain Tiles on the large desktop maps (Overview, Sites, Twin). Off by default; if the terrain tiles fail it switches off. Relief is visual only: the twin's elevations come from Copernicus DEM.
+- **What the photo is and is not:** REAL imagery, for orientation. It shows the ground, **not leaks**, and it is not from the radar dates: Esri's metadata (checked 10 Oct 2026) gives a WorldView-2 image of **27 May 2020** at W7, W3 and Karak Castle, while the radar passes are 4 / 16 / 28 Sep 2026.
+- **Terms:** Esri basemaps are used under the Esri Master License Agreement with attribution, for this non-commercial hackathon demo, and are never cached for offline use. Details and links: [SOURCES.md](SOURCES.md#basemap-and-3d-terrain-checked-10-oct-2026).
 
 ### What is held back from git (and what a fresh clone shows)
 
@@ -91,7 +101,7 @@ Every layer and every result on screen carries one of these badges.
 
 | Badge | What it covers |
 |---|---|
-| **REAL** | NISAR radar (NASA/ISRO, provisional), the Karak pipe network (ArcGIS layer 6), Copernicus DEM elevation, ERA5 rain (Open-Meteo), Sentinel-2 land cover, the gaps in the pipe drawing |
+| **REAL** | NISAR radar (NASA/ISRO, provisional), the Karak pipe network (ArcGIS layer 6), Copernicus DEM elevation, ERA5 rain (Open-Meteo), Sentinel-2 land cover, the gaps in the pipe drawing, the satellite basemap (Esri World Imagery: captured on other dates than the radar, shows the ground, not leaks) |
 | **SIMULATED** | Pressure readings in HydroFingerprint (EPANET simulations of the real network; there is no public logger data for Karak) |
 | **ASSUMED** | Hydraulic twin demand (0.7 L/s per km of pipe), supply level (25 m above the highest junction), pipe roughness, leak sizes (1 / 5 / 15 L/s) |
 | **RECORDED RUN** | An AI run played back from `server/recorded/` because a live Claude call was not possible |
@@ -114,7 +124,10 @@ Wet spots are **inspection candidates, never confirmed leaks**. Radar position a
 | Government AI leak project (Smart Transformation, sensor data) | [MENA Startup Digest](https://menastartupdigest.com/?p=47589) | Context |
 | NISAR L-band 24 cm; 12-day repeat | [NASA](https://science.nasa.gov/mission/nisar/) · [JPL](https://www.jpl.nasa.gov/press-kits/nisar/mission-overview) | Cited |
 | EPANET (public domain), WNTR (EPA/Sandia) | [EPANET](https://www.epa.gov/water-research/epanet) · [WNTR](https://github.com/USEPA/WNTR) | Used offline to build the twin and the simulations |
-| Basemap | © OpenStreetMap contributors | ODbL (online only) |
+| Satellite basemap (default): Esri World Imagery | [ArcGIS item](https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9) · tiles `https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}` | Esri Master License Agreement; attribution "Esri, Vantor, Earthstar Geographics, and the GIS User Community"; non-commercial hackathon demo; online only, not cached. Capture date is not the radar date (27 May 2020 at W7, W3 and Karak Castle per Esri metadata, checked 10 Oct 2026) |
+| Basemap labels: Esri World Transportation + World Boundaries and Places | [Roads item](https://www.arcgis.com/home/item.html?id=94f838a535334cf1aa061846514b77c7) · [Places item](https://www.arcgis.com/home/item.html?id=a842e359856a4365b1ddf8cc34fde079) | Esri Master License Agreement; attribution "Esri, HERE, Garmin, © OpenStreetMap contributors, and the GIS User Community"; online only |
+| Optional 3D terrain: AWS Terrain Tiles (Terrarium) | [AWS Open Data registry](https://registry.opendata.aws/terrain-tiles/) · tiles `https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png` | Open data (Mapzen); attribution required for its sources ([list](https://github.com/tilezen/joerd/blob/master/docs/attribution.md)), e.g. SRTM and GMTED2010 (USGS), ETOPO1 (NOAA); online only |
+| "Map" basemap | © OpenStreetMap contributors | ODbL (online only) |
 
 Full list: [SOURCES.md](SOURCES.md). Data dictionary and verified facts: [CLAUDE.md](CLAUDE.md).
 
@@ -145,7 +158,7 @@ flowchart LR
   HFB --> UI
 ```
 
-- **Frontend:** Vite 7, React 18, TypeScript, MapLibre GL 5 (OSM raster basemap when online, dark background offline), self-hosted Inter and IBM Plex Sans Arabic.
+- **Frontend:** Vite 7, React 18, TypeScript, MapLibre GL 5 (Esri satellite basemap with road and place labels by default, OSM "Map" style on a switch, optional 3D terrain on the desktop maps; plain dark background offline), self-hosted Inter and IBM Plex Sans Arabic.
 - **Backend:** Hono on Node (`server/index.ts`, run with `tsx`). Typed JSON routes over `data/`; raw `data/` files are never served directly.
 - **AI agents:** `server/council.ts` (three specialists, skeptic, dispatcher; server-sent events), `server/assistant.ts` (tool-using Q&A), `server/learning.ts` (demo-label weight updates), `server/audit.ts` (write log); live Claude with a recorded fallback in `server/recorded/`.
 - **AI:** Claude Messages API with tool use (`@anthropic-ai/sdk`) for triage and work orders. Facts are passed as JSON, and every number in the model's text is checked against the tool results. HydroFingerprint inference runs in the browser.

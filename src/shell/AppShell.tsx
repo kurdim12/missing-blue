@@ -9,6 +9,7 @@ import { useI18n, useT } from "../i18n";
 import { shellV2Strings, type ShellV2Key } from "../features/shell/strings-v2";
 import { href, useHashRoute } from "../router";
 import { Icon } from "./icons";
+import { BrandMark } from "./BrandMark";
 import { activeNavId, type NavCounts, type NavId } from "./nav";
 import { Sidebar, type AiStatus } from "./Sidebar";
 import "./shell-v2.css";
@@ -123,7 +124,7 @@ export function AppShell({
 
         <header className="v2-phonebar">
           <a className="v2-phonebar-brand" href={href(homeTo)} aria-label={t("homeLabel")}>
-            <span className="brand-mark v2-brand-mark" aria-hidden="true" />
+            <BrandMark className="brand-mark v2-brand-mark" />
             <span className="v2-phonebar-name">{lang === "ar" ? t("brandAr") : t("brandEn")}</span>
           </a>
           {activeLabel ? <span className="v2-phonebar-page">{activeLabel}</span> : null}

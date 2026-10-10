@@ -278,27 +278,39 @@
 div.ov-marker {
   cursor: default;
 }
+/* dark outer ring + shadow so the dot never sinks into bright satellite imagery (still fine on the dark map) */
 .ov-marker-dot {
   position: absolute;
   inset: 3px;
   border-radius: 50%;
   background: var(--blue);
-  border: 2px solid #e6eef1;
-  box-shadow: 0 0 0 5px rgba(63, 162, 255, 0.28);
+  border: 2px solid #fff;
+  box-shadow:
+    0 0 0 1.5px rgba(3, 10, 14, 0.85),
+    0 0 0 5px rgba(63, 162, 255, 0.42),
+    0 0 0 6.5px rgba(3, 10, 14, 0.45),
+    0 1px 4px 6px rgba(0, 0, 0, 0.25);
   transition: transform 0.15s ease;
 }
+/* solid dark pill + shadow: readable over the photo */
 .ov-marker-label {
   position: absolute;
   top: 50%;
-  left: 22px;
+  left: 24px;
   transform: translateY(-50%);
-  padding: 1px 6px;
+  padding: 1px 7px;
   border-radius: var(--r-1);
-  background: rgba(8, 18, 24, 0.86);
-  border: 1px solid rgba(63, 162, 255, 0.5);
+  background: #081218;
+  border: 1px solid rgba(63, 162, 255, 0.75);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.65);
   color: #fff;
   font: 700 12px / 1.3 var(--font-latin);
   white-space: nowrap;
+}
+/* western spot of a close pair (W1 / W2, W5 / W6): label on the left of the dot (map space, not mirrored in RTL) */
+.ov-marker.ov-label-left .ov-marker-label {
+  left: auto;
+  right: 24px;
 }
 .ov-marker:hover .ov-marker-dot,
 .ov-marker:focus-visible .ov-marker-dot {
@@ -310,7 +322,11 @@ div.ov-marker {
 .ov-marker.is-selected .ov-marker-dot {
   background: #fff;
   border: 3px solid var(--blue);
-  box-shadow: 0 0 0 7px rgba(63, 162, 255, 0.4);
+  box-shadow:
+    0 0 0 1.5px rgba(3, 10, 14, 0.85),
+    0 0 0 7px rgba(63, 162, 255, 0.5),
+    0 0 0 8.5px rgba(3, 10, 14, 0.5),
+    0 1px 4px 8px rgba(0, 0, 0, 0.25);
 }
 .ov-marker.is-selected .ov-marker-label {
   background: var(--blue);

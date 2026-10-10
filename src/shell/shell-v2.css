@@ -646,3 +646,20 @@ html[dir="rtl"] .v2-drawer {
   color: var(--red);
   background: rgba(196, 48, 42, 0.1);
 }
+
+/* Logo mark (src/shell/BrandMark.tsx): white blocks on the navy sidebar / phone bar. */
+.brand-mark,
+.v2-brand-mark.brand-mark,
+.v2-phonebar-brand .v2-brand-mark.brand-mark {
+  flex: none;
+  width: auto;
+  height: 34px;
+  aspect-ratio: 355 / 605;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  color: #fff;
+}
+.v2-phonebar-brand .v2-brand-mark.brand-mark {
+  height: 26px;
+}

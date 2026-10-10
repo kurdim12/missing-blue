@@ -3,6 +3,7 @@ import { useI18n, useT } from "../i18n";
 import { shellStrings } from "../features/shell/strings";
 import { SCREENS, type ScreenDef } from "../screens";
 import { href } from "../router";
+import { BrandMark } from "./BrandMark";
 import { Badge } from "../ui";
 import { useOnline } from "./useOnline";
 
@@ -13,7 +14,7 @@ export function TopBar({ active }: { active?: ScreenDef }) {
   return (
     <header className="topbar">
       <a className="brand" href={href("/problem")} aria-label="Missing Blue · الأزرق المفقود">
-        <span className="brand-mark" aria-hidden="true" />
+        <BrandMark className="brand-mark" />
         <span className="brand-names">
           <span className="brand-en" lang="en" dir="ltr">
             Missing <b>Blue</b>

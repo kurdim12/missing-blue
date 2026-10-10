@@ -1,9 +1,16 @@
-// MapLibre base map: OSM raster when online, plain dark ground when offline (navigator.onLine + tile errors).
+// MapLibre base map. Default background = SATELLITE (Esri World Imagery, natural colour, Esri roads + place labels on top);
+// "Map" = the dark, dimmed OpenStreetMap style. The choice is shared by every map and persisted (src/map/basemaps.ts).
+// Offline (navigator.onLine) or >= 3 tile errors on the active basemap -> plain dark ground + a note; data layers keep working.
+// Optional 3D relief (allow3d): AWS terrain tiles, off at start, never persisted.
 // Children render inside the map's context and add their own sources/layers with the hooks below.
 //
 //   <BaseMap bounds={KARAK_BOUNDS} onReady={(map) => ...}>
 //     <PipesLayer />            // a component that calls useGeoJson("pipes", data, [pipeLineLayer()])
 //   </BaseMap>
+//
+// Layer code can adapt paint to the background:
+//   const { photo } = useBasemapView();   // true while the satellite photo is actually drawn under the data
+//   const kind = useBasemap();            // "satellite" | "map" (the user's choice, also outside a map)
 //
 // No glyphs are configured (offline-safe), so do not use symbol text layers: use maplibregl.Marker / HTML overlays for labels.
 import maplibregl, {
@@ -14,41 +21,76 @@ import maplibregl, {
   type Map as MlMap,
   type StyleSpecification,
 } from "maplibre-gl";
-import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { useI18n, useT } from "../i18n";
 import { shellStrings } from "../features/shell/strings";
 import { COLORS, KARAK_BOUNDS } from "./style";
+import {
+  BASEMAP_KINDS,
+  CREDIT,
+  SRC_OSM,
+  SRC_SAT,
+  SRC_SAT_PLACES,
+  SRC_SAT_ROADS,
+  SRC_TERRAIN,
+  TERRAIN_EXAGGERATION,
+  TERRAIN_PITCH,
+  TERRAIN_SOURCE,
+  basemapLayers,
+  basemapSources,
+  basemapVisibility,
+  getBasemap,
+  setBasemap,
+  useBasemap,
+  type BasemapKind,
+} from "./basemaps";
+
+export { getBasemap, setBasemap, subscribeBasemap, useBasemap, type BasemapKind } from "./basemaps";
 
 const MapCtx = createContext<MlMap | null>(null);
 /** The loaded map (null until the style has loaded). */
 export const useMap = () => useContext(MapCtx);
 
-const OSM_LAYER = "basemap-osm";
+/** What is drawn under the data layers of the enclosing <BaseMap>. */
+export type BasemapView = {
+  /** the user's choice */
+  kind: BasemapKind;
+  /** background tiles are drawn (false = offline / tiles failing: plain dark ground) */
+  tiles: boolean;
+  /** the satellite photo is drawn (kind === "satellite" && tiles) */
+  photo: boolean;
+  /** 3D relief is on */
+  terrain: boolean;
+};
+const ViewCtx = createContext<BasemapView | null>(null);
+/** Inside <BaseMap>: what the background currently shows. Outside a map: derived from the stored choice. */
+export function useBasemapView(): BasemapView {
+  const v = useContext(ViewCtx);
+  const kind = useBasemap();
+  return v ?? { kind, tiles: true, photo: kind === "satellite", terrain: false };
+}
 
-function baseStyle(online: boolean): StyleSpecification {
-  return {
-    version: 8,
-    sources: {
-      osm: {
-        type: "raster",
-        tiles: ["https://tile.openstreetmap.org/{z}/{x}/{y}.png"],
-        tileSize: 256,
-        maxzoom: 19,
-        attribution: '© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors',
-      },
-    },
-    layers: [
-      { id: "basemap-ground", type: "background", paint: { "background-color": COLORS.ground } },
-      {
-        id: OSM_LAYER,
-        type: "raster",
-        source: "osm",
-        layout: { visibility: online ? "visible" : "none" },
-        // dimmed and desaturated so data layers read on a projector
-        paint: { "raster-opacity": 0.85, "raster-saturation": -0.75, "raster-brightness-max": 0.42, "raster-contrast": 0.1, "raster-fade-duration": 0 },
-      },
-    ],
-  };
+type Failed = { satellite: boolean; map: boolean; labels: boolean; terrain: boolean };
+const NONE_FAILED: Failed = { satellite: false, map: false, labels: false, terrain: false };
+
+function sourceGroup(sourceId: string | undefined): keyof Failed | null {
+  if (sourceId === SRC_SAT) return "satellite";
+  if (sourceId === SRC_OSM) return "map";
+  if (sourceId === SRC_SAT_ROADS || sourceId === SRC_SAT_PLACES) return "labels";
+  if (sourceId === SRC_TERRAIN) return "terrain";
+  return null;
+}
+
+function reducedMotion(): boolean {
+  try {
+    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  } catch {
+    return false;
+  }
+}
+
+function baseStyle(kind: BasemapKind, online: boolean): StyleSpecification {
+  return { version: 8, sources: basemapSources(), layers: basemapLayers(COLORS.ground, kind, online) };
 }
 
 export type BaseMapProps = {
@@ -57,30 +99,48 @@ export type BaseMapProps = {
   padding?: number;
   maxZoom?: number;
   interactive?: boolean;
-  /** Extra attribution, e.g. "NISAR: NASA/ISRO (ASF DAAC)". */
+  /** Extra attribution, e.g. "NISAR: NASA/ISRO (ASF DAAC)". The basemap credit is added automatically. */
   attribution?: string;
   className?: string;
+  /** Show the Satellite | Map switch (default: on interactive maps). */
+  basemapSwitch?: boolean;
+  /** Offer the 3D relief toggle (large desktop maps). Starts 2D; not persisted. */
+  allow3d?: boolean;
   /** Called once with the loaded map. */
   onReady?: (map: MlMap) => void;
   children?: ReactNode;
 };
 
-export function BaseMap({ bounds = KARAK_BOUNDS, padding = 24, maxZoom = 18, interactive = true, attribution, className = "", onReady, children }: BaseMapProps) {
+export function BaseMap({
+  bounds = KARAK_BOUNDS,
+  padding = 24,
+  maxZoom = 18,
+  interactive = true,
+  attribution,
+  className = "",
+  basemapSwitch,
+  allow3d = false,
+  onReady,
+  children,
+}: BaseMapProps) {
   const t = useT(shellStrings);
   const { dir } = useI18n();
+  const kind = useBasemap();
   const ref = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<MlMap | null>(null);
   const [online, setOnline] = useState(() => navigator.onLine);
-  const [tilesFailed, setTilesFailed] = useState(false);
+  const [failed, setFailed] = useState<Failed>(NONE_FAILED);
+  const [terrain, setTerrain] = useState(false);
+  const errors = useRef<Record<keyof Failed, number>>({ satellite: 0, map: 0, labels: 0, terrain: 0 });
   const onReadyRef = useRef(onReady);
   onReadyRef.current = onReady;
 
-  // create once
+  // create once (all basemap sources declared up front; only layer visibility changes later)
   useEffect(() => {
     if (!ref.current) return;
     const m = new maplibregl.Map({
       container: ref.current,
-      style: baseStyle(navigator.onLine),
+      style: baseStyle(getBasemap(), navigator.onLine),
       bounds,
       fitBoundsOptions: { padding },
       maxZoom,
@@ -89,14 +149,16 @@ export function BaseMap({ bounds = KARAK_BOUNDS, padding = 24, maxZoom = 18, int
       dragRotate: false,
       pitchWithRotate: false,
     });
-    m.addControl(new maplibregl.AttributionControl({ compact: true, customAttribution: attribution }), "bottom-right");
     m.touchZoomRotate.disableRotation();
-    let failures = 0;
     m.on("error", (e: { sourceId?: string; error?: Error }) => {
-      if (e.sourceId === "osm" && ++failures >= 3) setTilesFailed(true);
+      const g = sourceGroup(e.sourceId);
+      if (!g) return;
+      const limit = g === "terrain" ? 2 : 3;
+      if (++errors.current[g] >= limit) setFailed((f) => (f[g] ? f : { ...f, [g]: true }));
     });
     m.on("load", () => {
       setMap(m);
+      (window as unknown as { __mbMap?: MlMap }).__mbMap = m; // latest map, for console / browser checks
       onReadyRef.current?.(m);
     });
     const ro = new ResizeObserver(() => m.resize());
@@ -104,16 +166,19 @@ export function BaseMap({ bounds = KARAK_BOUNDS, padding = 24, maxZoom = 18, int
     return () => {
       ro.disconnect();
       setMap(null);
+      const w = window as unknown as { __mbMap?: MlMap };
+      if (w.__mbMap === m) delete w.__mbMap;
       m.remove();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // online / offline
+  // online / offline (coming back online retries every basemap)
   useEffect(() => {
     const up = () => {
+      errors.current = { satellite: 0, map: 0, labels: 0, terrain: 0 };
+      setFailed(NONE_FAILED);
       setOnline(true);
-      setTilesFailed(false);
     };
     const down = () => setOnline(false);
     window.addEventListener("online", up);
@@ -138,16 +203,125 @@ export function BaseMap({ bounds = KARAK_BOUNDS, padding = 24, maxZoom = 18, int
     };
   }, [map, dir, interactive]);
 
-  const showTiles = online && !tilesFailed;
+  const tiles = online && !failed[kind];
+  const labels = !failed.labels;
+  const terrainAvailable = allow3d && online && !failed.terrain;
+  const terrainOn = terrain && terrainAvailable;
+
+  // basemap layer visibility (a hidden layer requests no tiles)
   useEffect(() => {
-    if (map?.getLayer(OSM_LAYER)) map.setLayoutProperty(OSM_LAYER, "visibility", showTiles ? "visible" : "none");
-  }, [map, showTiles]);
+    if (!map) return;
+    const vis = basemapVisibility(kind, tiles, labels);
+    for (const [id, on] of Object.entries(vis)) {
+      if (!map.getLayer(id)) continue;
+      const want = on ? "visible" : "none";
+      if (map.getLayoutProperty(id, "visibility") !== want) map.setLayoutProperty(id, "visibility", want);
+    }
+  }, [map, kind, tiles, labels]);
+
+  // attribution follows what is drawn: screen credits + imagery (satellite) or OSM (map) + terrain (3D)
+  useEffect(() => {
+    if (!map) return;
+    const parts: string[] = [];
+    if (attribution) parts.push(attribution);
+    if (tiles && kind === "satellite") parts.push(labels ? `${CREDIT.satellite} · ${CREDIT.labels}` : CREDIT.satellite);
+    if (tiles && kind === "map") parts.push(CREDIT.map);
+    if (terrainOn) parts.push(CREDIT.terrain);
+    const ctl = new maplibregl.AttributionControl({ compact: true, customAttribution: parts.length ? parts : undefined });
+    map.addControl(ctl, "bottom-right");
+    return () => {
+      try {
+        map.removeControl(ctl);
+      } catch {
+        /* map removed */
+      }
+    };
+  }, [map, attribution, kind, tiles, labels, terrainOn]);
+
+  // 3D relief: terrain + pitch on; flat and pitch 0 off (also when terrain tiles fail or the connection drops)
+  useEffect(() => {
+    if (!map) return;
+    const duration = reducedMotion() ? 0 : 900;
+    try {
+      if (terrainOn) {
+        if (!map.getSource(SRC_TERRAIN)) map.addSource(SRC_TERRAIN, TERRAIN_SOURCE);
+        map.setTerrain({ source: SRC_TERRAIN, exaggeration: TERRAIN_EXAGGERATION });
+        map.easeTo({ pitch: TERRAIN_PITCH, duration });
+      } else {
+        if (map.getTerrain()) map.setTerrain(null);
+        if (map.getPitch() !== 0) map.easeTo({ pitch: 0, duration });
+      }
+    } catch {
+      /* map removed mid-change */
+    }
+  }, [map, terrainOn]);
+
+  useEffect(() => {
+    if (terrain && !terrainAvailable) setTerrain(false);
+  }, [terrain, terrainAvailable]);
+
+  const choose = (k: BasemapKind) => {
+    // picking a basemap again retries it after tile errors
+    errors.current[k] = 0;
+    if (k === "satellite") errors.current.labels = 0;
+    setFailed((f) => (f[k] || (k === "satellite" && f.labels) ? { ...f, [k]: false, ...(k === "satellite" ? { labels: false } : {}) } : f));
+    setBasemap(k);
+  };
+
+  const view = useMemo<BasemapView>(() => ({ kind, tiles, photo: tiles && kind === "satellite", terrain: terrainOn }), [kind, tiles, terrainOn]);
+  const showSwitch = basemapSwitch ?? interactive;
 
   return (
     <div className={`basemap ${className}`}>
       <div ref={ref} className="basemap-canvas" />
-      {!showTiles ? <div className="basemap-offline">{t("mapOffline")}</div> : null}
-      <MapCtx.Provider value={map}>{map ? children : null}</MapCtx.Provider>
+      {showSwitch ? (
+        <div className={`basemap-switch${interactive ? "" : " basemap-switch-nozoom"}`} role="group" aria-label={t("basemapGroup")}>
+          <div className="basemap-switch-seg">
+            {BASEMAP_KINDS.map((k) => {
+              const tip = k === "satellite" ? t("basemapSatelliteTip") : t("basemapMapTip");
+              const down = !online || failed[k];
+              return (
+                <button
+                  key={k}
+                  type="button"
+                  className="basemap-switch-btn"
+                  aria-pressed={kind === k}
+                  title={down ? `${tip} (${t("basemapUnavailable")})` : tip}
+                  onClick={() => choose(k)}
+                >
+                  {k === "satellite" ? t("basemapSatellite") : t("basemapMap")}
+                </button>
+              );
+            })}
+          </div>
+          {allow3d ? (
+            <button
+              type="button"
+              className="basemap-switch-btn basemap-switch-3d"
+              aria-pressed={terrainOn}
+              aria-disabled={!terrainAvailable}
+              title={terrainAvailable ? t("terrain3dTip") : t("terrain3dOff")}
+              onClick={() => {
+                if (terrainAvailable) setTerrain((v) => !v);
+              }}
+            >
+              {t("terrain3d")}
+            </button>
+          ) : null}
+        </div>
+      ) : null}
+      {!tiles ? (
+        <div
+          className={`basemap-offline${showSwitch ? "" : " basemap-offline-noswitch"}${interactive ? "" : " basemap-offline-nozoom"}`}
+          role="status"
+        >
+          <span className="basemap-offline-long">{t("mapOffline")}</span>
+          <span className="basemap-offline-short">{t("mapOfflineShort")}</span>
+        </div>
+      ) : null}
+      <ViewCtx.Provider value={view}>
+        <MapCtx.Provider value={map}>{map ? children : null}</MapCtx.Provider>
+      </ViewCtx.Provider>
     </div>
   );
 }

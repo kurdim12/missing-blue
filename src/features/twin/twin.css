@@ -226,7 +226,8 @@
 .twin-legend {
   position: absolute;
   z-index: 3;
-  inset-block-end: 34px;
+  /* clears a two- or three-line map credit (imagery + labels + pipes + elevation + model) under it */
+  inset-block-end: 74px;
   inset-inline-end: var(--s-4);
   width: 270px;
   max-height: calc(100% - 140px);
@@ -336,7 +337,9 @@
   position: absolute;
   inset: 0;
   border: 2px solid #081218;
-  box-shadow: 0 0 0 1px rgba(230, 238, 241, 0.6);
+  box-shadow:
+    0 0 0 1px rgba(230, 238, 241, 0.75),
+    0 1px 4px 1px rgba(0, 0, 0, 0.6);
 }
 .twin-key-supply .twin-key-sym {
   background: var(--twin-supply);
@@ -355,19 +358,23 @@
   border-radius: 50%;
   background: #081218;
   border: 3px solid var(--twin-leak);
-  box-shadow: none;
+  box-shadow:
+    0 0 0 1.5px rgba(3, 10, 14, 0.8),
+    0 1px 4px 1px rgba(0, 0, 0, 0.5);
 }
 .twin-key.is-dim {
   opacity: 0.6;
 }
+/* solid dark pill + shadow: readable over the satellite photo */
 .twin-key-label {
   position: absolute;
   white-space: nowrap;
-  padding: 2px 6px;
+  padding: 2px 7px;
   border-radius: var(--r-1);
-  background: rgba(8, 18, 24, 0.86);
+  background: #081218;
   border: 1px solid var(--border-strong);
-  color: var(--text);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.65);
+  color: #e6eef1;
   font: 600 12px / 1.3 var(--font);
 }
 .twin-key-label:empty {
@@ -407,7 +414,20 @@
   height: 100%;
   border-radius: 50%;
   border: 3px solid var(--twin-leak);
+  /* dark edges inside and out keep the red ring visible on bright imagery */
+  box-shadow:
+    0 0 0 1.5px rgba(3, 10, 14, 0.75),
+    inset 0 0 0 1.5px rgba(3, 10, 14, 0.6);
   animation: twin-pulse 1.6s ease-out infinite;
+}
+.twin-ring-core {
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  border: 3px solid var(--twin-leak);
+  box-shadow:
+    0 0 0 1.5px rgba(3, 10, 14, 0.8),
+    inset 0 0 0 1.5px rgba(3, 10, 14, 0.6);
 }
 @keyframes twin-pulse {
   0% {
@@ -494,5 +514,17 @@
   /* phone: only the focus labels (wet spot, current break); other key sites keep their symbol */
   .twin-key:not(.is-focus) .twin-key-label {
     display: none;
+  }
+}
+
+/* Desktop: the side panel covers the inline-start part of the map, so the map credit (the satellite imagery credit
+   included) wraps in the free part beside it instead of running under the panel. The map never mirrors, the panel does. */
+@media (min-width: 641px) {
+  .twin .maplibregl-ctrl-bottom-right {
+    left: calc(min(420px, 100% - 2 * var(--s-4)) + 2 * var(--s-4));
+  }
+  [dir="rtl"] .twin .maplibregl-ctrl-bottom-right {
+    left: 0;
+    right: calc(min(420px, 100% - 2 * var(--s-4)) + 2 * var(--s-4));
   }
 }

@@ -5,6 +5,7 @@ import { fmt, fmtDate, useI18n, useT } from "../i18n";
 import { shellV2Strings, type ShellV2Key } from "../features/shell/strings-v2";
 import { href } from "../router";
 import { Icon } from "./icons";
+import { BrandMark } from "./BrandMark";
 import { NAV, type NavCounts, type NavId } from "./nav";
 import { useOnline } from "./useOnline";
 import "./shell-v2.css";
@@ -45,7 +46,7 @@ export function Sidebar({ activeId, counts, dataUntil, ai = "checking", onAsk, o
   return (
     <div className={`v2-side v2-side-${variant}`}>
       <a className="v2-brand" href={href(homeTo)} aria-label={t("homeLabel")} onClick={onNavigate}>
-        <span className="brand-mark v2-brand-mark" aria-hidden="true" />
+        <BrandMark className="brand-mark v2-brand-mark" />
         <span className="v2-brand-names">
           <span className="v2-brand-ar" lang="ar" dir="rtl">
             {t("brandAr")}
