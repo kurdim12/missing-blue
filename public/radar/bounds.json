@@ -1,0 +1,23 @@
+{
+  "bounds": {
+    "west": 35.63,
+    "south": 31.03,
+    "east": 35.79,
+    "north": 31.24
+  },
+  "size": [
+    760,
+    1160
+  ],
+  "files": [
+    "hh_2026-09-04.png",
+    "hh_2026-09-16.png",
+    "hh_2026-09-28.png",
+    "change_hh_2026-09-16.png",
+    "change_hv_2026-09-16.png",
+    "change_hh_2026-09-28.png",
+    "change_hv_2026-09-28.png",
+    "wet_mask.png"
+  ],
+  "source": "NISAR L2 GCOV PROVISIONAL, track 151 frame 73 (NASA/ISRO, ASF DAAC)"
+}

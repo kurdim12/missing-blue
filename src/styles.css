@@ -1,0 +1,13 @@
+:root {
+  --bg: #0b1220;
+  --panel: #111a2e;
+  --ink: #e6edf7;
+  --muted: #93a3b8;
+  --blue: #3b82f6;
+  --font: "Inter", "IBM Plex Sans Arabic", system-ui, sans-serif;
+}
+* { box-sizing: border-box; }
+html, body, #root { height: 100%; margin: 0; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font); }
+html[dir="rtl"] body, [lang="ar"] { font-family: "IBM Plex Sans Arabic", "Inter", system-ui, sans-serif; }
+.skeleton { max-width: 720px; margin: 15vh auto; padding: 0 24px; line-height: 1.6; }
